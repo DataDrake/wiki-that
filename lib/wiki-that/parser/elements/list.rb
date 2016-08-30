@@ -9,8 +9,7 @@ module WikiThat
       unless first
         j = 0
         stack.each do |t|
-          print(WikiThat.is_special_char(doc[i]))
-          if doc[i] != t
+          if doc[i] != t && !(( t == '-' && doc[i] == ';') || (t == ';' && doc[i] == '-'))
             i -= j + 1
             return [i,'',true,false]
           end
@@ -38,7 +37,6 @@ module WikiThat
       stack.push(doc[i])
       done = false
       first = true
-      print(stack)
       while i != doc.length && !done
         i,partial,done,first = parse_item(doc,i,stack,first)
         buff += partial

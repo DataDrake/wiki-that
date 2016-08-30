@@ -1,7 +1,13 @@
 require 'test/unit'
 require_relative('../../../../lib/wiki-that/parser/parser')
 class LinkTest < Test::Unit::TestCase
-    # Fake test
+
+  def setup
+    WikiThat.base_url='wiki'
+    WikiThat.default_namespace='BOB'
+    WikiThat.sub_url='sub/folder'
+  end
+
   def test_empty
     i,text = WikiThat::Parser.parse('',0)
     assert_equal(0,i,'Link should not advance')
@@ -47,6 +53,30 @@ class LinkTest < Test::Unit::TestCase
   def test_internal_empty
     i,text = WikiThat::Parser.parse('[[]]',0)
     assert_equal(4,i,'Link should advance')
-    assert_equal('<a href=\'\'></a>',text,'Link should not have been generated')
+    assert_equal('<a href=\'wiki/BOB/\'></a>',text,'Link should have been generated')
+  end
+
+  def test_internal_home
+    i,text = WikiThat::Parser.parse('[[public/Home]]',0)
+    assert_equal(15,i,'Link should advance')
+    assert_equal('<a href=\'wiki/BOB/public/Home\'></a>',text,'Link should have been generated')
+  end
+
+  def test_internal_relative
+    i,text = WikiThat::Parser.parse('[[/public/Home]]',0)
+    assert_equal(16,i,'Link should advance')
+    assert_equal('<a href=\'wiki/BOB/sub/folder/public/Home\'></a>',text,'Link should have been generated')
+  end
+
+  def test_internal_audio
+    i,text = WikiThat::Parser.parse('[[Audio:public/test.wav]]',0)
+    assert_equal(25,i,'Link should advance')
+    assert_equal('<audio controls><source src=\'wiki/BOB/public/test.wav\'></audio>',text,'Link should have been generated')
+  end
+
+  def test_internal_video
+    i,text = WikiThat::Parser.parse('[[Video:public/test.wav]]',0)
+    assert_equal(25,i,'Link should advance')
+    assert_equal('<video controls><source src=\'wiki/BOB/public/test.wav\'></video>',text,'Link should have been generated')
   end
 end

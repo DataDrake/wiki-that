@@ -55,4 +55,29 @@ class ListTest < Test::Unit::TestCase
     assert_equal(13,i,'List should advance')
     assert_equal("<ul><li><ol><li> AB</li><li><ul><li> ABC</li></ul></li></ol></li></ul>",text,'Unordered List should have been generated')
   end
+
+  def test_dl
+    i,text = WikiThat::Parser.parse('- ABC',0)
+    assert_equal(5,i,'List should advance')
+    assert_equal('<dl><dd> ABC</dd></dl>',text,'Unordered List should have been generated')
+  end
+
+  def test_dl2
+    i,text = WikiThat::Parser.parse('; ABC',0)
+    assert_equal(5,i,'List should advance')
+    assert_equal('<dl><dt> ABC</dt></dl>',text,'Unordered List should have been generated')
+  end
+
+  def test_dl_dt_dn
+    i,text = WikiThat::Parser.parse("; ABC\n- DEF",0)
+    assert_equal(11,i,'List should advance')
+    assert_equal('<dl><dt> ABC</dt><dd> DEF</dd></dl>',text,'Unordered List should have been generated')
+  end
+
+  def test_ol_dl_dt_dn
+    i,text = WikiThat::Parser.parse("#; ABC\n#- DEF",0)
+    assert_equal(13,i,'List should advance')
+    assert_equal('<ol><li><dl><dt> ABC</dt><dd> DEF</dd></dl></li></ol>',text,'Unordered List should have been generated')
+  end
+
 end

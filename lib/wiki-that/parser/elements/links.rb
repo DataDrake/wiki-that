@@ -2,10 +2,10 @@ module WikiThat
   module Links
 
     @@handlers = {
-        'Audio': -> (namespace,link,attrs){
+        'Audio' => -> (namespace,link,attrs){
           "<audio controls><source src='#{link}'></audio>"
         },
-        'Image': -> (namespace,link,attrs){
+        'Image' => -> (namespace,link,attrs){
           link = "<img src='#{link}'"
           link += '/>'
           if attrs.length > 0
@@ -13,7 +13,7 @@ module WikiThat
           end
           link
         },
-        'Video': -> (namespace,link,attrs){
+        'Video' => -> (namespace,link,attrs){
           "<video controls><source src='#{link}'></video>"
         }
     }
@@ -84,6 +84,15 @@ module WikiThat
       end
       i += 1
       # Decide how to handle the link
+      if WikiThat.sub_url && link[0] == '/'
+        link = WikiThat.sub_url + link
+      end
+      if WikiThat.default_namespace
+        link = WikiThat.default_namespace + '/' + link
+      end
+      if WikiThat.base_url
+        link = WikiThat.base_url + '/' + link
+      end
       if @@handlers[namespace]
         [i, @@handlers[namespace].call(namespace, link, attrs)]
       else
