@@ -79,4 +79,39 @@ class LinkTest < Test::Unit::TestCase
     assert_equal(25,i,'Link should advance')
     assert_equal('<video controls><source src=\'wiki/BOB/public/test.wav\'></video>',text,'Link should have been generated')
   end
+
+  def test_internal_image
+    i,text = WikiThat::Parser.parse('[[Image:public/test.png]]',0)
+    assert_equal(25,i,'Link should advance')
+    assert_equal('<img src=\'wiki/BOB/public/test.png\'>',text,'Link should have been generated')
+  end
+  def test_internal_image_caption
+    i,text = WikiThat::Parser.parse('[[Image:public/test.png|Test PNG]]',0)
+    assert_equal(34,i,'Link should advance')
+    assert_equal('<div><img src=\'wiki/BOB/public/test.png\'></div>',text,'Link should have been generated')
+  end
+
+  def test_internal_image_frame
+    i,text = WikiThat::Parser.parse('[[Image:public/test.png|frame|Test PNG]]',0)
+    assert_equal(40,i,'Link should advance')
+    assert_equal('<div class=\'frame\'><img src=\'wiki/BOB/public/test.png\'><caption>Test PNG</caption></div>',text,'Link should have been generated')
+  end
+
+  def test_internal_image_thumb
+    i,text = WikiThat::Parser.parse('[[Image:public/test.png|thumb|Test PNG]]',0)
+    assert_equal(40,i,'Link should advance')
+    assert_equal('<div class=\'thumb\'><a href=\'wiki/BOB/public/test.png\'><img src=\'wiki/BOB/public/test.png\'></a><caption>Test PNG</caption></div>',text,'Link should have been generated')
+  end
+
+  def test_internal_image_width
+    i,text = WikiThat::Parser.parse('[[Image:public/test.png|100px|Test PNG]]',0)
+    assert_equal(40,i,'Link should advance')
+    assert_equal('<div><img src=\'wiki/BOB/public/test.png\' width=\'100px\'></div>',text,'Link should have been generated')
+  end
+
+  def test_internal_image_left
+    i,text = WikiThat::Parser.parse('[[Image:public/test.png|left|Test PNG]]',0)
+    assert_equal(39,i,'Link should advance')
+    assert_equal('<div class=\'left\'><img src=\'wiki/BOB/public/test.png\'></div>',text,'Link should have been generated')
+  end
 end

@@ -1,30 +1,11 @@
+require_relative('links/audio')
+require_relative('links/image')
+require_relative('links/video')
+
 module WikiThat
   module Links
 
-    @@handlers = {
-        'Audio' => -> (namespace,link,attrs){
-          "<audio controls><source src='#{link}'></audio>"
-        },
-        'Image' => -> (namespace,link,attrs){
-          link = "<img src='#{link}'"
-          link += '/>'
-          if attrs.length > 0
-            link = "<div class='captioned'>#{link}<caption>#{attrs.last}</caption></div>"
-          end
-          link
-        },
-        'Video' => -> (namespace,link,attrs){
-          "<video controls><source src='#{link}'></video>"
-        }
-    }
-
-    def self.register_namespace_handler(namespace,handler)
-      @@handlers[namespace] = handler
-    end
-
-    def self.unregister_namespace_handler(namespace)
-      @@handlers.delete(namespace)
-    end
+    IMAGE_PROPERTIES = %w(border frame left right center thumb thumbnail)
 
     def self.parse_internal(doc,i)
       buff = '[['
@@ -58,7 +39,7 @@ module WikiThat
         buff += doc[i]
         i += 1
         attr = ''
-        while i != doc.length && doc[i] != ']' && doc[i] != "\n"
+        while i != doc.length && doc[i] != ']' && doc[i] != "\n" && doc[i] != '|'
           doc += doc[i]
           attr += doc[i]
           i += 1
@@ -93,10 +74,15 @@ module WikiThat
       if WikiThat.base_url
         link = WikiThat.base_url + '/' + link
       end
-      if @@handlers[namespace]
-        [i, @@handlers[namespace].call(namespace, link, attrs)]
-      else
-        [i,"<a href='#{link}'>#{attrs[0]}</a>"]
+      case namespace
+        when 'Audio'
+          [i,WikiThat::Links::Audio.generate(link,attrs)]
+        when 'Image'
+          [i,WikiThat::Links::Image.generate(link,attrs)]
+        when 'Video'
+          [i,WikiThat::Links::Video.generate(link,attrs)]
+        else
+          [i,"<a href='#{link}'>#{attrs.last}</a>"]
       end
     end
 

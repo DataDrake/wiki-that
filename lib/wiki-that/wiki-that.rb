@@ -13,7 +13,7 @@ module WikiThat
   end
 
   def self.is_special_char(c)
-    c =~ /[*#;:`=\-]/
+    c =~ /[*#;:'=\-]/
   end
 
 end
