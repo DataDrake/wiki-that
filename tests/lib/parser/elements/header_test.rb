@@ -1,5 +1,5 @@
 require 'test/unit'
-require_relative('../../../../lib/wiki-that/parser/elements/header')
+require_relative('../../../../lib/wiki-that/wiki-that')
 class HeaderTest < Test::Unit::TestCase
   # Fake test
   def test_empty

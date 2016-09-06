@@ -1,4 +1,5 @@
 require_relative('elements/break')
+require_relative('elements/formatting')
 require_relative('elements/header')
 require_relative('elements/links')
 require_relative('elements/list')
@@ -19,9 +20,10 @@ module WikiThat
             i,partial = WikiThat::Table.parse(doc,i)
           when "\n"
             i,partial = WikiThat::Break.parse(doc,i)
+          when "'"
+            i,partial = WikiThat::Formatting.parse(doc,i)
           else
-            print(doc[i])
-            i,partial = WikiThat::Paragraph.parse(doc,i)
+            i,partial = WikiThat::Text.parse(doc,i)
         end
         if partial.length > 0
           output += partial
