@@ -1,6 +1,11 @@
 module WikiThat
   module Text
-    def self.parse(doc,i)
+
+    def parse_inline(stop)
+
+    end
+
+    def parse_paragraph(doc,i)
       buff = ''
       broken = false
       while i != doc.length && doc[i] != "\n" && !WikiThat.special_char?(doc[i])

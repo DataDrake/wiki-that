@@ -11,6 +11,12 @@ module WikiThat
     include WikiThat::Break
     include WikiThat::Formatting
     include WikiThat::Header
+    include WikiThat::List
+    include WikiThat::Table
+    include WikiThat::Text
+
+    attr_reader :error
+    attr_reader :result
 
     def initialize(doc,base_url, default_namespace, sub_url)
       @doc = doc
@@ -20,11 +26,8 @@ module WikiThat
       @sub_url = sub_url
       @state = :line_start
       @stack = []
+      @error = nil
       @result = ''
-    end
-
-    def parse_inline(stop)
-
     end
 
     def parse
@@ -32,20 +35,22 @@ module WikiThat
         case @state
           when :line_start
             case @doc[@index]
-              when '='
-                @state = :header
-              when '['
-                @state = :link
-              when '*', '#', ';', '-'
-                @state = :list
-              when '{'
-                @state = :table
               when "\n"
                 @state = :break
-              when "'"
+              when *FORMAT_SPECIAL
                 @state = :format
+              when *HEADER_SPECIAL
+                @state = :header
+              when *HRULE_SPECIAL
+                @state = :horizontal_rule
+              when *LINK_SPECIAL
+                @state = :link
+              when *LIST_SPECIAL
+                @state = :list
+              when *TABLE_SPECIAL
+                @state = :table
               else
-                @state = :inline_text
+                @state = :paragraph
             end
           when :break
             parse_break
@@ -53,10 +58,22 @@ module WikiThat
             parse_formatting
           when :header
             parse_header
+          when :horizontal_rule
+            parse_horizontal_rule
+          when :link
+            parse_link
+          when :list
+            parse_list
+          when :table
+            parse_table
           else
-            @state = :inline_text
+            @error = "Arrived at illegal state: #{@state}"
         end
       end
+    end
+
+    def success?
+      @error == nil
     end
   end
 end

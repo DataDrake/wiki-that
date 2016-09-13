@@ -16,8 +16,9 @@ module WikiThat
         return
       end
 
-      #Read inner content
+      #Read inner content, ignoring apostrophes
       end_count = 0
+      part = ''
       while not_match? "\n"
         while match? "'"
           buff += @doc[@index]
@@ -27,7 +28,8 @@ module WikiThat
         if end_count >= 2
           break
         end
-        buff += parse_inline("'")
+        part = parse_inline("'")
+        buff += part
         end_count = 0
       end
 

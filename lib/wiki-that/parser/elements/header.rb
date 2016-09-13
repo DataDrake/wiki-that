@@ -33,7 +33,7 @@ module WikiThat
       #Read the rest of the line
       while not_match? "\n"
         buff += @doc[@index]
-        unless whitespace?(@doc[@index])
+        unless whitespace? @doc[@index]
           @state = :header_fail
         end
         @index += 1
@@ -46,11 +46,8 @@ module WikiThat
       end
 
       #Produce output
-      if start_level > end_level
-        @result += "<h#{end_level}>#{content}</h#{end_level}>"
-      else
-        @result += "<h#{start_level}>#{content}</h#{start_level}>"
-      end
+      level = start_level > end_level ? end_level : start_level
+      @result += "<h#{level}>#{content}</h#{level}>"
 
       #Set next state
       @state = :break
