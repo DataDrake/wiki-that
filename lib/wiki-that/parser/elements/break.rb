@@ -1,16 +1,20 @@
 module WikiThat
   module Break
     def parse_break
-      #Read first newline
-      buff = @doc[@index]
       @index += 1
+      @count = 0
 
-      #Break if second newline
-      if match? "\n"
-        @result += '<br/>'
+      #Find all consecutive newlines
+      while match? "\n"
+        @count += 1
         @index += 1
+      end
+
+      # Break if more than 1
+      if count > 1
+        @result += '<br/>'
       else
-        @result += buff
+        @result += "\n"
       end
 
       #Set next state

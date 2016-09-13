@@ -25,7 +25,6 @@ module WikiThat
     TABLE_SPECIAL  = %w({)
 
     def special_char?(c)
-      c =~ /[*#;:'=\-\[]/
       case c
         when *FORMAT_SPECIAL
           true

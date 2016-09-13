@@ -11,6 +11,7 @@ module WikiThat
     include WikiThat::Break
     include WikiThat::Formatting
     include WikiThat::Header
+    include WikiThat::Link
     include WikiThat::List
     include WikiThat::Table
     include WikiThat::Text
