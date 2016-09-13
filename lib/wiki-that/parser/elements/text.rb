@@ -3,7 +3,7 @@ module WikiThat
     def self.parse(doc,i)
       buff = ''
       broken = false
-      while i != doc.length && doc[i] != "\n" && !WikiThat.is_special_char(doc[i])
+      while i != doc.length && doc[i] != "\n" && !WikiThat.special_char?(doc[i])
         buff += doc[i]
         i += 1
       end

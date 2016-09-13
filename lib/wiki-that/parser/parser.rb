@@ -4,10 +4,12 @@ require_relative('elements/header')
 require_relative('elements/links')
 require_relative('elements/list')
 require_relative('elements/text')
+require_relative('helpers')
 module WikiThat
   class Parser
-
+    include WikiThat::Helpers
     include WikiThat::Break
+    include WikiThat::Formatting
     include WikiThat::Header
 
     def initialize(doc,base_url, default_namespace, sub_url)
@@ -21,7 +23,7 @@ module WikiThat
       @result = ''
     end
 
-    def parse_inline
+    def parse_inline(stop)
 
     end
 
@@ -47,6 +49,8 @@ module WikiThat
             end
           when :break
             parse_break
+          when :format
+            parse_formatting
           when :header
             parse_header
           else
