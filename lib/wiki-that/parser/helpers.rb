@@ -10,7 +10,7 @@ module WikiThat
 
     def whitespace?(c)
       case c
-        when ' ', "\n"
+        when ' ', "\t"
           true
         else
           false

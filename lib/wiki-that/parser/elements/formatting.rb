@@ -18,7 +18,7 @@ module WikiThat
 
       #Read inner content, ignoring apostrophes
       end_count = 0
-      part = ''
+      content = ''
       while not_match? "\n"
         while match? "'"
           buff += @doc[@index]
@@ -30,6 +30,7 @@ module WikiThat
         end
         part = parse_inline("'")
         buff += part
+        content += part
         end_count = 0
       end
 
@@ -45,11 +46,11 @@ module WikiThat
       #Produce Tag
       case count
         when 2
-          @result += "<i>#{part}</i>"
-        when 3,4
-          @result += "<b>#{part}</b>"
+          @result += "<i>#{content}</i>"
+        when 3
+          @result += "<b>#{content}</b>"
         when 5
-          @result += "<b><i>#{part}</i></b>"
+          @result += "<b><i>#{content}</i></b>"
         else
           @result += buff
       end
