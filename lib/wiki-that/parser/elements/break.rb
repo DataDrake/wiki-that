@@ -1,12 +1,13 @@
 module WikiThat
   module Break
-    def self.parse(doc,i)
-      buff = doc[i]
-      i += 1
-      if i != doc.length && doc[i] == "\n"
-        return [i,'<br/>']
+    def parse_break
+      buff = @doc[@index]
+      @index += 1
+      if @index != @doc.length && @doc[@index] == "\n"
+        @result += '<br/>'
+      else
+        @result += buff
       end
-      [i,buff]
     end
   end
 end

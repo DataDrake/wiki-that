@@ -7,6 +7,9 @@ require_relative('elements/text')
 module WikiThat
   class Parser
 
+    include WikiThat::Break
+    include WikiThat::Header
+
     def initialize(doc,base_url, default_namespace, sub_url)
       @doc = doc
       @index = 0
@@ -22,31 +25,29 @@ module WikiThat
 
     end
 
-
-
-    def parse(doc,i = 0)
-      output = ''
-      while i != doc.length
+    def parse
+      while @index != @doc.length
         case @state
           when :line_start
-            case doc[i]
+            case @doc[@index]
               when '='
                 @state = :header
-                @stack.push(WikiThat::Header.new)
               when '['
-                @state = :link_start
+                @state = :link
               when '*', '#', ';', '-'
-                @state = :list_start
+                @state = :list
               when '{'
-                @state = :table_start
+                @state = :table
               when "\n"
-                @state = :break_start
+                @state = :break
               when "'"
-                @state = :format_start
+                @state = :format
               else
                 @state = :inline_text
             end
-          when :header_start
+          when :break
+            parse_break
+          when :header
             parse_header
           else
             @state = :inline_text
