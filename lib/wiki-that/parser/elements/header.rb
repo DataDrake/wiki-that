@@ -2,50 +2,43 @@ require_relative('../../../../lib/wiki-that/wiki-that')
 
 module WikiThat
   module Header
-
-    def self.read_tag(doc,i)
-      start_depth = 0
-      start_buff = ''
-      while i != doc.length && doc[i] == '='
-        start_buff += doc[i]
-        start_depth += 1
-        i += 1
+    def parse_header
+      buff = ''
+      start_level = 0
+      while @index != @doc.length && @doc[@index] == '='
+        buff += '='
+        start_level += 1
+        @index += 1
       end
-      [i,start_depth,start_buff]
-    end
-
-    def self.parse(doc,i)
-
-      # Read Start Tag
-      i,start_depth,start_buff = read_tag(doc,i)
-      # Fail if not a header or no whitespace after Tag
-      if start_depth == 1 || i == doc.length || !WikiThat.is_whitespace(doc[i])
-        return [i,start_buff]
+      content = parse_inline
+      buff += content
+      if @state != :header
+        @result += buff
+        return
       end
-
-      # Get inner text, stopping at first '==' or '\n'
-      i,inner_buff = WikiThat::Text.parse(doc,i)
-      # Fail if no chance of closing Tag
-      if i == doc.length || doc[i] != '='
-        return [i, start_buff+inner_buff]
+      end_level = 0
+      while @index != @doc.length && @doc[@index] == '='
+        buff += '='
+        end_level += 1
+        @index += 1
       end
-
-      # Read inner tag
-      i,end_depth,end_buff = read_tag(doc,i)
-
-      # Get outer text, stopping at '\n'
-      i,outer_buff = WikiThat::Text.parse(doc,i)
-
-      # Fail if end Tag is not end Tag
-      if end_depth < 2
-        return [i, start_buff+inner_buff+end_buff+outer_buff]
+      while @index != @doc.length && @doc[@index] != "\n"
+        buff += @doc[@index]
+        unless WikiThat.is_whitespace(@doc[@index])
+          @state = :header_fail
+        end
+        @index += 1
       end
-
-      # return a header with the lower depth as the header level
-      if start_depth > end_depth
-        return [i,"<h#{end_depth}>#{inner_buff}</h#{end_depth}>#{outer_buff}"]
+      if @state == :header_fail
+        @result += buff
+        return
       end
-      [i,"<h#{start_depth}>#{inner_buff}</h#{start_depth}>#{outer_buff}"]
+      if start_level > end_level
+        @result += "<h#{end_level}>#{content}</h#{end_level}>"
+      else
+        @result += "<h#{start_level}>#{content}</h#{start_level}>"
+      end
+      @state = :break
     end
   end
 end

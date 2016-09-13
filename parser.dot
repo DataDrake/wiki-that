@@ -1,0 +1,27 @@
+digraph {
+
+    rankdir=LR;
+
+    LineStart -> H1Start [label="'='"];
+    H1Start -> H2Start [label="'='"];
+    H2Start -> H3Start [label="'='"];
+    H3Start -> H4Start [label="'='"];
+    H4Start -> H5Start [label="'='"];
+    H5Start -> H6Start [label="'='"];
+
+    H1Start -> InlineText [label="'[^=]'"];
+    H2Start -> InlineText [label="'[^=]'"];
+    H3Start -> InlineText [label="'[^=]'"];
+    H4Start -> InlineText [label="'[^=]'"];
+    H5Start -> InlineText [label="'[^=]'"];
+    H6Start -> InlineText [label="'[^=]'"];
+
+    InlineText -> H1End [label="'='"];
+    H1End -> H2End [label="'='"];
+    H2End -> H3End [label="'='"];
+    H3End -> H4End [label="'='"];
+    H4End -> H5End [label="'='"];
+    H5End -> H6End [label="'='"];
+
+
+}
