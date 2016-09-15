@@ -7,63 +7,68 @@ module WikiThat
 
     IMAGE_PROPERTIES = %w(border frame left right center thumb thumbnail)
 
-    def self.parse_internal(doc,i)
+    def parse_internal
       buff = '[['
-      i += 1
+      @index += 1
       link = ''
       attrs = []
       namespace = nil
       # Parse Link or Namespace
-      while i != doc.length && doc[i] != ']' && doc[i] != "\n" && doc[i] != '|' && doc[i] != ':'
-        buff += doc[i]
-        link += doc[i]
-        i += 1
+      while not_match?(']', "\n", '|', ':')
+        buff += @doc[@index]
+        link += @doc[@index]
+        @index += 1
       end
-      if i == doc.length || i == "\n"
-        return [i,buff]
+      if @index == @doc.length || match?("\n")
+        @result += buff
+        return
       end
       # If namespace, continue parsing link
-      if doc[i] == ':'
-        buff += doc[i]
-        i += 1
+      if match? ':'
+        buff += @doc[@index]
+        @index += 1
         namespace = link
         link = ''
-        while i != doc.length && doc[i] != ']' && doc[i] != "\n" && doc[i] != '|'
-          buff += doc[i]
-          link += doc[i]
-          i += 1
+        while not_match?(']', "\n", '|')
+          buff += @doc[@index]
+          link += @doc[@index]
+          @index += 1
         end
       end
       # Parse attributes
-      while doc[i] == '|'
-        buff += doc[i]
-        i += 1
+      while match? '|'
+        buff += @doc[@index]
+        @index += 1
         attr = ''
-        while i != doc.length && doc[i] != ']' && doc[i] != "\n" && doc[i] != '|'
-          doc += doc[i]
-          attr += doc[i]
-          i += 1
+        while not_match?(']', "\n", '|')
+          buff += @doc[@index]
+          attr += @doc[@index]
+          @index += 1
         end
         attrs.push(attr)
       end
-      if i == doc.length || i == "\n"
-        return [i,buff]
+      if @index == @doc.length || match?("\n")
+        @result += buff
+        return
       end
       # Fail if not at the end of inner link
-      buff += doc[i]
-      if doc[i] != ']'
-        i += 1
-        return [i,buff]
+      buff += @doc[@index]
+      if not_match? ']'
+        @index += 1
+        @result += buff
+        return
       end
-      i += 1
-      if i == doc.length
-        return [i,buff]
+      @index += 1
+      if @index == @doc.length
+        @result += buff
+        return
       end
       # Fail if not at the end of outer link
-      if doc[i] != ']'
-        return [i,buff]
+      if not_match? ']'
+        @result += buff
+        return
       end
-      i += 1
+      @index += 1
       # Decide how to handle the link
       if WikiThat.sub_url && link[0] == '/'
         link = WikiThat.sub_url + link
@@ -76,47 +81,49 @@ module WikiThat
       end
       case namespace
         when 'Audio'
-          [i,WikiThat::Links::Audio.generate(link,attrs)]
+          @result += WikiThat::Links::Audio.generate(link,attrs)
         when 'Image'
-          [i,WikiThat::Links::Image.generate(link,attrs)]
+          @result += WikiThat::Links::Image.generate(link,attrs)
         when 'Video'
-          [i,WikiThat::Links::Video.generate(link,attrs)]
+          @result += WikiThat::Links::Video.generate(link,attrs)
         else
-          [i,"<a href='#{link}'>#{attrs.last}</a>"]
+          @result += "<a href='#{link}'>#{attrs.last}</a>"
       end
     end
 
-    def self.parse(doc,i)
-      buff = doc[i]
-      i += 1
-      if doc[i] == '['
+    def parse_link
+      buff = @doc[@index]
+      @index += 1
+      if match? '['
         return parse_internal(doc,i)
       end
       link = ''
       alt = ''
-      while i != doc.length && doc[i] != ']' && doc[i] != "\n" && doc[i] != '|'
-        buff += doc[i]
-        link += doc[i]
-        i += 1
+      while not_match?(']', "\n", '|')
+        buff += @doc[@index]
+        link += @doc[@index]
+        @index += 1
       end
-      if i == doc.length
-        return [i,buff]
+      if @index == doc.length
+        @result += buff
+        return
       end
-      buff += doc[i]
-      if doc[i] == '|'
-        i += 1
-        while i != doc.length && doc[i] != ']' && doc[i] != "\n"
-          alt += doc[i]
-          i += 1
+      buff += @doc[@index]
+      if match? '|'
+        @index += 1
+        while not_match?(']', "\n")
+          alt += @doc[@index]
+          @index += 1
         end
       end
-      buff += doc[i]
-      if doc[i] != ']'
-        i += 1
-        return [i,buff]
+      buff += @doc[@index]
+      if not_match?(']')
+        @index += 1
+        @result += buff
+        return
       end
-      i += 1
-      [i,"<a href='#{link}'>#{alt}</a>"]
+      @index += 1
+      @result += "<a href='#{link}'>#{alt}</a>"
     end
   end
 end

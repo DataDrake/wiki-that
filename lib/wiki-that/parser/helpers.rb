@@ -1,11 +1,27 @@
 module WikiThat
   module Helpers
-    def match?(char)
-      @index != @doc.length && @doc[@index] == char
+    def match?(*chars)
+      if @index == @doc.length
+        return false
+      end
+      chars.each do |char|
+        if @doc[@index] == char
+          return true
+        end
+      end
+      false
     end
 
-    def not_match?(char)
-      @index != @doc.length && @doc[@index] != char
+    def not_match?(*char)
+      if @index == @doc.length
+        return false
+      end
+      chars.each do |char|
+        if @doc[@index] == char
+          return false
+        end
+      end
+      true
     end
 
     def whitespace?(c)
