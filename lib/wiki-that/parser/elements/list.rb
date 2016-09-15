@@ -5,43 +5,43 @@ module WikiThat
     LIST_MAP = {'*' => 'ul', '#' => 'ol', ';' => 'dl', '-' => 'dl'}
     ITEM_MAP = {'*' => 'li', '#' => 'li', ';' => 'dt', '-' => 'dd'}
 
-    def self.parse_item(doc,i,stack,first)
+    def self.parse_item(first)
       unless first
         j = 0
-        stack.each do |t|
-          if doc[i] != t && !(( t == '-' && doc[i] == ';') || (t == ';' && doc[i] == '-'))
-            i -= j + 1
-            return [i,'',true,false]
+        @stack.each do |t|
+          if not_match? t && !(( t == '-' && match?(';')) || (t == ';' && match?('-')))
+            rewind j + 1
+            return ['',true,false]
           end
           j += 1
-          i += 1
+          advance
         end
-        i -= 1
+        rewind 1
       end
-      start_tag = "<#{ITEM_MAP[doc[i]]}>"
-      end_tag = "</#{ITEM_MAP[doc[i]]}>"
-      i += 1
+      start_tag = "<#{ITEM_MAP[current]}>"
+      end_tag = "</#{ITEM_MAP[current]}>"
+      advance
       broken = false
-      if doc[i] =~ LIST_MATCH
-        i,buff = parse(doc,i,stack)
+      if current =~ LIST_MATCH
+        buff = parse_list
       else
-        i,buff,broken = WikiThat::Text.parse(doc,i)
+        buff,broken = WikiThat::Text.parse(doc,i)
       end
-      [i,start_tag + buff + end_tag,broken,false]
+      [start_tag + buff + end_tag,broken,false]
     end
 
-    def self.parse(doc,i, stack = [])
-      start_tag = "<#{LIST_MAP[doc[i]]}>"
-      end_tag = "</#{LIST_MAP[doc[i]]}>"
+    def self.parse_list
+      start_tag = "<#{LIST_MAP[current]}>"
+      end_tag = "</#{LIST_MAP[current]}>"
       buff = ''
-      stack.push(doc[i])
+      @stack.push(current)
       done = false
       first = true
-      while i != doc.length && !done
-        i,partial,done,first = parse_item(doc,i,stack,first)
+      until end? || done
+        partial,done,first = parse_item(first)
         buff += partial
       end
-      [i,start_tag + buff + end_tag]
+      append start_tag + buff + end_tag
     end
   end
 end

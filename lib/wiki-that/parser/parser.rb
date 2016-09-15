@@ -73,8 +73,8 @@ module WikiThat
       end
     end
 
-    def advance
-      @index += 1
+    def advance(dist = 1)
+      @index += dist
     end
 
     def append(str)
@@ -90,6 +90,10 @@ module WikiThat
 
     def next_state(state)
       @state = state
+    end
+
+    def rewind(dist = 1)
+      @index -= dist
     end
 
     def end?
