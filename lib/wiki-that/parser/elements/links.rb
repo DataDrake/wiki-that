@@ -20,6 +20,7 @@ module WikiThat
         advance
       end
       if end? || match?("\n")
+        error 'Warning: Incomplete internal link'
         append buff
         return
       end
@@ -48,6 +49,7 @@ module WikiThat
         attrs.push(attr)
       end
       if end? || match?("\n")
+        error 'Warning: Incomplete internal link'
         append buff
         return
       end
@@ -55,29 +57,32 @@ module WikiThat
       buff += current
       if not_match? ']'
         advance
+        error 'Warning: Incomplete internal link'
         append buff
         return
       end
       advance
       if end?
+        error 'Warning: Incomplete internal link'
         append buff
         return
       end
       # Fail if not at the end of outer link
       if not_match? ']'
+        error 'Warning: Incomplete internal link'
         append buff
         return
       end
       advance
       # Decide how to handle the link
-      if WikiThat.sub_url && link[0] == '/'
-        link = WikiThat.sub_url + link
+      if @sub_url && link[0] == '/'
+        link = @sub_url + link
       end
-      if WikiThat.default_namespace
-        link = WikiThat.default_namespace + '/' + link
+      if @default_namespace
+        link = @default_namespace + '/' + link
       end
-      if WikiThat.base_url
-        link = WikiThat.base_url + '/' + link
+      if @base_url
+        link = @base_url + '/' + link
       end
       case namespace
         when 'Audio'
@@ -106,6 +111,7 @@ module WikiThat
         advance
       end
       if end?
+        error 'Warning: Incomplete external link'
         append buff
         return
       end
@@ -120,6 +126,7 @@ module WikiThat
       buff += current
       if not_match?(']')
         advance
+        error 'Warning: Incomplete external link'
         append buff
         return
       end

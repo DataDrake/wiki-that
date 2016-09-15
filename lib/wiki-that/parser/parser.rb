@@ -3,6 +3,7 @@ require_relative('elements/formatting')
 require_relative('elements/header')
 require_relative('elements/links')
 require_relative('elements/list')
+require_relative('elements/table')
 require_relative('elements/text')
 require_relative('helpers')
 module WikiThat
@@ -11,12 +12,12 @@ module WikiThat
     include WikiThat::Break
     include WikiThat::Formatting
     include WikiThat::Header
-    include WikiThat::Link
+    include WikiThat::Links
     include WikiThat::List
     include WikiThat::Table
     include WikiThat::Text
 
-    attr_reader :error
+    attr_reader :errors
     attr_reader :result
 
     def initialize(doc,base_url, default_namespace, sub_url)
@@ -27,7 +28,7 @@ module WikiThat
       @sub_url = sub_url
       @state = :line_start
       @stack = []
-      @error = nil
+      @errors = []
       @result = ''
     end
 
@@ -68,7 +69,7 @@ module WikiThat
           when :table
             parse_table
           else
-            @error = "Arrived at illegal state: #{@state}"
+            error "Arrived at illegal state: #{@state}"
         end
       end
     end
@@ -88,6 +89,10 @@ module WikiThat
       @doc[@index]
     end
 
+    def error(err)
+      @errors.push err
+    end
+
     def next_state(state)
       @state = state
     end
@@ -101,7 +106,7 @@ module WikiThat
     end
 
     def success?
-      @error == nil
+      @errors.empty?
     end
   end
 end
