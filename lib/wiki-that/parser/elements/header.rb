@@ -13,8 +13,22 @@ module WikiThat
       end
 
       #Read inner content
-      content = parse_inline('=')
-      buff += content
+      end_count = 0
+      content = ''
+      while not_match? "\n"
+        while match? '='
+          buff += @doc[@index]
+          end_count += 1
+          @index += 1
+        end
+        if end_count >= 2
+          break
+        end
+        part = parse_inline("'")
+        buff += part
+        content += part
+        end_count = 0
+      end
 
       #Fail if not at end sequence
       if not_match? '='
