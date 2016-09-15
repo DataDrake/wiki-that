@@ -5,14 +5,14 @@ module WikiThat
       start_count = 0
       buff = ''
       while match? "'"
-        buff += @doc[@index]
+        buff += current
         start_count += 1
-        i += 1
+        advance
       end
 
       #Fail if not a start sequence
       if start_count < 2
-        @result += buff
+        append buff
         return
       end
 
@@ -21,9 +21,9 @@ module WikiThat
       content = ''
       while not_match? "\n"
         while match? "'"
-          buff += @doc[@index]
+          buff += current
           end_count += 1
-          @index += 1
+          advance
         end
         if end_count >= 2
           break
@@ -36,7 +36,7 @@ module WikiThat
 
       #Fail if not an end sequence
       if end_count < 2
-        @result += buff
+        append buff
         return
       end
 
@@ -46,20 +46,20 @@ module WikiThat
       #Produce Tag
       case count
         when 2
-          @result += "<i>#{content}</i>"
+          append "<i>#{content}</i>"
         when 3
-          @result += "<b>#{content}</b>"
+          append "<b>#{content}</b>"
         when 5
-          @result += "<b><i>#{content}</i></b>"
+          append "<b><i>#{content}</i></b>"
         else
-          @result += buff
+          append buff
       end
 
       #Set next state
       if not_match? "\n"
-        @state = :inline_text
+        next_state :inline_text
       else
-        @state = :break
+        next_state :break
       end
     end
   end

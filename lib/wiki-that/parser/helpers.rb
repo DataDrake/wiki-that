@@ -1,23 +1,23 @@
 module WikiThat
   module Helpers
     def match?(*chars)
-      if @index == @doc.length
+      if end?
         return false
       end
       chars.each do |char|
-        if @doc[@index] == char
+        if current == char
           return true
         end
       end
       false
     end
 
-    def not_match?(*char)
-      if @index == @doc.length
+    def not_match?(*chars)
+      if end?
         return false
       end
       chars.each do |char|
-        if @doc[@index] == char
+        if current == char
           return false
         end
       end

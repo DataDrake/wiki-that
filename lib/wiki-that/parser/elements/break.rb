@@ -1,24 +1,23 @@
 module WikiThat
   module Break
     def parse_break
-      @index += 1
-      @count = 0
+      count = 0
+      advance
 
       #Find all consecutive newlines
       while match? "\n"
-        @count += 1
-        @index += 1
+        count += 1
+        advance
       end
 
       # Break if more than 1
       if count > 1
-        @result += '<br/>'
+        append '<br/>'
       else
-        @result += "\n"
+        append "\n"
       end
 
-      #Set next state
-      @state = :line_start
+      next_state :line_start
     end
   end
 end

@@ -9,66 +9,66 @@ module WikiThat
 
     def parse_internal
       buff = '[['
-      @index += 1
+      advance
       link = ''
       attrs = []
       namespace = nil
       # Parse Link or Namespace
       while not_match?(']', "\n", '|', ':')
-        buff += @doc[@index]
-        link += @doc[@index]
-        @index += 1
+        buff += current
+        link += current
+        advance
       end
-      if @index == @doc.length || match?("\n")
-        @result += buff
+      if end? || match?("\n")
+        append buff
         return
       end
       # If namespace, continue parsing link
       if match? ':'
-        buff += @doc[@index]
-        @index += 1
+        buff += current
+        advance
         namespace = link
         link = ''
         while not_match?(']', "\n", '|')
-          buff += @doc[@index]
-          link += @doc[@index]
-          @index += 1
+          buff += current
+          link += current
+          advance
         end
       end
       # Parse attributes
       while match? '|'
-        buff += @doc[@index]
-        @index += 1
+        buff += current
+        advance
         attr = ''
         while not_match?(']', "\n", '|')
-          buff += @doc[@index]
-          attr += @doc[@index]
-          @index += 1
+          buff += current
+          attr += current
+          advance
         end
         attrs.push(attr)
       end
-      if @index == @doc.length || match?("\n")
-        @result += buff
+      if end? || match?("\n")
+        append buff
         return
       end
       # Fail if not at the end of inner link
-      buff += @doc[@index]
+      buff += current
       if not_match? ']'
-        @index += 1
-        @result += buff
+        advance
+        append buff
         return
       end
-      @index += 1
-      if @index == @doc.length
-        @result += buff
+      advance
+      if end?
+        append buff
         return
       end
       # Fail if not at the end of outer link
       if not_match? ']'
-        @result += buff
+        append buff
         return
       end
-      @index += 1
+      advance
       # Decide how to handle the link
       if WikiThat.sub_url && link[0] == '/'
         link = WikiThat.sub_url + link
@@ -81,49 +81,52 @@ module WikiThat
       end
       case namespace
         when 'Audio'
-          @result += WikiThat::Links::Audio.generate(link,attrs)
+          append WikiThat::Links::Audio.generate(link,attrs)
         when 'Image'
-          @result += WikiThat::Links::Image.generate(link,attrs)
+          append WikiThat::Links::Image.generate(link,attrs)
         when 'Video'
-          @result += WikiThat::Links::Video.generate(link,attrs)
+          append WikiThat::Links::Video.generate(link,attrs)
         else
-          @result += "<a href='#{link}'>#{attrs.last}</a>"
+          append "<a href='#{link}'>#{attrs.last}</a>"
       end
     end
 
     def parse_link
-      buff = @doc[@index]
-      @index += 1
+      buff = current
+      advance
       if match? '['
-        return parse_internal(doc,i)
+        parse_internal
+        return
       end
       link = ''
       alt = ''
       while not_match?(']', "\n", '|')
-        buff += @doc[@index]
-        link += @doc[@index]
-        @index += 1
+        buff += current
+        link += current
+        advance
       end
-      if @index == doc.length
-        @result += buff
+      if end?
+        append buff
         return
       end
-      buff += @doc[@index]
+      buff += current
       if match? '|'
-        @index += 1
+        advance
         while not_match?(']', "\n")
-          alt += @doc[@index]
-          @index += 1
+          alt += current
+          advance
         end
       end
-      buff += @doc[@index]
+      buff += current
       if not_match?(']')
-        @index += 1
-        @result += buff
+        advance
+        append buff
         return
       end
-      @index += 1
-      @result += "<a href='#{link}'>#{alt}</a>"
+      advance
+      append "<a href='#{link}'>#{alt}</a>"
+
+      next_state :inline_text
     end
   end
 end

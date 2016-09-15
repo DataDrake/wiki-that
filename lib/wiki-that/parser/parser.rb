@@ -32,26 +32,26 @@ module WikiThat
     end
 
     def parse
-      while @index != @doc.length
+      until end?
         case @state
           when :line_start
-            case @doc[@index]
+            case current
               when "\n"
-                @state = :break
+                next_state :break
               when *FORMAT_SPECIAL
-                @state = :format
+                next_state :format
               when *HEADER_SPECIAL
-                @state = :header
+                next_state :header
               when *HRULE_SPECIAL
-                @state = :horizontal_rule
+                next_state :horizontal_rule
               when *LINK_SPECIAL
-                @state = :link
+                next_state :link
               when *LIST_SPECIAL
-                @state = :list
+                next_state :list
               when *TABLE_SPECIAL
-                @state = :table
+                next_state :table
               else
-                @state = :paragraph
+                next_state :paragraph
             end
           when :break
             parse_break
@@ -71,6 +71,29 @@ module WikiThat
             @error = "Arrived at illegal state: #{@state}"
         end
       end
+    end
+
+    def advance
+      @index += 1
+    end
+
+    def append(str)
+      @result += str
+    end
+
+    def current
+      if end?
+        return ''
+      end
+      @doc[@index]
+    end
+
+    def next_state(state)
+      @state = state
+    end
+
+    def end?
+      @index >= @doc.length
     end
 
     def success?

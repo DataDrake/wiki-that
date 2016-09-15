@@ -9,7 +9,7 @@ module WikiThat
       while match? '='
         buff += '='
         start_level += 1
-        @index += 1
+        advance
       end
 
       #Read inner content
@@ -17,9 +17,9 @@ module WikiThat
       content = ''
       while not_match? "\n"
         while match? '='
-          buff += @doc[@index]
+          buff += current
           end_count += 1
-          @index += 1
+          advance
         end
         if end_count >= 2
           break
@@ -32,7 +32,7 @@ module WikiThat
 
       #Fail if not at end sequence
       if not_match? '='
-        @result += buff
+        append buff
         return
       end
 
@@ -41,30 +41,29 @@ module WikiThat
       while match? '='
         buff += '='
         end_level += 1
-        @index += 1
+        advance
       end
 
       #Read the rest of the line
       while not_match? "\n"
-        buff += @doc[@index]
-        unless whitespace? @doc[@index]
+        buff += current
+        unless whitespace? current
           @state = :header_fail
         end
-        @index += 1
+        advance
       end
 
       #Fail if it wasn't alll whitespace
       if @state == :header_fail
-        @result += buff
+        append buff
         return
       end
 
       #Produce output
       level = start_level > end_level ? end_level : start_level
-      @result += "<h#{level}>#{content}</h#{level}>"
+      append "<h#{level}>#{content}</h#{level}>"
 
-      #Set next state
-      @state = :break
+      next_state :break
     end
   end
 end
