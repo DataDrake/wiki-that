@@ -2,7 +2,12 @@ module WikiThat
   module Text
 
     def parse_inline(stop)
-
+      buff = ''
+      while not_match? stop
+        buff += current
+        advance
+      end
+      buff
     end
 
     def parse_paragraph(doc,i)

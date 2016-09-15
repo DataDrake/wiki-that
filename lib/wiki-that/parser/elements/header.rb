@@ -12,36 +12,33 @@ module WikiThat
         advance
       end
 
-      #Read inner content
-      end_count = 0
-      content = ''
-      while not_match? "\n"
-        while match? '='
-          buff += current
-          end_count += 1
-          advance
-        end
-        if end_count >= 2
-          break
-        end
-        part = parse_inline("'")
-        buff += part
-        content += part
-        end_count = 0
-      end
-
-      #Fail if not at end sequence
-      if not_match? '='
+      if start_level < 2
         append buff
         return
       end
 
-      #Read end sequence
+      #Read inner content
       end_level = 0
-      while match? '='
-        buff += '='
-        end_level += 1
-        advance
+      content = ''
+      while not_match? "\n"
+        while match? '='
+          buff += current
+          end_level += 1
+          advance
+        end
+        if end_level >= 2
+          break
+        end
+        part = parse_inline('=')
+        buff += part
+        content += part
+        end_level = 0
+      end
+
+      if end_level < 2
+        error 'Warning: Incomplete header'
+        append buff
+        return
       end
 
       #Read the rest of the line
