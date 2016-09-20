@@ -11,12 +11,10 @@ module WikiThat
 
       # Break if more than 1
       if count > 1
-        append '<br/>'
+        next_state :break
       else
-        append "\n"
+        next_state :line_start
       end
-
-      next_state :line_start
     end
   end
 end

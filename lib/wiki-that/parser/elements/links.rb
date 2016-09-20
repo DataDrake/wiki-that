@@ -21,8 +21,7 @@ module WikiThat
       end
       if end? || match?("\n")
         error 'Warning: Incomplete internal link'
-        append buff
-        return
+        return buff
       end
       # If namespace, continue parsing link
       if match? ':'
@@ -50,49 +49,41 @@ module WikiThat
       end
       if end? || match?("\n")
         error 'Warning: Incomplete internal link'
-        append buff
-        return
+        return buff
       end
       # Fail if not at the end of inner link
       buff += current
       if not_match? ']'
         advance
         error 'Warning: Incomplete internal link'
-        append buff
-        return
+        return buff
       end
       advance
       if end?
         error 'Warning: Incomplete internal link'
-        append buff
-        return
+        return buff
       end
       # Fail if not at the end of outer link
       if not_match? ']'
         error 'Warning: Incomplete internal link'
-        append buff
-        return
+        return buff
       end
       advance
       # Decide how to handle the link
-      if @sub_url && link[0] != '/'
-        link = @sub_url + link
-      end
-      if @default_namespace
-        link = @default_namespace + '/' + link
-      end
-      if @base_url
-        link = @base_url + '/' + link
+      if link[0] == '/'
+        link = @base_url + '/' + @default_namespace + link
+      else
+        link = @base_url + '/' + @default_namespace + '/' + @sub_url + '/' + link
       end
       case namespace
         when 'Audio'
-          append WikiThat::Links::Audio.generate(link,attrs)
+          WikiThat::Links::Audio.generate(link,attrs)
         when 'Image'
-          append WikiThat::Links::Image.generate(link,attrs)
+          WikiThat::Links::Image.generate(link,attrs)
         when 'Video'
-          append WikiThat::Links::Video.generate(link,attrs)
+          WikiThat::Links::Video.generate(link,attrs)
         else
-          append "<a href='#{link}'>#{attrs.last}</a>"
+          "<a href='#{link}'>#{attrs.last}</a>"
       end
     end
 
@@ -100,8 +91,7 @@ module WikiThat
       buff = current
       advance
       if match? '['
-        parse_internal
-        return
+        return parse_internal
       end
       link = ''
       alt = ''
@@ -112,8 +102,7 @@ module WikiThat
       end
       if end?
         error 'Warning: Incomplete external link'
-        append buff
-        return
+        return buff
       end
       buff += current
       if match? '|'
@@ -127,13 +116,17 @@ module WikiThat
       if not_match?(']')
         advance
         error 'Warning: Incomplete external link'
-        append buff
-        return
+        return buff
       end
       advance
-      append "<a href='#{link}'>#{alt}</a>"
 
       next_state :inline_text
+      "<a href='#{link}'>#{alt}</a>"
+    end
+
+    def parse_link_line
+      append parse_link
+      next_state :line_start
     end
   end
 end

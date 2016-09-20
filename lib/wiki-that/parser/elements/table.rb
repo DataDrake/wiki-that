@@ -22,7 +22,7 @@ module WikiThat
 
     end
 
-    def self.parse(doc,i)
+    def parse_table
       table = '<table'
       buff = '' + doc[i]
       i += 1

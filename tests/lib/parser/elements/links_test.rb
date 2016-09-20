@@ -30,6 +30,13 @@ class LinkTest < Test::Unit::TestCase
     assert_equal('<a href=\'http://example.com\'></a>',parser.result,'Valid link should have been generated')
   end
 
+  def test_external_inline
+    parser = WikiThat::Parser.new('Go Here: [http://example.com]','wiki','BOB','sub/folder')
+    parser.parse
+    assert_true(parser.success?,'Parsing should have succeeded')
+    assert_equal('<p>Go Here: <a href=\'http://example.com\'></a></p>',parser.result,'Valid link should have been generated')
+  end
+
   def test_external_alt
     parser = WikiThat::Parser.new('[http://example.com|Example]','wiki','BOB','sub/folder')
     parser.parse
@@ -55,74 +62,74 @@ class LinkTest < Test::Unit::TestCase
     parser = WikiThat::Parser.new('[[]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<a href=\'wiki/BOB/\'></a>',parser.result,'Link should have been generated')
+    assert_equal('<a href=\'wiki/BOB/sub/folder/\'></a>',parser.result,'Link should have been generated')
   end
 
   def test_internal_home
     parser = WikiThat::Parser.new('[[public/Home]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<a href=\'wiki/BOB/public/Home\'></a>',parser.result,'Link should have been generated')
+    assert_equal('<a href=\'wiki/BOB/sub/folder/public/Home\'></a>',parser.result,'Link should have been generated')
   end
 
   def test_internal_relative
     parser = WikiThat::Parser.new('[[/public/Home]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<a href=\'wiki/BOB/sub/folder/public/Home\'></a>',parser.result,'Link should have been generated')
+    assert_equal('<a href=\'wiki/BOB/public/Home\'></a>',parser.result,'Link should have been generated')
   end
 
   def test_internal_audio
-    parser = WikiThat::Parser.new('[[Audio:public/test.wav]]','wiki','BOB','sub/folder')
+    parser = WikiThat::Parser.new('[[Audio:/public/test.wav]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<audio controls><source src=\'wiki/BOB/public/test.wav\'></audio>',parser.result,'Link should have been generated')
   end
 
   def test_internal_video
-    parser = WikiThat::Parser.new('[[Video:public/test.wav]]','wiki','BOB','sub/folder')
+    parser = WikiThat::Parser.new('[[Video:/public/test.wav]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<video controls><source src=\'wiki/BOB/public/test.wav\'></video>',parser.result,'Link should have been generated')
   end
 
   def test_internal_image
-    parser = WikiThat::Parser.new('[[Image:public/test.png]]','wiki','BOB','sub/folder')
+    parser = WikiThat::Parser.new('[[Image:/public/test.png]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<img src=\'wiki/BOB/public/test.png\'>',parser.result,'Link should have been generated')
   end
 
   def test_internal_image_caption
-    parser = WikiThat::Parser.new('[[Image:public/test.png|Test PNG]]','wiki','BOB','sub/folder')
+    parser = WikiThat::Parser.new('[[Image:/public/test.png|Test PNG]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<div><img src=\'wiki/BOB/public/test.png\'></div>',parser.result,'Link should have been generated')
   end
 
   def test_internal_image_frame
-    parser = WikiThat::Parser.new('[[Image:public/test.png|frame|Test PNG]]','wiki','BOB','sub/folder')
+    parser = WikiThat::Parser.new('[[Image:/public/test.png|frame|Test PNG]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<div class=\'frame\'><img src=\'wiki/BOB/public/test.png\'><caption>Test PNG</caption></div>',parser.result,'Link should have been generated')
   end
 
   def test_internal_image_thumb
-    parser = WikiThat::Parser.new('[[Image:public/test.png|thumb|Test PNG]]','wiki','BOB','sub/folder')
+    parser = WikiThat::Parser.new('[[Image:/public/test.png|thumb|Test PNG]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<div class=\'thumb\'><a href=\'wiki/BOB/public/test.png\'><img src=\'wiki/BOB/public/test.png\'></a><caption>Test PNG</caption></div>',parser.result,'Link should have been generated')
   end
 
   def test_internal_image_width
-    parser = WikiThat::Parser.new('[[Image:public/test.png|100px|Test PNG]]','wiki','BOB','sub/folder')
+    parser = WikiThat::Parser.new('[[Image:/public/test.png|100px|Test PNG]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<div><img src=\'wiki/BOB/public/test.png\' width=\'100px\'></div>',parser.result,'Link should have been generated')
   end
 
   def test_internal_image_left
-    parser = WikiThat::Parser.new('[[Image:public/test.png|left|Test PNG]]','wiki','BOB','sub/folder')
+    parser = WikiThat::Parser.new('[[Image:/public/test.png|left|Test PNG]]','wiki','BOB','sub/folder')
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<div class=\'left\'><img src=\'wiki/BOB/public/test.png\'></div>',parser.result,'Link should have been generated')

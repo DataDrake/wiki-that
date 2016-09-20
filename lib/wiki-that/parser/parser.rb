@@ -39,10 +39,6 @@ module WikiThat
         case @state
           when :line_start
             case current
-              when "\n"
-                next_state :break
-              when *FORMAT_SPECIAL
-                next_state :format
               when *HEADER_SPECIAL
                 next_state :header
               when *LINK_SPECIAL
@@ -56,20 +52,18 @@ module WikiThat
               else
                 next_state :paragraph
             end
-          when :break
-            parse_break
-          when :format
-            parse_formatting
           when :header
             parse_header
           when :horizontal_rule
             parse_horizontal_rule
           when :link
-            parse_link
+            parse_link_line
           when :list
             parse_list
           when :table
             parse_table
+          when :paragraph
+            parse_paragraph
           else
             error "Arrived at illegal state: #{@state}"
         end

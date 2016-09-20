@@ -12,8 +12,7 @@ module WikiThat
 
       #Fail if not a start sequence
       if start_count < 2
-        append buff
-        return
+        return buff
       end
 
       #Read inner content, ignoring apostrophes
@@ -36,8 +35,7 @@ module WikiThat
 
       #Fail if not an end sequence
       if end_count < 2
-        append buff
-        return
+        return buff
       end
 
       #Choose Minimum Depth
@@ -46,21 +44,16 @@ module WikiThat
       #Produce Tag
       case count
         when 2
-          append "<i>#{content}</i>"
+          buff = "<i>#{content}</i>"
         when 3
-          append "<b>#{content}</b>"
+          buff = "<b>#{content}</b>"
         when 5
-          append "<b><i>#{content}</i></b>"
-        else
-          append buff
+          buff = "<b><i>#{content}</i></b>"
+        else ## do nothing
       end
 
-      #Set next state
-      if not_match? "\n"
-        next_state :inline_text
-      else
-        next_state :break
-      end
+      next_state :inline_text
+      buff
     end
   end
 end

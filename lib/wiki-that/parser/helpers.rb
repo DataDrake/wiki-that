@@ -32,11 +32,8 @@ module WikiThat
           false
       end
     end
-
-    FORMAT_SPECIAL = %w(')
     HEADER_SPECIAL = %w(=)
     HRULE_SPECIAL  = %w(-)
-    LINK_SPECIAL   = %w([)
     LIST_SPECIAL   = %w(* # : ;)
     TABLE_SPECIAL  = %w({)
 
