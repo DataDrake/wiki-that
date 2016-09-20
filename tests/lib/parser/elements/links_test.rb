@@ -37,6 +37,13 @@ class LinkTest < Test::Unit::TestCase
     assert_equal('<p>Go Here: <a href=\'http://example.com\'></a></p>',parser.result,'Valid link should have been generated')
   end
 
+  def test_external_inline2
+    parser = WikiThat::Parser.new('[http://example.com] <-- Follow','wiki','BOB','sub/folder')
+    parser.parse
+    assert_true(parser.success?,'Parsing should have succeeded')
+    assert_equal('<a href=\'http://example.com\'></a><p> <-- Follow</p>',parser.result,'Valid link should have been generated')
+  end
+
   def test_external_alt
     parser = WikiThat::Parser.new('[http://example.com|Example]','wiki','BOB','sub/folder')
     parser.parse
