@@ -2,7 +2,6 @@ module WikiThat
   module Break
     def parse_break
       count = 0
-      advance
 
       #Find all consecutive newlines
       while match? "\n"

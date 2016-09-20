@@ -75,7 +75,7 @@ module WikiThat
       end
       advance
       # Decide how to handle the link
-      if @sub_url && link[0] == '/'
+      if @sub_url && link[0] != '/'
         link = @sub_url + link
       end
       if @default_namespace

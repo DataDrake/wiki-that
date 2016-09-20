@@ -13,5 +13,6 @@
   * List
 * Write
   * Break
+  * Horizontal Rule
   * Table
   * Text

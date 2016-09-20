@@ -3,6 +3,7 @@ require_relative('elements/formatting')
 require_relative('elements/header')
 require_relative('elements/links')
 require_relative('elements/list')
+require_relative('elements/rule')
 require_relative('elements/table')
 require_relative('elements/text')
 require_relative('helpers')
@@ -14,6 +15,7 @@ module WikiThat
     include WikiThat::Header
     include WikiThat::Links
     include WikiThat::List
+    include WikiThat::Rule
     include WikiThat::Table
     include WikiThat::Text
 
@@ -43,14 +45,14 @@ module WikiThat
                 next_state :format
               when *HEADER_SPECIAL
                 next_state :header
-              when *HRULE_SPECIAL
-                next_state :horizontal_rule
               when *LINK_SPECIAL
                 next_state :link
               when *LIST_SPECIAL
                 next_state :list
               when *TABLE_SPECIAL
                 next_state :table
+              when *HRULE_SPECIAL
+                next_state :horizontal_rule
               else
                 next_state :paragraph
             end
