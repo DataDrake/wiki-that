@@ -41,14 +41,14 @@ module WikiThat
             case current
               when *HEADER_SPECIAL
                 next_state :header
+              ##when *HRULE_SPECIAL
+                ##next_state :horizontal_rule
               when *LINK_SPECIAL
                 next_state :link
               when *LIST_SPECIAL
                 next_state :list
               when *TABLE_SPECIAL
                 next_state :table
-              when *HRULE_SPECIAL
-                next_state :horizontal_rule
               else
                 next_state :paragraph
             end

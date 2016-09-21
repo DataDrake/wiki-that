@@ -34,7 +34,6 @@ module WikiThat
     end
     HEADER_SPECIAL = %w(=)
     HRULE_SPECIAL  = %w(-)
-    LIST_SPECIAL   = %w(* # : ;)
     TABLE_SPECIAL  = %w({)
 
     def special_char?(c)

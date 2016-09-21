@@ -1,47 +1,78 @@
 module WikiThat
   module List
 
-    LIST_MATCH = /[*#:;]/
     LIST_MAP = {'*' => 'ul', '#' => 'ol', ';' => 'dl', '-' => 'dl'}
     ITEM_MAP = {'*' => 'li', '#' => 'li', ';' => 'dt', '-' => 'dd'}
 
-    def self.parse_item(first)
-      unless first
-        j = 0
-        @stack.each do |t|
-          if not_match? t && !(( t == '-' && match?(';')) || (t == ';' && match?('-')))
-            rewind j + 1
-            return ['',true,false]
-          end
-          j += 1
-          advance
+    LIST_SPECIAL = %w(* # : ; -)
+
+    def parse_item
+      local_stack = []
+      @stack.each do |s|
+        case s
+          when current
+            local_stack.push(s)
+            advance
+          when '-'
+            if match? ';'
+              local_stack.push(s)
+              advance
+            end
+          when ';'
+            if match? '-'
+              local_stack.push(s)
+              advance
+            end
+          else
+            break
         end
-        rewind 1
       end
+      if local_stack.length == @stack.length
+        rewind
+        [false,parse_first_item]
+      else local_stack.length < @stack.length
+        [true,'']
+      end
+    end
+
+    def parse_first_item
       start_tag = "<#{ITEM_MAP[current]}>"
       end_tag = "</#{ITEM_MAP[current]}>"
       advance
-      broken = false
-      if current =~ LIST_MATCH
-        buff = parse_list
-      else
-        buff,broken = WikiThat::Text.parse(doc,i)
+      case current
+        when *LIST_SPECIAL
+          buff = parse_list2
+        else
+          buff = parse_inline("\n")
+          advance
       end
-      [start_tag + buff + end_tag,broken,false]
+      start_tag + buff + end_tag
     end
 
-    def self.parse_list
-      start_tag = "<#{LIST_MAP[current]}>"
-      end_tag = "</#{LIST_MAP[current]}>"
+    def parse_items
       buff = ''
-      @stack.push(current)
+      ## get first list item
+      buff += parse_first_item
       done = false
-      first = true
+      ## while not end of list
       until end? || done
-        partial,done,first = parse_item(first)
+        done,partial = parse_item
         buff += partial
       end
-      append start_tag + buff + end_tag
+      buff
+    end
+
+    def parse_list2
+      start_tag = "<#{LIST_MAP[current]}>"
+      end_tag = "</#{LIST_MAP[current]}>"
+      @stack.push(current)
+      buff = parse_items
+      @stack.pop
+      start_tag + buff + end_tag
+    end
+    def parse_list
+      append parse_list2
+      next_state :line_start
     end
   end
 end
