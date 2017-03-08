@@ -47,10 +47,6 @@ module WikiThat
         end
         attrs.push(attr)
       end
-      if end? || match?("\n")
-        error 'Warning: Incomplete internal link'
-        return buff
-      end
       # Fail if not at the end of inner link
       buff += current
       if not_match? ']'
@@ -63,8 +59,10 @@ module WikiThat
         error 'Warning: Incomplete internal link'
         return buff
       end
+      buff += current
       # Fail if not at the end of outer link
       if not_match? ']'
+        advance
         error 'Warning: Incomplete internal link'
         return buff
       end
@@ -112,11 +110,11 @@ module WikiThat
           advance
         end
       end
-      buff += current
-      if not_match?(']')
+      if not_match?(']') or end?
+        buff += current
         advance
         error 'Warning: Incomplete external link'
-        return buff
+        return buff+alt
       end
       advance
 

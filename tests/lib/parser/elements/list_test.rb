@@ -86,6 +86,14 @@ class ListTest < Test::Unit::TestCase
     assert_equal('<dl><dt> ABC</dt><dd> DEF</dd></dl>',parser.result,'Unordered List should have been generated')
   end
 
+  def test_dl_dn_dt
+    parser = WikiThat::Parser.new("- ABC\n; DEF",'wiki','BOB','sub/folder')
+    parser.parse
+
+    assert_equal('<dl><dd> ABC</dd><dt> DEF</dt></dl>',parser.result,'Unordered List should have been generated')
+  end
+
+
   def test_ol_dl_dt_dn
     parser = WikiThat::Parser.new("#; ABC\n#- DEF",'wiki','BOB','sub/folder')
     parser.parse

@@ -10,6 +10,20 @@ class FormattingTest < Test::Unit::TestCase
     assert_equal('',parser.result)
   end
 
+  def test_short
+    parser = WikiThat::Parser.new('\'','wiki','BOB','sub/folder')
+    parser.parse
+    assert_true(parser.success?,'Parsing should have succeeded')
+    assert_equal('<p>\'</p>',parser.result)
+  end
+
+  def test_short2
+    parser = WikiThat::Parser.new('\'\'thing\'','wiki','BOB','sub/folder')
+    parser.parse
+    assert_true(parser.success?,'Parsing should have succeeded')
+    assert_equal('<p>\'\'thing\'</p>',parser.result)
+  end
+
   def test_italic
     parser = WikiThat::Parser.new('\'\'italic things\'\'','wiki','BOB','sub/folder')
     parser.parse

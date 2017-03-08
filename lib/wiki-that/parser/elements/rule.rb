@@ -8,9 +8,13 @@ module WikiThat
         count += 1
         advance
       end
-      if count < 3
-        append buff
-        return
+      case count
+        when 1,2
+          rewind(count)
+          next_state :list
+          return
+        else
+
       end
       append '<hr/>'
     end

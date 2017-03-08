@@ -9,6 +9,14 @@ class HeaderTest < Test::Unit::TestCase
     assert_equal('',parser.result,'Response should be empty')
   end
 
+  def test_short
+    start = '= Incomplete Header ='
+    parser = WikiThat::Parser.new(start,'wiki','BOB','sub/folder')
+    parser.parse
+    assert_true(parser.success?,'Parsing should have succeeded')
+    assert_equal(start,parser.result,'No header should be produced')
+  end
+
   def test_incomplete
     start = '== Incomplete Header'
     parser = WikiThat::Parser.new(start,'wiki','BOB','sub/folder')
@@ -47,6 +55,22 @@ class HeaderTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<h2> Complete Header </h2>',parser.result,'H2 should be produced')
+  end
+
+  def test_h2_trailing_whitespace
+    start = '== Complete Header ==     '
+    parser = WikiThat::Parser.new(start,'wiki','BOB','sub/folder')
+    parser.parse
+    assert_true(parser.success?,'Parsing should have succeeded')
+    assert_equal('<h2> Complete Header </h2>',parser.result,'H2 should be produced')
+  end
+
+  def test_h2_trailing_text
+    start = '== Complete Header == text'
+    parser = WikiThat::Parser.new(start,'wiki','BOB','sub/folder')
+    parser.parse
+    assert_false(parser.success?,'Parsing should have failed')
+    assert_equal(start,parser.result,'H2 should not be produced')
   end
 
   def test_h3

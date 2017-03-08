@@ -13,7 +13,8 @@ module WikiThat
       end
 
       if start_level < 2
-        append buff
+        rewind
+        append parse_inline("\n")
         return
       end
 
@@ -50,7 +51,7 @@ module WikiThat
         advance
       end
 
-      #Fail if it wasn't alll whitespace
+      #Fail if it wasn't all whitespace
       if @state == :header_fail
         error "Warning: Text after header not allowed on same line"
         append buff

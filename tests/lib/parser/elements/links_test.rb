@@ -23,6 +23,14 @@ class LinkTest < Test::Unit::TestCase
     assert_equal('<a href=\'\'></a>',parser.result,'Empty link should have been generated')
   end
 
+  def test_external_incomplete
+    start = '[http://example.com|Hello'
+    parser = WikiThat::Parser.new(start,'wiki','BOB','sub/folder')
+    parser.parse
+    assert_false(parser.success?,'Parsing should have failed')
+    assert_equal(start,parser.result,'Valid link should not have been generated')
+  end
+
   def test_external
     parser = WikiThat::Parser.new('[http://example.com]','wiki','BOB','sub/folder')
     parser.parse
@@ -112,6 +120,30 @@ class LinkTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?,'Parsing should have succeeded')
     assert_equal('<div><img src=\'wiki/BOB/public/test.png\'></div>',parser.result,'Link should have been generated')
+  end
+
+  def test_internal_image_caption_incomplete1
+    start = '[[Image:/public/test.png|Test PNG'
+    parser = WikiThat::Parser.new(start,'wiki','BOB','sub/folder')
+    parser.parse
+    assert_false(parser.success?,'Parsing should have failed')
+    assert_equal(start,parser.result,'Link should not have been generated')
+  end
+
+  def test_internal_image_caption_incomplete2
+    start = "[[Image:/public/test.png|Test PNG\n"
+    parser = WikiThat::Parser.new(start,'wiki','BOB','sub/folder')
+    parser.parse
+    assert_false(parser.success?,'Parsing should have failed')
+    assert_equal(start,parser.result,'Link should not have been generated')
+  end
+
+  def test_internal_image_caption_incomplete3
+    start = '[[Image:/public/test.png|Test PNG] '
+    parser = WikiThat::Parser.new(start,'wiki','BOB','sub/folder')
+    parser.parse
+    assert_false(parser.success?,'Parsing should have failed')
+    assert_equal(start,parser.result,'Link should not have been generated')
   end
 
   def test_internal_image_frame
