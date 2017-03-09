@@ -1,5 +1,30 @@
+##
+# Copyright 2017 Bryan T. Meyers
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#	See the License for the specific language governing permissions and
+#	limitations under the License.
+##
 module WikiThat
+  ##
+  # Helpers contains useful logic functions to be used by Parser modules
+  # @author Bryan T. Meyers
+  ##
   module Helpers
+
+    ##
+    # Determine if the current character matches any in a list
+    # @param [Array] chars a list of characters to check
+    # @return [Boolean] True iff the current character is in the list
+    ##
     def match?(*chars)
       if end?
         return false
@@ -12,6 +37,11 @@ module WikiThat
       false
     end
 
+    ##
+    # Determine if the current character does not match any in a list
+    # @param [Array] chars a list of characters to check
+    # @return [Boolean] True iff the current character is not in the list
+    ##
     def not_match?(*chars)
       if end?
         return false
@@ -24,6 +54,11 @@ module WikiThat
       true
     end
 
+    ##
+    # Determine if the specified character is a whitespace character
+    # @param [String] c the character to check
+    # @return [Boolean] True iff the character is whitespace
+    ##
     def whitespace?(c)
       case c
         when ' ', "\t"
@@ -32,27 +67,12 @@ module WikiThat
           false
       end
     end
-    HEADER_SPECIAL = %w(=)
-    HRULE_SPECIAL  = %w(-)
-    TABLE_SPECIAL  = %w({)
 
-    def special_char?(c)
-      case c
-        when *FORMAT_SPECIAL
-          true
-        when *HEADER_SPECIAL
-          true
-        when *HRULE_SPECIAL
-          true
-        when *LINK_SPECIAL
-          true
-        when *LIST_SPECIAL
-          true
-        when *TABLE_SPECIAL
-          true
-        else
-          false
-      end
-    end
+    # Special characters for Headers
+    HEADER_SPECIAL = %w(=)
+    # Special characters for Horizontal Rules
+    HRULE_SPECIAL  = %w(-)
+    # Special characters for Tables
+    TABLE_SPECIAL  = %w({)
   end
 end

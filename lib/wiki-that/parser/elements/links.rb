@@ -1,17 +1,45 @@
+##
+# Copyright 2017 Bryan T. Meyers
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#	See the License for the specific language governing permissions and
+#	limitations under the License.
+##
 require_relative('links/audio')
 require_relative('links/image')
 require_relative('links/video')
 
 module WikiThat
+  ##
+  # Parser module for links and embedded media
+  #
+  # This module deviates from standard MediaWiki in its use
+  # of namespaces and support for media tags. It is not compliant
+  # with the Wikimedia Foundation grammar.
+  #
+  # @author Bryan T. Meyers
+  ##
   module Links
 
+    # Property attributes for images
     IMAGE_PROPERTIES = %w(border frame left right center thumb thumbnail)
 
+    ##
+    # Parse the current text as a link to content in a namespace
+    ##
     def parse_internal
       buff = '[['
       advance
-      link = ''
-      attrs = []
+      link      = ''
+      attrs     = []
       namespace = nil
       # Parse Link or Namespace
       while not_match?(']', "\n", '|', ':')
@@ -28,7 +56,7 @@ module WikiThat
         buff += current
         advance
         namespace = link
-        link = ''
+        link      = ''
         while not_match?(']', "\n", '|')
           buff += current
           link += current
@@ -75,16 +103,19 @@ module WikiThat
       end
       case namespace
         when 'Audio'
-          WikiThat::Links::Audio.generate(link,attrs)
+          WikiThat::Links::Audio.generate(link, attrs)
         when 'Image'
-          WikiThat::Links::Image.generate(link,attrs)
+          WikiThat::Links::Image.generate(link, attrs)
         when 'Video'
-          WikiThat::Links::Video.generate(link,attrs)
+          WikiThat::Links::Video.generate(link, attrs)
         else
           "<a href='#{link}'>#{attrs.last}</a>"
       end
     end
 
+    ##
+    # Parse any link , internal or external
+    ##
     def parse_link
       buff = current
       advance
@@ -92,7 +123,7 @@ module WikiThat
         return parse_internal
       end
       link = ''
-      alt = ''
+      alt  = ''
       while not_match?(']', "\n", '|')
         buff += current
         link += current
@@ -122,6 +153,9 @@ module WikiThat
       "<a href='#{link}'>#{alt}</a>"
     end
 
+    ##
+    # Parse the current link as a link
+    ##
     def parse_link_line
       append parse_link
       next_state :line_start
