@@ -59,6 +59,7 @@ module WikiThat
         parse_break
       end
       append '</p>'
+      next_state :line_start
     end
   end
 end

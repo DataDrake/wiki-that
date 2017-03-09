@@ -102,6 +102,7 @@ module WikiThat
             parse_paragraph
           else
             error "Arrived at illegal state: #{@state}"
+            return
         end
       end
     end
