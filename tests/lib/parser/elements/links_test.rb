@@ -14,7 +14,7 @@
 #	limitations under the License.
 ##
 require 'test/unit'
-require_relative('../../../../lib/wiki-that/parser/parser')
+require_relative('../../../../lib/wiki-that')
 class LinkTest < Test::Unit::TestCase
 
   def test_empty

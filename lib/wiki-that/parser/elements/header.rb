@@ -13,7 +13,6 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
-require_relative('../../../../lib/wiki-that/wiki-that')
 
 module WikiThat
   ##

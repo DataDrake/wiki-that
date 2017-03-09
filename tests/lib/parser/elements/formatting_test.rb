@@ -14,7 +14,7 @@
 #	limitations under the License.
 ##
 require 'test/unit'
-require_relative('../../../../lib/wiki-that/wiki-that')
+require_relative('../../../../lib/wiki-that')
 
 class FormattingTest < Test::Unit::TestCase
 
