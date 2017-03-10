@@ -13,28 +13,35 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
+require_relative('token')
 module WikiThat
   ##
-  # Lexer module for handline line breaks
+  # Lexer module for inline formatting
   # @author Bryan T. Meyers
   ##
-  module Break
+  module Formatting
     ##
-    # Parse the current text as a line break
+    # Lex the current text as inline formatting
     ##
-    def parse_break
+    def lex_formatting
+      #Read opening marks
       count = 0
-
-      #Find all consecutive newlines
-      while match? "\n"
+      while match? "'"
         count += 1
         advance
       end
 
-      # Break if more than 1
-      if count > 1
-        append Token.new(:break,count)
+      case count
+        when 0
+          error 'Format count should never be zero'
+          nil
+        when 1
+          rewind
+          nil
+        else
+          Token.new(:format,count)
       end
+
     end
   end
 end

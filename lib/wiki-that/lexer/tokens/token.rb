@@ -15,26 +15,22 @@
 ##
 module WikiThat
   ##
-  # Lexer module for handline line breaks
+  # Tokens are typed data found by a Lexer
   # @author Bryan T. Meyers
   ##
-  module Break
-    ##
-    # Parse the current text as a line break
-    ##
-    def parse_break
-      count = 0
+  class Token
 
-      #Find all consecutive newlines
-      while match? "\n"
-        count += 1
-        advance
-      end
-
-      # Break if more than 1
-      if count > 1
-        append Token.new(:break,count)
-      end
+    def initialize(type,value)
+      @children = []
+      @type = type
+      @value = value
     end
+
+    attr_reader :children, :type, :value
+
+    def add_child(child)
+      @children.push(child)
+    end
+
   end
 end

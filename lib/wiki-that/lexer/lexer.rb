@@ -13,22 +13,22 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
-require_relative('elements/break')
-require_relative('elements/formatting')
-require_relative('elements/header')
-require_relative('elements/links')
-require_relative('elements/list')
-require_relative('elements/rule')
-require_relative('elements/table')
-require_relative('elements/text')
+require_relative('tokens/break')
+require_relative('tokens/formatting')
+require_relative('tokens/header')
+require_relative('tokens/links')
+require_relative('tokens/list')
+require_relative('tokens/rule')
+require_relative('tokens/table')
+require_relative('tokens/text')
 require_relative('helpers')
 module WikiThat
   ##
-  # Parsers are disposable objects for translatin a Mediawiki
-  # document to HTML only once.
+  # Lexers are disposable objects for translate a Mediawiki
+  # document to a Token list.
   # @author Bryan T. Meyers
   ##
-  class Parser
+  class Lexer
     include WikiThat::Helpers
     include WikiThat::Break
     include WikiThat::Formatting
@@ -39,30 +39,22 @@ module WikiThat
     include WikiThat::Table
     include WikiThat::Text
 
-    # All of the errors generated while parsing
+    # All of the errors generated while lexing
     attr_reader :errors
     # The output of the translation to HTML
     attr_reader :result
 
     ##
-    # Create a new WikiThat::Parser
+    # Create a new WikiThat::Lexer
     # @param [String] doc the MediaWiki document
-    # @param [String] base_url the base or the URL to use for relative links
-    # @param [String] default_namespace the namespace to use when one isn't specified
-    # @param [String] sub_url the base of the url inside the current namespace
     #
-    # @returns [WikiThat::Parser] a newly configured Parser
+    # @returns [WikiThat::Lexer] a newly configured Lexer
     ##
-    def initialize(doc, base_url, default_namespace, sub_url)
+    def initialize(doc)
       @doc               = doc
       @index             = 0
-      @base_url          = base_url
-      @default_namespace = default_namespace
-      @sub_url           = sub_url
-      @state             = :line_start
-      @stack             = []
       @errors            = []
-      @result            = ''
+      @result            = []
     end
 
     ##
@@ -70,45 +62,27 @@ module WikiThat
     #
     # @returns [String] the resulting HTML partial
     ##
-    def parse
+    def lex
       until end?
-        case @state
-          when :line_start
-            case current
-              when *HEADER_SPECIAL
-                next_state :header
-              when *HRULE_SPECIAL
-                next_state :horizontal_rule
-              when *LINK_SPECIAL
-                next_state :link
-              when *LIST_SPECIAL
-                next_state :list
-              when *TABLE_SPECIAL
-                next_state :table
-              else
-                next_state :paragraph
-            end
-          when :header
-            parse_header
-          when :horizontal_rule
-            parse_horizontal_rule
-          when :link
-            parse_link_line
-          when :list
-            parse_list
-          when :table
-            parse_table
-          when :paragraph
-            parse_paragraph
+        case current
+          when *HEADER_SPECIAL
+            #lex_header
+          when *HRULE_SPECIAL
+            #lex_horizontal_rule
+          when *LINK_SPECIAL
+            #lex_link_line
+          when *LIST_SPECIAL
+            #lex_list
+          when *TABLE_SPECIAL
+            #lex_table
           else
-            error "Arrived at illegal state: #{@state}"
-            return
+            lex_text
         end
       end
     end
 
     ##
-    # Move the parser tape forward
+    # Move the lexer tape forward
     # @param [Integer] dist how many steps to move forward, default 1
     ##
     def advance(dist = 1)
@@ -116,11 +90,11 @@ module WikiThat
     end
 
     ##
-    # Append a string to the result
-    # @param [String] str the string to append
+    # Append Tokens to the result
+    # @param [Token] toks the Tokens to append
     ##
-    def append(str)
-      @result += str
+    def append(toks)
+      @result.push(*toks)
     end
 
     ##
@@ -143,15 +117,7 @@ module WikiThat
     end
 
     ##
-    # Set the state for the next iteration
-    # @param [Symbol] state the new state
-    ##
-    def next_state(state)
-      @state = state
-    end
-
-    ##
-    # Move the parser tape backward
+    # Move the lexer tape backward
     # @param [Integer] dist how many steps to move backward, default 1
     ##
     def rewind(dist = 1)

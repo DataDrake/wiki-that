@@ -13,6 +13,7 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
+require_relative('token')
 module WikiThat
   ##
   # Lexer module for handling raw text
@@ -26,40 +27,49 @@ module WikiThat
     LINK_SPECIAL   = %w([)
 
     ##
-    # Continue to parse as inline-text until the specified
+    # Continue to lex as inline-text until the specified
     # character or end of line
     # @param [String] stop the character to stop at
     # @returns [String] the text read
     ##
-    def parse_inline(stop)
+    def lex_inline(stop = nil)
       buff = ''
       while not_match?(stop) && not_match?("\n")
         case current
           # Inline formatting
           when *FORMAT_SPECIAL
-            buff += parse_formatting
+            fmt = lex_formatting
+            if FORMAT_SPECIAL.include? current
+              buff += current
+              advance
+            else
+              if buff.length > 0
+                append Token.new(:text,buff.clone)
+                buff = ''
+              end
+              append fmt
+            end
           # Inline links
           when *LINK_SPECIAL
-            buff += parse_link
+            #lex_link
           else
             buff += current
             advance
         end
       end
-      buff
+      if buff.length > 0
+        append Token.new(:text,buff)
+      end
     end
 
     ##
     # Continue reading as raw text until a linebreak
     ##
-    def parse_paragraph
-      append '<p>'
-      until end? || @state == :break
-        append parse_inline("\n")
-        parse_break
+    def lex_text
+      until end?
+        lex_inline
+        lex_break
       end
-      append '</p>'
-      next_state :line_start
     end
   end
 end

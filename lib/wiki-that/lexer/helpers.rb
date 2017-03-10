@@ -15,7 +15,7 @@
 ##
 module WikiThat
   ##
-  # Helpers contains useful logic functions to be used by Parser modules
+  # Helpers contains useful logic functions to be used by Lexer modules
   # @author Bryan T. Meyers
   ##
   module Helpers

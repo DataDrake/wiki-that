@@ -13,7 +13,7 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
-require_relative('wiki-that/parser/parser')
+require_relative('wiki-that/lexer/lexer')
 module WikiThat
   VERSION = '0.0.1'
 end

@@ -19,66 +19,66 @@ require_relative('../../../../lib/wiki-that')
 class FormattingTest < Test::Unit::TestCase
 
   def test_empty
-    parser = WikiThat::Parser.new('','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('',parser.result)
+    lexer = WikiThat::Lexer.new('','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('',lexer.result)
   end
 
   def test_short
-    parser = WikiThat::Parser.new('\'','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p>\'</p>',parser.result)
+    lexer = WikiThat::Lexer.new('\'','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p>\'</p>',lexer.result)
   end
 
   def test_short2
-    parser = WikiThat::Parser.new('\'\'thing\'','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p>\'\'thing\'</p>',parser.result)
+    lexer = WikiThat::Lexer.new('\'\'thing\'','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p>\'\'thing\'</p>',lexer.result)
   end
 
   def test_italic
-    parser = WikiThat::Parser.new('\'\'italic things\'\'','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p><i>italic things</i></p>',parser.result)
+    lexer = WikiThat::Lexer.new('\'\'italic things\'\'','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p><i>italic things</i></p>',lexer.result)
   end
 
   def test_italic_inline
-    parser = WikiThat::Parser.new('not \'\'italic things\'\' not','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p>not <i>italic things</i> not</p>',parser.result)
+    lexer = WikiThat::Lexer.new('not \'\'italic things\'\' not','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p>not <i>italic things</i> not</p>',lexer.result)
   end
 
   def test_bold
-    parser = WikiThat::Parser.new('\'\'\'bold things\'\'\'','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p><b>bold things</b></p>',parser.result)
+    lexer = WikiThat::Lexer.new('\'\'\'bold things\'\'\'','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p><b>bold things</b></p>',lexer.result)
   end
 
   def test_bold_inline
-    parser = WikiThat::Parser.new('not \'\'\'bold things\'\'\' not','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p>not <b>bold things</b> not</p>',parser.result)
+    lexer = WikiThat::Lexer.new('not \'\'\'bold things\'\'\' not','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p>not <b>bold things</b> not</p>',lexer.result)
   end
 
   def test_both
-    parser = WikiThat::Parser.new('\'\'\'\'\'both things\'\'\'\'\'','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p><b><i>both things</i></b></p>',parser.result)
+    lexer = WikiThat::Lexer.new('\'\'\'\'\'both things\'\'\'\'\'','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p><b><i>both things</i></b></p>',lexer.result)
   end
 
   def test_both_inline
-    parser = WikiThat::Parser.new('not \'\'\'\'\'both things\'\'\'\'\' not','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p>not <b><i>both things</i></b> not</p>',parser.result)
+    lexer = WikiThat::Lexer.new('not \'\'\'\'\'both things\'\'\'\'\' not','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p>not <b><i>both things</i></b> not</p>',lexer.result)
   end
 
 end

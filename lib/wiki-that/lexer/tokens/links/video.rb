@@ -14,26 +14,20 @@
 #	limitations under the License.
 ##
 module WikiThat
-  ##
-  # Lexer module for handline line breaks
-  # @author Bryan T. Meyers
-  ##
-  module Break
+  module Links
     ##
-    # Parse the current text as a line break
+    # Generator for Video tags
+    # @author Bryan T. Meyers
     ##
-    def parse_break
-      count = 0
-
-      #Find all consecutive newlines
-      while match? "\n"
-        count += 1
-        advance
-      end
-
-      # Break if more than 1
-      if count > 1
-        append Token.new(:break,count)
+    module Video
+      ##
+      # Create a video tag from the pre-parsed link data
+      # @param [String] link the URL for the video source
+      # @param [String] attrs the attributes for this video tag
+      # @return [String] the generated tag
+      ##
+      def self.generate(link, attrs)
+        "<video controls><source src='#{link}'></video>"
       end
     end
   end

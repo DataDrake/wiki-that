@@ -13,6 +13,7 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
+require_relative('token')
 module WikiThat
   ##
   # Lexer module for handline line breaks
@@ -20,9 +21,9 @@ module WikiThat
   ##
   module Break
     ##
-    # Parse the current text as a line break
+    # Lex the current text as a line break
     ##
-    def parse_break
+    def lex_break
       count = 0
 
       #Find all consecutive newlines

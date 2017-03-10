@@ -1,5 +1,5 @@
 # wiki-that
-A custom MediaWiki parser which generates HTML partials for 
+A custom MediaWiki lexer which generates HTML partials for 
 use in the Engineering Design Guide and Environment (EDGE),
 developed at the Rochester Institute of Technology. This 
 library does adapts the WikiMedia Foundation MediaWiki grammar

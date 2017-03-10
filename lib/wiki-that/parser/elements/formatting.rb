@@ -15,7 +15,7 @@
 ##
 module WikiThat
   ##
-  # Parser module for inline formatting
+  # Lexer module for inline formatting
   # @author Bryan T. Meyers
   ##
   module Formatting

@@ -1,5 +1,7 @@
-## Parser
+## Lexer
 * Tables
+
+## Parser
   
 ## Tests
 

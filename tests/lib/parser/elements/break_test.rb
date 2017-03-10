@@ -19,45 +19,45 @@ require_relative('../../../../lib/wiki-that')
 class BreakTest < Test::Unit::TestCase
 
   def test_empty
-    parser = WikiThat::Parser.new('','wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('',parser.result)
+    lexer = WikiThat::Lexer.new('','wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('',lexer.result)
   end
 
   def test_newline
-    parser = WikiThat::Parser.new("\n",'wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p></p>',parser.result)
+    lexer = WikiThat::Lexer.new("\n",'wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p></p>',lexer.result)
   end
 
   def test_break1
-    parser = WikiThat::Parser.new("\n\n",'wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p></p>',parser.result)
+    lexer = WikiThat::Lexer.new("\n\n",'wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p></p>',lexer.result)
   end
 
   def test_break2
-    parser = WikiThat::Parser.new("\n\n\n",'wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p></p>',parser.result)
+    lexer = WikiThat::Lexer.new("\n\n\n",'wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p></p>',lexer.result)
   end
 
   def test_break3
-    parser = WikiThat::Parser.new("Hello\nGoodbye\n\n",'wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p>HelloGoodbye</p>',parser.result)
+    lexer = WikiThat::Lexer.new("Hello\nGoodbye\n\n",'wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p>HelloGoodbye</p>',lexer.result)
   end
 
   def test_break4
-    parser = WikiThat::Parser.new("Hello\n\nGoodbye\n",'wiki','BOB','sub/folder')
-    parser.parse
-    assert_true(parser.success?,'Parsing should have succeeded')
-    assert_equal('<p>Hello</p><p>Goodbye</p>',parser.result)
+    lexer = WikiThat::Lexer.new("Hello\n\nGoodbye\n",'wiki','BOB','sub/folder')
+    lexer.lex
+    assert_true(lexer.success?,'Parsing should have succeeded')
+    assert_equal('<p>Hello</p><p>Goodbye</p>',lexer.result)
   end
 
 end
