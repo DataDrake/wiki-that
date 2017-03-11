@@ -20,26 +20,25 @@ module WikiThat
   ##
   module Rule
     ##
-    # Parse the current text as a horizontal rule if found
+    # Lex the current text as a horizontal rule if found
     ##
-    def parse_horizontal_rule
-      buff  = ''
+    def lex_horizontal_rule
       count = 0
       while match? '-'
-        buff  += current
         count += 1
         advance
       end
       case count
         # This is a list, not a horizontal rule
-        when 1, 2
+        when 1
+          rewind
+          lex_list
+        when 2
           rewind(count)
-          next_state :list
-          return
+          lex_text
         else
-
+          append Token.new(:rule,count)
       end
-      append '<hr/>'
     end
   end
 end

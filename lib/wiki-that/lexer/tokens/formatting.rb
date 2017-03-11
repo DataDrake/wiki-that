@@ -41,7 +41,6 @@ module WikiThat
         else
           Token.new(:format,count)
       end
-
     end
   end
 end

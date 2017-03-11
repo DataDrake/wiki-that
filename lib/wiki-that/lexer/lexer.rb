@@ -66,13 +66,11 @@ module WikiThat
       until end?
         case current
           when *HEADER_SPECIAL
-            #lex_header
+            lex_header
           when *HRULE_SPECIAL
-            #lex_horizontal_rule
-          when *LINK_SPECIAL
-            #lex_link_line
+            lex_horizontal_rule
           when *LIST_SPECIAL
-            #lex_list
+            lex_list
           when *TABLE_SPECIAL
             #lex_table
           else

@@ -16,44 +16,52 @@
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
 
-class RuleTest < Test::Unit::TestCase
+class RuleLexTest < Test::Unit::TestCase
 
   def test_empty
-    lexer = WikiThat::Lexer.new('','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal('',lexer.result,'Nothing should have been generated')
+    assert_true(lexer.success?,'Lexing should have succeeded')
+    assert_equal(0,lexer.result.length)
   end
 
   def test_incomplete1
     start = '-'
-    lexer = WikiThat::Lexer.new(start,'wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal('<dl><dd></dd></dl>',lexer.result,'Nothing should have been generated')
+    assert_true(lexer.success?,'Lexing should have succeeded')
+    assert_equal(1,lexer.result.length)
+    assert_equal(:list_item,lexer.result[0].type)
+    assert_equal('-',lexer.result[0].value)
   end
 
   def test_incomplete2
     start = '--'
-    lexer = WikiThat::Lexer.new(start,'wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal('<dl><dd><dl><dd></dd></dl></dd></dl>',lexer.result,'Nothing should have been generated')
+    assert_true(lexer.success?,'Lexing should have succeeded')
+    assert_equal(1,lexer.result.length)
+    assert_equal(:text,lexer.result[0].type)
+    assert_equal('--',lexer.result[0].value)
   end
 
   def test_complete1
     start = '---'
-    lexer = WikiThat::Lexer.new(start,'wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal('<hr/>',lexer.result,'Nothing should have been generated')
+    assert_true(lexer.success?,'Lexing should have succeeded')
+    assert_equal(1,lexer.result.length)
+    assert_equal(:rule,lexer.result[0].type)
+    assert_equal(3,lexer.result[0].value)
   end
 
   def test_complete2
-    start = '---'
-    lexer = WikiThat::Lexer.new(start,'wiki','BOB','sub/folder')
+    start = '----'
+    lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal('<hr/>',lexer.result,'Nothing should have been generated')
+    assert_true(lexer.success?,'Lexing should have succeeded')
+    assert_equal(1,lexer.result.length)
+    assert_equal(:rule,lexer.result[0].type)
+    assert_equal(4,lexer.result[0].value)
   end
 end

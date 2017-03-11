@@ -21,69 +21,45 @@ module WikiThat
   ##
   module Header
     ##
-    # Parse the current line as a header
+    # Lex the current line as a header
     ##
-    def parse_header
+    def lex_header
       #Read start sequence
-      buff        = ''
-      start_level = 0
+      count = 0
       while match? '='
-        buff        += '='
-        start_level += 1
+        count += 1
         advance
       end
 
-      if start_level < 2
+      if count < 2
         rewind
-        append parse_inline("\n")
+        lex_inline
         return
+      else
+        append Token.new(:header_start,count)
       end
 
       #Read inner content
-      end_level = 0
-      content   = ''
-      while not_match? "\n"
-        while match? '='
-          buff      += current
-          end_level += 1
-          advance
-        end
-        if end_level >= 2
-          break
-        end
-        part      = parse_inline('=')
-        buff      += part
-        content   += part
-        end_level = 0
-      end
+      lex_inline('=')
 
-      if end_level < 2
-        error 'Warning: Incomplete header'
-        append buff
-        return
-      end
-
-      #Read the rest of the line
-      while not_match? "\n"
-        buff += current
-        unless whitespace? current
-          @state = :header_fail
-        end
+      #closing tag
+      count = 0
+      while match? '='
+        count += 1
         advance
       end
 
-      #Fail if it wasn't all whitespace
-      if @state == :header_fail
-        error "Warning: Text after header not allowed on same line"
-        append buff
-        return
+      case count
+        when 0
+          # do nothing
+        when 1
+          rewind
+        else
+          append Token.new(:header_end,count)
       end
 
-      #Produce output
-      level = start_level > end_level ? end_level : start_level
-      append "<h#{level}>#{content}</h#{level}>"
-
-      next_state :break
+      #trailing text
+      lex_inline
     end
   end
 end

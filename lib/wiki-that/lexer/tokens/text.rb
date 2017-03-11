@@ -13,6 +13,7 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
+require_relative('list')
 require_relative('token')
 module WikiThat
   ##
@@ -32,9 +33,9 @@ module WikiThat
     # @param [String] stop the character to stop at
     # @returns [String] the text read
     ##
-    def lex_inline(stop = nil)
+    def lex_inline(*stop)
       buff = ''
-      while not_match?(stop) && not_match?("\n")
+      while not_match?(*stop) and not_match?("\n")
         case current
           # Inline formatting
           when *FORMAT_SPECIAL
@@ -51,7 +52,21 @@ module WikiThat
             end
           # Inline links
           when *LINK_SPECIAL
-            #lex_link
+            if buff.length > 0
+              append Token.new(:text,buff)
+              buff = ''
+            end
+            lex_link
+          when *LIST_SPECIAL
+            rewind
+            if current == "\n"
+              advance
+              lex_list
+            else
+              advance
+              buff += current
+              advance
+            end
           else
             buff += current
             advance
