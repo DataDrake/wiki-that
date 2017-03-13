@@ -22,21 +22,33 @@ module WikiThat
 
     ##
     # Continue reading text tokens until a linebreak
+    # @param [Symbol] stop the type to stop parsing at
     ##
-    def parse_text
-      text = Element.new(:paragraph)
-      until end?
+    def parse_inline(stop = nil)
+      children = []
+      until match? [stop] or end?
         case current.type
           when :format
-            #parse_format
+            children.push(*parse_format)
           when :link_start
-            #parse_link
+            #children.push(*parse_link)
           when :text
-            text.add_child(Element.new(:text,current.value))
+            children.push(Element.new(:text,current.value))
+            advance
           else
             break
         end
-        advance
+      end
+      children
+    end
+
+    ##
+    # Continue reading text tokens until a linebreak
+    ##
+    def parse_text
+      text = Element.new(:paragraph)
+      until match? [:break] or end?
+        text.add_children(*parse_inline)
       end
       append text
     end

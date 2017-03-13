@@ -22,7 +22,7 @@ class RuleParseTest < Test::Unit::TestCase
     parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
-    assert_equal(0, parser.result.length, 'Nothing should have been generated')
+    assert_equal(0, parser.result.children.length, 'Nothing should have been generated')
   end
 
   def test_incomplete1
@@ -30,11 +30,11 @@ class RuleParseTest < Test::Unit::TestCase
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
-    assert_equal(1, parser.result.length)
-    assert_equal(:paragraph, parser.result[0].type)
-    assert_equal(1, parser.result[0].children.length)
-    assert_equal(:text, parser.result[0].children[0].type)
-    assert_equal('-', parser.result[0].children[0].value)
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:paragraph, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('-', parser.result.children[0].children[0].value)
   end
 
   def test_incomplete2
@@ -42,11 +42,11 @@ class RuleParseTest < Test::Unit::TestCase
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
-    assert_equal(1, parser.result.length)
-    assert_equal(:paragraph, parser.result[0].type)
-    assert_equal(1, parser.result[0].children.length)
-    assert_equal(:text, parser.result[0].children[0].type)
-    assert_equal('--', parser.result[0].children[0].value)
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:paragraph, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('--', parser.result.children[0].children[0].value)
   end
 
   def test_complete1
@@ -54,9 +54,9 @@ class RuleParseTest < Test::Unit::TestCase
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
-    assert_equal(1, parser.result.length)
-    assert_equal(:rule, parser.result[0].type)
-    assert_equal(0, parser.result[0].children.length)
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:rule, parser.result.children[0].type)
+    assert_equal(0, parser.result.children[0].children.length)
   end
 
   def test_complete2
@@ -64,8 +64,8 @@ class RuleParseTest < Test::Unit::TestCase
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
-    assert_equal(1, parser.result.length)
-    assert_equal(:rule, parser.result[0].type)
-    assert_equal(0, parser.result[0].children.length)
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:rule, parser.result.children[0].type)
+    assert_equal(0, parser.result.children[0].children.length)
   end
 end

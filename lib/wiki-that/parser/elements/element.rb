@@ -33,7 +33,8 @@ module WikiThat
       @value    = value
     end
 
-    attr_reader :attributes, :children, :type, :value
+    attr_reader :attributes, :children, :type
+    attr_accessor :value
 
     ##
     # Set an attribute for this element
@@ -52,6 +53,17 @@ module WikiThat
     ##
     def add_child(child)
       @children.push(child)
+    end
+
+    ##
+    # Add multiple child elements to this element
+    #
+    # @param [Element] children the child elements
+    ##
+    def add_children(*children)
+      children.each do |child|
+        @children.push(child)
+      end
     end
 
   end

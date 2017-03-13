@@ -60,13 +60,13 @@ module WikiThat
       @errors = []
       @warnings = []
       @tokens = []
-      @result = []
+      @result = Element.new(:root)
     end
 
     ##
-    # Translate the MediaWiki document into HTML
+    # Translate the MediaWiki document into an element tree
     #
-    # @returns [String] the resulting HTML partial
+    # @returns [Element] the resulting root element
     ##
     def parse
       @lexer.lex
@@ -98,11 +98,11 @@ module WikiThat
     end
 
     ##
-    # Append Elements to the result
-    # @param [Array] elements the Elements to append
+    # Append Element to the result
+    # @param [Element] element the Element to append
     ##
-    def append(elements)
-      @result.push(*elements)
+    def append(element)
+      @result.add_child(element)
     end
 
     ##

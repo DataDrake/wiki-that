@@ -22,60 +22,60 @@ module WikiThat
     ##
     # Parse the current text as inline formatting
     ##
-    def parse_formatting
-      #Read opening marks
-      start_count = 0
-      buff        = ''
-      while match? "'"
-        buff        += current
-        start_count += 1
-        advance
-      end
-
-      #Fail if not a start sequence
-      if start_count < 2
-        return buff
-      end
-
-      #Read inner content, ignoring apostrophes
-      end_count = 0
-      content   = ''
-      while not_match? "\n"
-        while match? "'"
-          buff      += current
-          end_count += 1
-          advance
+    def parse_format
+      results = []
+      start = current
+      advance
+      contents = []
+      finish = nil
+      done = false
+      until end? or done
+        case current.type
+          when :format
+            finish = current
+            advance
+            break
+          when :link
+            #contents = [parse_link]
+          when :text
+            contents.push(Element.new(:text,current.value))
+            advance
+          else
+            break
         end
-        if end_count >= 2
-          break
+      end
+      if finish.nil?
+        element = Element.new(:text,'')
+        (0...start.value).each do
+          element.value += "'"
         end
-        part      = parse_inline("'")
-        buff      += part
-        content   += part
-        end_count = 0
+        results.push element
+        results.push(*contents)
+        return results
       end
-
-      #Fail if not an end sequence
-      if end_count < 2
-        return buff
+      depth = finish.value
+      if start.value < finish.value
+        depth = start.value
       end
-
-      #Choose Minimum Depth
-      count = start_count < end_count ? start_count : end_count
-
-      #Produce Tag
-      case count
+      case depth
         when 2
-          buff = "<i>#{content}</i>"
+          element = Element.new(:italic)
+          element.add_children(*contents)
+          results.push(element)
         when 3
-          buff = "<b>#{content}</b>"
-        when 5
-          buff = "<b><i>#{content}</i></b>"
-        else ## do nothing
+          element = Element.new(:bold)
+          element.add_children(*contents)
+          results.push(element)
+        else
+          e1 = Element.new(:bold)
+          contents.each do |c|
+            e1.add_child(c)
+          end
+          e2 = Element.new(:italic)
+          e2.add_child(e1)
+          results.push(e2)
       end
-
-      next_state :inline_text
-      buff
+      results
     end
   end
 end
