@@ -76,7 +76,7 @@ module WikiThat
           when :break
             advance
           when :header_start
-            #parse_header
+            parse_header
           when :rule
             parse_rule
           when :list_item
@@ -127,7 +127,7 @@ module WikiThat
     ##
     def current
       if end?
-        return ''
+        return nil
       end
       @tokens[@index]
     end
@@ -156,7 +156,7 @@ module WikiThat
     ##
     def not_match?(types)
       if end?
-        return false
+        return true
       end
       types.each do |type|
         if current.type == type

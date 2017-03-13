@@ -10,7 +10,7 @@
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
 #	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
+#	See the License for the specific language governing permisssions and
 #	limitations under the License.
 ##
 
@@ -24,66 +24,66 @@ module WikiThat
     # Parse the current line as a header
     ##
     def parse_header
-      #Read start sequence
-      buff        = ''
-      start_level = 0
-      while match? '='
-        buff        += '='
-        start_level += 1
-        advance
-      end
-
-      if start_level < 2
-        rewind
-        append parse_inline("\n")
+      start = current
+      advance
+      content = parse_inline(:header_end)
+      if not_match? [:header_end]
+        buff = ''
+        (0...start.value).each do
+          buff += '='
+        end
+        append Element.new(:text,buff)
+        content.each do |c|
+          append c
+        end
+        warning 'Incomplete Header Parsed'
         return
       end
-
-      #Read inner content
-      end_level = 0
-      content   = ''
-      while not_match? "\n"
-        while match? '='
-          buff      += current
-          end_level += 1
-          advance
+      finish = current
+      advance
+      post = parse_inline
+      fail = false
+      if post.length == 1
+        if post[0].type == :text
+          post[0].value.each_char do |c|
+            unless " \n\t".include? c
+              fail = true
+              break
+            end
+          end
+        else
+          fail = true
         end
-        if end_level >= 2
-          break
-        end
-        part      = parse_inline('=')
-        buff      += part
-        content   += part
-        end_level = 0
+      elsif post.length > 1
+        fail = true
       end
-
-      if end_level < 2
-        error 'Warning: Incomplete header'
-        append buff
+      if fail
+        buff = ''
+        (0...start.value).each do
+          buff += '='
+        end
+        append Element.new(:text,buff)
+        content.each do |c|
+          append c
+        end
+        buff = ''
+        (0...finish.value).each do
+          buff += '='
+        end
+        append Element.new(:text,buff)
+        post.each do |c|
+          append c
+        end
+        error 'Only trailing whitespace characters are allowed on the same line as a header'
         return
       end
-
-      #Read the rest of the line
-      while not_match? "\n"
-        buff += current
-        unless whitespace? current
-          @state = :header_fail
-        end
-        advance
+      depth = finish.value
+      if finish.value > start.value
+        depth = start.value
       end
-
-      #Fail if it wasn't all whitespace
-      if @state == :header_fail
-        error "Warning: Text after header not allowed on same line"
-        append buff
-        return
-      end
-
-      #Produce output
-      level = start_level > end_level ? end_level : start_level
-      append "<h#{level}>#{content}</h#{level}>"
-
-      next_state :break
+      header = Element.new(:header,depth)
+      header.add_children(*content)
+      append header
     end
   end
 end

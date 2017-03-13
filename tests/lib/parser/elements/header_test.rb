@@ -15,108 +15,162 @@
 ##
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
-class HeaderTest < Test::Unit::TestCase
+class HeaderParseTest < Test::Unit::TestCase
   # Fake test
   def test_empty
-    lexer = WikiThat::Lexer.new('', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('', lexer.result, 'Response should be empty')
+    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(0, parser.result.children.length)
   end
 
   def test_short
     start = '= Incomplete Header ='
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal(start, lexer.result, 'No header should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:paragraph, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('= Incomplete Header =', parser.result.children[0].children[0].value)
   end
 
   def test_incomplete
     start = '== Incomplete Header'
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_false(lexer.success?, 'Parsing should have failed')
-    assert_equal(start, lexer.result, 'No header should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(2, parser.result.children.length)
+    assert_equal(:text, parser.result.children[0].type)
+    assert_equal('==', parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[1].type)
+    assert_equal(' Incomplete Header', parser.result.children[1].value)
   end
 
   def test_incomplete2
     start = '== Incomplete Header ='
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_false(lexer.success?, 'Parsing should have failed')
-    assert_equal(start, lexer.result, 'No header should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(3, parser.result.children.length)
+    assert_equal(:text, parser.result.children[0].type)
+    assert_equal('==', parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[1].type)
+    assert_equal(' Incomplete Header ', parser.result.children[1].value)
+    assert_equal(:text, parser.result.children[2].type)
+    assert_equal('=', parser.result.children[2].value)
   end
 
   def test_h2
     start = '== Complete Header =='
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('<h2> Complete Header </h2>', lexer.result, 'H2 should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:header, parser.result.children[0].type)
+    assert_equal(2, parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
 
   def test_h2_unbalanced_right
     start = '== Complete Header ==='
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('<h2> Complete Header </h2>', lexer.result, 'H2 should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:header, parser.result.children[0].type)
+    assert_equal(2, parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
 
   def test_h2_unbalanced_left
     start = '=== Complete Header =='
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('<h2> Complete Header </h2>', lexer.result, 'H2 should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:header, parser.result.children[0].type)
+    assert_equal(2, parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
 
   def test_h2_trailing_whitespace
     start = '== Complete Header ==     '
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('<h2> Complete Header </h2>', lexer.result, 'H2 should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:header, parser.result.children[0].type)
+    assert_equal(2, parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
 
   def test_h2_trailing_text
     start = '== Complete Header == text'
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_false(lexer.success?, 'Parsing should have failed')
-    assert_equal(start, lexer.result, 'H2 should not be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_false(parser.success?, 'Parsing should have failed')
+    assert_equal(4, parser.result.children.length)
+    assert_equal(:text, parser.result.children[0].type)
+    assert_equal('==', parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[1].type)
+    assert_equal(' Complete Header ', parser.result.children[1].value)
+    assert_equal(:text, parser.result.children[2].type)
+    assert_equal('==', parser.result.children[2].value)
+    assert_equal(:text, parser.result.children[3].type)
+    assert_equal(' text', parser.result.children[3].value)
   end
 
   def test_h3
     start = '=== Complete Header ==='
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('<h3> Complete Header </h3>', lexer.result, 'H3 should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:header, parser.result.children[0].type)
+    assert_equal(3, parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
 
   def test_h4
     start = '==== Complete Header ===='
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('<h4> Complete Header </h4>', lexer.result, 'H4 should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:header, parser.result.children[0].type)
+    assert_equal(4, parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
 
   def test_h5
     start = '===== Complete Header ====='
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('<h5> Complete Header </h5>', lexer.result, 'H5 should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:header, parser.result.children[0].type)
+    assert_equal(5, parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
 
   def test_h6
     start = '====== Complete Header ======'
-    lexer = WikiThat::Lexer.new(start, 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-    assert_true(lexer.success?, 'Parsing should have succeeded')
-    assert_equal('<h6> Complete Header </h6>', lexer.result, 'H6 should be produced')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:header, parser.result.children[0].type)
+    assert_equal(6, parser.result.children[0].value)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
 end
