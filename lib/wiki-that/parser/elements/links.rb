@@ -30,135 +30,46 @@ module WikiThat
   module Links
 
     # Property attributes for images
-    IMAGE_PROPERTIES = %w(border frame left right center thumb thumbnail)
+    IMAGE_ATTRIBUTES = %w(border frame left right center thumb thumbnail)
 
     ##
     # Parse the current text as a link to content in a namespace
     ##
     def parse_internal
-      buff = '[['
       advance
-      link      = ''
-      attrs     = []
-      namespace = nil
-      # Parse Link or Namespace
-      while not_match?(']', "\n", '|', ':')
-        buff += current
-        link += current
-        advance
-      end
-      if end? || match?("\n")
-        error 'Warning: Incomplete internal link'
-        return buff
-      end
-      # If namespace, continue parsing link
-      if match? ':'
-        buff += current
-        advance
-        namespace = link
-        link      = ''
-        while not_match?(']', "\n", '|')
-          buff += current
-          link += current
-          advance
-        end
-      end
-      # Parse attributes
-      while match? '|'
-        buff += current
-        advance
-        attr = ''
-        while not_match?(']', "\n", '|')
-          buff += current
-          attr += current
-          advance
-        end
-        attrs.push(attr)
-      end
-      # Fail if not at the end of inner link
-      buff += current
-      if not_match? ']'
-        advance
-        error 'Warning: Incomplete internal link'
-        return buff
-      end
-      advance
-      if end?
-        error 'Warning: Incomplete internal link'
-        return buff
-      end
-      buff += current
-      # Fail if not at the end of outer link
-      if not_match? ']'
-        advance
-        error 'Warning: Incomplete internal link'
-        return buff
-      end
-      advance
-      # Decide how to handle the link
-      if link[0] == '/'
-        link = @base_url + '/' + @default_namespace + link
-      else
-        link = @base_url + '/' + @default_namespace + '/' + @sub_url + '/' + link
-      end
-      case namespace
-        when 'Audio'
-          WikiThat::Links::Audio.generate(link, attrs)
-        when 'Image'
-          WikiThat::Links::Image.generate(link, attrs)
-        when 'Video'
-          WikiThat::Links::Video.generate(link, attrs)
-        else
-          "<a href='#{link}'>#{attrs.last}</a>"
-      end
     end
 
     ##
     # Parse any link , internal or external
     ##
     def parse_link
-      buff = current
+      if current.value > 1
+        parse_internal
+      end
       advance
-      if match? '['
-        return parse_internal
-      end
-      link = ''
-      alt  = ''
-      while not_match?(']', "\n", '|')
-        buff += current
-        link += current
-        advance
-      end
-      if end?
-        error 'Warning: Incomplete external link'
-        return buff
-      end
-      buff += current
-      if match? '|'
-        advance
-        while not_match?(']', "\n")
-          alt += current
-          advance
+      url = ''
+      while match? [:link_namespace,:text]
+        if match? [:link_namespace]
+          url += ':'
+        else
+          url += current.value
         end
-      end
-      if not_match?(']') or end?
-        buff += current
         advance
-        error 'Warning: Incomplete external link'
-        return buff+alt
+      end
+      unless match? [:link_end] and current.value == 1
+        warning 'External link not closed by "]"'
+        return Element.new(:text,"[#{url}")
       end
       advance
-
-      next_state :inline_text
-      "<a href='#{link}'>#{alt}</a>"
-    end
-
-    ##
-    # Parse the current link as a link
-    ##
-    def parse_link_line
-      append parse_link
-      next_state :line_start
+      anchor = Element.new(:a)
+      url = url.split(' ')
+      anchor.set_attribute(:href, url[0])
+      if url.length > 2
+        anchor.set_attribute(:alt, url[1...url.length].join(' '))
+      elsif url.length == 2
+        anchor.set_attribute(:alt, url[1])
+      end
+      anchor
     end
   end
 end

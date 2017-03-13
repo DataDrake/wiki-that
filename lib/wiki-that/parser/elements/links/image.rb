@@ -32,7 +32,7 @@ module WikiThat
           classes = []
           width   = nil
           attrs.each do |a|
-            if IMAGE_PROPERTIES.include? a
+            if IMAGE_ATTRIBUTES.include? a
               classes.push(a)
             end
             if a =~ /\d+px/

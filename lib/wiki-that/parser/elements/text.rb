@@ -31,12 +31,12 @@ module WikiThat
           when :format
             children.push(*parse_format)
           when :link_start
-            #children.push(*parse_link)
+            children.push(parse_link)
           when :text
             children.push(Element.new(:text,current.value))
             advance
           else
-            break
+            return children
         end
       end
       children
