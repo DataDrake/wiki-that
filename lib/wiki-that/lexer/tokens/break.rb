@@ -34,7 +34,7 @@ module WikiThat
 
       # Break if more than 1
       if count > 1
-        append Token.new(:break,count)
+        append Token.new(:break, count)
       end
     end
   end

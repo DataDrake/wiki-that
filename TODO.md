@@ -1,11 +1,11 @@
 ## Lexer
-* Tables
+* DONE
 
 ## Parser
-  
+  * Port to Lexer backend
+  * New tests for tables
 ## Tests
 
-* Write
-  * Break
-  * Table
-  * Text
+## Generator
+  * Read Parse Tree
+  * Generate HTML5 doc

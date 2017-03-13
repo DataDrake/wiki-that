@@ -20,164 +20,150 @@ class ListLexTest < Test::Unit::TestCase
   def test_empty
     lexer = WikiThat::Lexer.new('')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(0,lexer.result.length)
+    assert_equal(0, lexer.result.length)
   end
 
   def test_ul
     lexer = WikiThat::Lexer.new('*')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(1,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('*' ,lexer.result[0].value)
+    assert_equal(1, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('*', lexer.result[0].value)
   end
 
   def test_ul_li
     lexer = WikiThat::Lexer.new('*A')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(2,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('*' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal('A' ,lexer.result[1].value)
+    assert_equal(2, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('*', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal('A', lexer.result[1].value)
   end
 
   def test_ul_li2
     lexer = WikiThat::Lexer.new('* ABC')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(2,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('*' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' ABC' ,lexer.result[1].value)
+    assert_equal(2, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('*', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' ABC', lexer.result[1].value)
   end
 
   def test_ol
     lexer = WikiThat::Lexer.new('#')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(1,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('#' ,lexer.result[0].value)
+    assert_equal(1, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('#', lexer.result[0].value)
   end
 
   def test_ol_li
     lexer = WikiThat::Lexer.new('#A')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(2,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('#' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal('A' ,lexer.result[1].value)
+    assert_equal(2, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('#', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal('A', lexer.result[1].value)
   end
 
   def test_ol_li2
     lexer = WikiThat::Lexer.new('# ABC')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(2,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('#' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' ABC' ,lexer.result[1].value)
+    assert_equal(2, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('#', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' ABC', lexer.result[1].value)
   end
 
   def test_ol_ul
     lexer = WikiThat::Lexer.new('#* ABC')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(2,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('#*' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' ABC' ,lexer.result[1].value)
+    assert_equal(2, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('#*', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' ABC', lexer.result[1].value)
   end
 
   def test_ul_ol_ul
     lexer = WikiThat::Lexer.new("*# AB\n*#* ABC")
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(4,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('*#' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' AB' ,lexer.result[1].value)
-    assert_equal(:list_item,lexer.result[2].type)
-    assert_equal('*#*' ,lexer.result[2].value)
-    assert_equal(:text,lexer.result[3].type)
-    assert_equal(' ABC' ,lexer.result[3].value)
+    assert_equal(4, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('*#', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' AB', lexer.result[1].value)
+    assert_equal(:list_item, lexer.result[2].type)
+    assert_equal('*#*', lexer.result[2].value)
+    assert_equal(:text, lexer.result[3].type)
+    assert_equal(' ABC', lexer.result[3].value)
   end
 
   def test_dl
     lexer = WikiThat::Lexer.new('- ABC')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(2,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('-' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' ABC' ,lexer.result[1].value)
+    assert_equal(2, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('-', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' ABC', lexer.result[1].value)
   end
 
   def test_dl2
     lexer = WikiThat::Lexer.new('; ABC')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(2,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal(';' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' ABC' ,lexer.result[1].value)
+    assert_equal(2, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal(';', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' ABC', lexer.result[1].value)
   end
 
   def test_dl_dt_dn
     lexer = WikiThat::Lexer.new("; ABC\n- DEF")
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(4,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal(';' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' ABC' ,lexer.result[1].value)
-    assert_equal(:list_item,lexer.result[2].type)
-    assert_equal('-' ,lexer.result[2].value)
-    assert_equal(:text,lexer.result[3].type)
-    assert_equal(' DEF' ,lexer.result[3].value)
+    assert_equal(4, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal(';', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' ABC', lexer.result[1].value)
+    assert_equal(:list_item, lexer.result[2].type)
+    assert_equal('-', lexer.result[2].value)
+    assert_equal(:text, lexer.result[3].type)
+    assert_equal(' DEF', lexer.result[3].value)
   end
 
   def test_dl_dn_dt
     lexer = WikiThat::Lexer.new("- ABC\n; DEF")
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(4,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('-' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' ABC' ,lexer.result[1].value)
-    assert_equal(:list_item,lexer.result[2].type)
-    assert_equal(';' ,lexer.result[2].value)
-    assert_equal(:text,lexer.result[3].type)
-    assert_equal(' DEF' ,lexer.result[3].value)
+    assert_equal(4, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('-', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' ABC', lexer.result[1].value)
+    assert_equal(:list_item, lexer.result[2].type)
+    assert_equal(';', lexer.result[2].value)
+    assert_equal(:text, lexer.result[3].type)
+    assert_equal(' DEF', lexer.result[3].value)
   end
 
 
   def test_ol_dl_dt_dn
     lexer = WikiThat::Lexer.new("#; ABC\n#- DEF")
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(4,lexer.result.length)
-    assert_equal(:list_item,lexer.result[0].type)
-    assert_equal('#;' ,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' ABC' ,lexer.result[1].value)
-    assert_equal(:list_item,lexer.result[2].type)
-    assert_equal('#-' ,lexer.result[2].value)
-    assert_equal(:text,lexer.result[3].type)
-    assert_equal(' DEF' ,lexer.result[3].value)
+    assert_equal(4, lexer.result.length)
+    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal('#;', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' ABC', lexer.result[1].value)
+    assert_equal(:list_item, lexer.result[2].type)
+    assert_equal('#-', lexer.result[2].value)
+    assert_equal(:text, lexer.result[3].type)
+    assert_equal(' DEF', lexer.result[3].value)
   end
 
 end

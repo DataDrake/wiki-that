@@ -14,6 +14,10 @@
 #	limitations under the License.
 ##
 module WikiThat
+
+  # Special characters for Horizontal Rules
+  RULE_SPECIAL = %w(-)
+
   ##
   # Lexer module for horizontal rules
   # @author Bryan T. Meyers

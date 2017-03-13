@@ -15,6 +15,10 @@
 ##
 
 module WikiThat
+
+  # Special characters for Headers
+  HEADER_SPECIAL = %w(=)
+
   ##
   # Lexer module for handling headers
   # @author Bryan T. Meyers
@@ -36,7 +40,7 @@ module WikiThat
         lex_inline
         return
       else
-        append Token.new(:header_start,count)
+        append Token.new(:header_start, count)
       end
 
       #Read inner content
@@ -55,7 +59,7 @@ module WikiThat
         when 1
           rewind
         else
-          append Token.new(:header_end,count)
+          append Token.new(:header_end, count)
       end
 
       #trailing text

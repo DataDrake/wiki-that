@@ -20,10 +20,10 @@ module WikiThat
   ##
   class Token
 
-    def initialize(type,value)
+    def initialize(type, value)
       @children = []
-      @type = type
-      @value = value
+      @type     = type
+      @value    = value
     end
 
     attr_reader :children, :type, :value

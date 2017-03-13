@@ -33,7 +33,7 @@ module WikiThat
         buff += current
         advance
       end
-      append Token.new(:list_item,buff)
+      append Token.new(:list_item, buff)
     end
   end
 end

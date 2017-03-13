@@ -13,7 +13,6 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
-require_relative('list')
 require_relative('token')
 module WikiThat
   ##
@@ -21,11 +20,6 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   module Text
-
-    # Special characters for formatting tags
-    FORMAT_SPECIAL = %w(')
-    # Special Characters for Links
-    LINK_SPECIAL   = %w([)
 
     ##
     # Continue to lex as inline-text until the specified
@@ -45,7 +39,7 @@ module WikiThat
               advance
             else
               if buff.length > 0
-                append Token.new(:text,buff.clone)
+                append Token.new(:text, buff.clone)
                 buff = ''
               end
               append fmt
@@ -53,7 +47,7 @@ module WikiThat
           # Inline links
           when *LINK_SPECIAL
             if buff.length > 0
-              append Token.new(:text,buff)
+              append Token.new(:text, buff)
               buff = ''
             end
             lex_link
@@ -73,7 +67,7 @@ module WikiThat
         end
       end
       if buff.length > 0
-        append Token.new(:text,buff)
+        append Token.new(:text, buff)
       end
     end
 

@@ -18,102 +18,102 @@ require_relative('../../../../lib/wiki-that')
 
 class ListTest < Test::Unit::TestCase
   def test_empty
-    lexer = WikiThat::Lexer.new('','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('',lexer.result,'Nothing should have been generated')
+    assert_equal('', lexer.result, 'Nothing should have been generated')
   end
 
   def test_ul
-    lexer = WikiThat::Lexer.new('*','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('*', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ul><li></li></ul>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ul><li></li></ul>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_ul_li
-    lexer = WikiThat::Lexer.new('*A','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('*A', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ul><li>A</li></ul>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ul><li>A</li></ul>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_ul_li2
-    lexer = WikiThat::Lexer.new('* ABC','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('* ABC', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ul><li> ABC</li></ul>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ul><li> ABC</li></ul>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_ol
-    lexer = WikiThat::Lexer.new('#','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('#', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ol><li></li></ol>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ol><li></li></ol>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_ol_li
-    lexer = WikiThat::Lexer.new('#A','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('#A', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ol><li>A</li></ol>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ol><li>A</li></ol>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_ol_li2
-    lexer = WikiThat::Lexer.new('# ABC','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('# ABC', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ol><li> ABC</li></ol>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ol><li> ABC</li></ol>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_ol_ul
-    lexer = WikiThat::Lexer.new('#* ABC','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('#* ABC', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ol><li><ul><li> ABC</li></ul></li></ol>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ol><li><ul><li> ABC</li></ul></li></ol>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_ul_ol_ul
-    lexer = WikiThat::Lexer.new("*# AB\n*#* ABC",'wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new("*# AB\n*#* ABC", 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ul><li><ol><li> AB</li><li><ul><li> ABC</li></ul></li></ol></li></ul>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ul><li><ol><li> AB</li><li><ul><li> ABC</li></ul></li></ol></li></ul>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_dl
-    lexer = WikiThat::Lexer.new('- ABC','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('- ABC', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<dl><dd> ABC</dd></dl>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<dl><dd> ABC</dd></dl>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_dl2
-    lexer = WikiThat::Lexer.new('; ABC','wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new('; ABC', 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<dl><dt> ABC</dt></dl>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<dl><dt> ABC</dt></dl>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_dl_dt_dn
-    lexer = WikiThat::Lexer.new("; ABC\n- DEF",'wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new("; ABC\n- DEF", 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<dl><dt> ABC</dt><dd> DEF</dd></dl>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<dl><dt> ABC</dt><dd> DEF</dd></dl>', lexer.result, 'Unordered List should have been generated')
   end
 
   def test_dl_dn_dt
-    lexer = WikiThat::Lexer.new("- ABC\n; DEF",'wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new("- ABC\n; DEF", 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<dl><dd> ABC</dd><dt> DEF</dt></dl>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<dl><dd> ABC</dd><dt> DEF</dt></dl>', lexer.result, 'Unordered List should have been generated')
   end
 
 
   def test_ol_dl_dt_dn
-    lexer = WikiThat::Lexer.new("#; ABC\n#- DEF",'wiki','BOB','sub/folder')
+    lexer = WikiThat::Lexer.new("#; ABC\n#- DEF", 'wiki', 'BOB', 'sub/folder')
     lexer.lex
 
-    assert_equal('<ol><li><dl><dt> ABC</dt><dd> DEF</dd></dl></li></ol>',lexer.result,'Unordered List should have been generated')
+    assert_equal('<ol><li><dl><dt> ABC</dt><dd> DEF</dd></dl></li></ol>', lexer.result, 'Unordered List should have been generated')
   end
 
 end

@@ -20,174 +20,160 @@ class HeaderLexTest < Test::Unit::TestCase
   def test_empty
     lexer = WikiThat::Lexer.new('')
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(0,lexer.result.length)
+    assert_equal(0, lexer.result.length)
   end
 
   def test_short
     start = '= Incomplete Header ='
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(1,lexer.result.length)
-    assert_equal(:text,lexer.result[0].type)
-    assert_equal('= Incomplete Header =' ,lexer.result[0].value)
+    assert_equal(1, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('= Incomplete Header =', lexer.result[0].value)
   end
 
   def test_incomplete
     start = '== Incomplete Header'
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    puts lexer.result.inspect
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(2,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(2,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Incomplete Header',lexer.result[1].value)
+    assert_equal(2, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(2, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Incomplete Header', lexer.result[1].value)
   end
 
   def test_incomplete2
     start = '== Incomplete Header ='
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(3,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(2,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Incomplete Header ',lexer.result[1].value)
-    assert_equal(:text,lexer.result[2].type)
-    assert_equal('=',lexer.result[2].value)
+    assert_equal(3, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(2, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Incomplete Header ', lexer.result[1].value)
+    assert_equal(:text, lexer.result[2].type)
+    assert_equal('=', lexer.result[2].value)
   end
 
   def test_h2
     start = '== Complete Header =='
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(3,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(2,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(2,lexer.result[2].value)
+    assert_equal(3, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(2, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(2, lexer.result[2].value)
   end
 
   def test_h2_unbalanced_right
     start = '== Complete Header ==='
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(3,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(2,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(3,lexer.result[2].value)
+    assert_equal(3, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(2, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(3, lexer.result[2].value)
   end
 
   def test_h2_unbalanced_left
     start = '=== Complete Header =='
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(3,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(3,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(2,lexer.result[2].value)
+    assert_equal(3, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(3, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(2, lexer.result[2].value)
   end
 
   def test_h2_trailing_whitespace
     start = '== Complete Header ==     '
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(4,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(2,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(2,lexer.result[2].value)
-    assert_equal(:text,lexer.result[3].type)
-    assert_equal('     ',lexer.result[3].value)
+    assert_equal(4, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(2, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(2, lexer.result[2].value)
+    assert_equal(:text, lexer.result[3].type)
+    assert_equal('     ', lexer.result[3].value)
   end
 
   def test_h2_trailing_text
     start = '== Complete Header == text'
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(4,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(2,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(2,lexer.result[2].value)
-    assert_equal(:text,lexer.result[3].type)
-    assert_equal(' text',lexer.result[3].value)
+    assert_equal(4, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(2, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(2, lexer.result[2].value)
+    assert_equal(:text, lexer.result[3].type)
+    assert_equal(' text', lexer.result[3].value)
   end
 
   def test_h3
     start = '=== Complete Header ==='
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(3,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(3,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(3,lexer.result[2].value)
+    assert_equal(3, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(3, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(3, lexer.result[2].value)
   end
 
   def test_h4
     start = '==== Complete Header ===='
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(3,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(4,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(4,lexer.result[2].value)
+    assert_equal(3, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(4, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(4, lexer.result[2].value)
   end
 
   def test_h5
     start = '===== Complete Header ====='
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(3,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(5,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(5,lexer.result[2].value)
+    assert_equal(3, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(5, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(5, lexer.result[2].value)
   end
 
   def test_h6
     start = '====== Complete Header ======'
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_true(lexer.success?,'Parsing should have succeeded')
-    assert_equal(3,lexer.result.length)
-    assert_equal(:header_start,lexer.result[0].type)
-    assert_equal(6,lexer.result[0].value)
-    assert_equal(:text,lexer.result[1].type)
-    assert_equal(' Complete Header ',lexer.result[1].value)
-    assert_equal(:header_end,lexer.result[2].type)
-    assert_equal(6,lexer.result[2].value)
+    assert_equal(3, lexer.result.length)
+    assert_equal(:header_start, lexer.result[0].type)
+    assert_equal(6, lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal(' Complete Header ', lexer.result[1].value)
+    assert_equal(:header_end, lexer.result[2].type)
+    assert_equal(6, lexer.result[2].value)
   end
 end

@@ -54,25 +54,5 @@ module WikiThat
       true
     end
 
-    ##
-    # Determine if the specified character is a whitespace character
-    # @param [String] c the character to check
-    # @return [Boolean] True iff the character is whitespace
-    ##
-    def whitespace?(c)
-      case c
-        when ' ', "\t"
-          true
-        else
-          false
-      end
-    end
-
-    # Special characters for Headers
-    HEADER_SPECIAL = %w(=)
-    # Special characters for Horizontal Rules
-    HRULE_SPECIAL  = %w(-)
-    # Special characters for Tables
-    TABLE_SPECIAL  = %w({)
   end
 end

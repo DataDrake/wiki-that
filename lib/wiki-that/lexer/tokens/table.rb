@@ -14,49 +14,63 @@
 #	limitations under the License.
 ##
 module WikiThat
+
+  # Special characters for Tables
+  TABLE_SPECIAL = %w({ | !)
+
   ##
   # Lexer module for MediaWiki Tables
   # @author Bryan T. Meyers
   ##
   module Table
 
-    def self.parse_attributes(doc,i)
-      buff = ''
-      while i != doc.length && doc[i] != "\n"
-        buff += doc[i]
-        i += 1
-      end
-      if i != doc.length
-        buff += doc[i]
-        i += 1
-      end
-      attrs = buff.scan(/\w+=".*?"/)
-      if attrs.length > 0
-        attrs = ' ' + attrs.join(' ')
-      end
-      [i,buff,attrs]
-    end
-
-    def self.parse_caption(doc,i)
-
-    end
-
-    def parse_table
-      table = '<table'
-      buff = '' + doc[i]
-      i += 1
-      if doc[i] != '|'
-        return [i,buff]
-      end
-      buff += doc[i]
-      i += 1
-      i,pbuff,attrs = parse_attributes(doc,i)
-      buff += pbuff
-      table += "#{attrs}>"
-      i,pbuff,ptab = parse_caption(doc,i)
-      buff += pbuff
-      if ptab.length > 0
-        table += ptab
+    ##
+    # Lex any of the possible table tokens
+    ##
+    def lex_table
+      case current
+        when '{'
+          advance
+          unless match? '|'
+            rewind
+            lex_text
+            return
+          end
+          advance
+          append Token.new(:table_start)
+          lex_inline
+        when '|'
+          advance
+          case current
+            when '}'
+              advance
+              append Token.new(:table_end)
+              lex_inline
+            when '+'
+              advance
+              append Token.new(:table_caption)
+              lex_inline
+            when '-'
+              advance
+              append Token.new(:table_row)
+              lex_inline('|', '!')
+            when '|'
+              advance
+              append Token.new(:table_column, 2)
+              lex_inline('|', '!')
+            else
+              append Token.new(:table_column, 1)
+              lex_inline('|', '!')
+          end
+        when '!'
+          advance
+          if match? '!'
+            advance
+            append Token.new(:table_header, 2)
+          else
+            append Token.new(:table_header, 1)
+          end
+          lex_inline('|', '!')
       end
     end
   end

@@ -51,10 +51,9 @@ module WikiThat
     # @returns [WikiThat::Lexer] a newly configured Lexer
     ##
     def initialize(doc)
-      @doc               = doc
-      @index             = 0
-      @errors            = []
-      @result            = []
+      @doc    = doc
+      @index  = 0
+      @result = []
     end
 
     ##
@@ -65,14 +64,16 @@ module WikiThat
     def lex
       until end?
         case current
+          when "\n"
+            lex_break
           when *HEADER_SPECIAL
             lex_header
-          when *HRULE_SPECIAL
+          when *RULE_SPECIAL
             lex_horizontal_rule
           when *LIST_SPECIAL
             lex_list
           when *TABLE_SPECIAL
-            #lex_table
+            lex_table
           else
             lex_text
         end
@@ -107,14 +108,6 @@ module WikiThat
     end
 
     ##
-    # Register a new error for the current parsing
-    # @param [String] err the error as a string
-    ##
-    def error(err)
-      @errors.push err
-    end
-
-    ##
     # Move the lexer tape backward
     # @param [Integer] dist how many steps to move backward, default 1
     ##
@@ -128,14 +121,6 @@ module WikiThat
     ##
     def end?
       @index >= @doc.length
-    end
-
-    ##
-    # Verify that parsing has completed successfully
-    # @return [Boolean] True iff the parsing succeeded
-    ##
-    def success?
-      @errors.empty?
     end
   end
 end

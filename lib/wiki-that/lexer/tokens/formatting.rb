@@ -15,6 +15,10 @@
 ##
 require_relative('token')
 module WikiThat
+
+  # Special characters for formatting tags
+  FORMAT_SPECIAL = %w(')
+
   ##
   # Lexer module for inline formatting
   # @author Bryan T. Meyers
@@ -32,14 +36,11 @@ module WikiThat
       end
 
       case count
-        when 0
-          error 'Format count should never be zero'
-          nil
         when 1
           rewind
           nil
         else
-          Token.new(:format,count)
+          Token.new(:format, count)
       end
     end
   end

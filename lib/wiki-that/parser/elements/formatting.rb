@@ -25,9 +25,9 @@ module WikiThat
     def parse_formatting
       #Read opening marks
       start_count = 0
-      buff = ''
+      buff        = ''
       while match? "'"
-        buff += current
+        buff        += current
         start_count += 1
         advance
       end
@@ -39,19 +39,19 @@ module WikiThat
 
       #Read inner content, ignoring apostrophes
       end_count = 0
-      content = ''
+      content   = ''
       while not_match? "\n"
         while match? "'"
-          buff += current
+          buff      += current
           end_count += 1
           advance
         end
         if end_count >= 2
           break
         end
-        part = parse_inline("'")
-        buff += part
-        content += part
+        part      = parse_inline("'")
+        buff      += part
+        content   += part
         end_count = 0
       end
 

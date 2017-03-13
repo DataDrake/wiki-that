@@ -14,6 +14,10 @@
 #	limitations under the License.
 ##
 module WikiThat
+
+  # Special Characters for Links
+  LINK_SPECIAL = %w([)
+
   ##
   # Lexer module for links and embedded media
   #
@@ -34,16 +38,16 @@ module WikiThat
         count += 1
         advance
       end
-      append Token.new(:link_start,count)
-      
+      append Token.new(:link_start, count)
+
       while not_match?("\n") and not end?
-        lex_inline(':','|',']')
+        lex_inline(':', '|', ']')
         case current
           when ':'
-            append Token.new(:link_namespace,'')
+            append Token.new(:link_namespace, '')
             advance
           when '|'
-            append Token.new(:link_attribute,'')
+            append Token.new(:link_attribute, '')
             advance
           when ']'
             count = 0
@@ -51,7 +55,7 @@ module WikiThat
               count += 1
               advance
             end
-            append Token.new(:link_end,count)
+            append Token.new(:link_end, count)
             return
           else
             ## do nothing

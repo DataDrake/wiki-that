@@ -33,7 +33,7 @@ module WikiThat
     ##
     def parse_inline(stop)
       buff = ''
-      while not_match?(stop) && not_match?("\n")
+      while not_match?(stop) and not_match?("\n")
         case current
           # Inline formatting
           when *FORMAT_SPECIAL
