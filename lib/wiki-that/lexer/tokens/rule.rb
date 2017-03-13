@@ -28,7 +28,7 @@ module WikiThat
     ##
     def lex_horizontal_rule
       count = 0
-      while match? '-'
+      while match? RULE_SPECIAL
         count += 1
         advance
       end
@@ -41,7 +41,7 @@ module WikiThat
           rewind(count)
           lex_text
         else
-          append Token.new(:rule,count)
+          append Token.new(:rule, count)
       end
     end
   end

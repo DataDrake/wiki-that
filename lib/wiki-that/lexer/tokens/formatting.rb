@@ -30,17 +30,16 @@ module WikiThat
     def lex_formatting
       #Read opening marks
       count = 0
-      while match? "'"
+      while match? FORMAT_SPECIAL
         count += 1
         advance
       end
 
-      case count
-        when 1
-          rewind
-          nil
-        else
-          Token.new(:format, count)
+      if count > 1
+        Token.new(:format, count)
+      else
+        rewind
+        nil
       end
     end
   end

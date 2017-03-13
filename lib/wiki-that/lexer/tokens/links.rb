@@ -34,24 +34,24 @@ module WikiThat
     def lex_link
 
       count = 0
-      while match? '['
+      while match? LINK_SPECIAL
         count += 1
         advance
       end
       append Token.new(:link_start, count)
 
-      while not_match?("\n") and not end?
-        lex_inline(':', '|', ']')
+      while current != "\n" and not end?
+        lex_text(%w(: | ] ))
         case current
           when ':'
-            append Token.new(:link_namespace, '')
+            append Token.new(:link_namespace)
             advance
           when '|'
-            append Token.new(:link_attribute, '')
+            append Token.new(:link_attribute)
             advance
           when ']'
             count = 0
-            while match? ']'
+            while current == ']'
               count += 1
               advance
             end

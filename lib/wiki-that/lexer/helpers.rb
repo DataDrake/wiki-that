@@ -25,7 +25,7 @@ module WikiThat
     # @param [Array] chars a list of characters to check
     # @return [Boolean] True iff the current character is in the list
     ##
-    def match?(*chars)
+    def match?(chars)
       if end?
         return false
       end
@@ -42,7 +42,7 @@ module WikiThat
     # @param [Array] chars a list of characters to check
     # @return [Boolean] True iff the current character is not in the list
     ##
-    def not_match?(*chars)
+    def not_match?(chars)
       if end?
         return false
       end

@@ -27,7 +27,7 @@ module WikiThat
       count = 0
 
       #Find all consecutive newlines
-      while match? "\n"
+      while current == "\n"
         count += 1
         advance
       end

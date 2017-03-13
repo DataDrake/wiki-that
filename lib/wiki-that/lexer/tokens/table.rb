@@ -31,46 +31,46 @@ module WikiThat
       case current
         when '{'
           advance
-          unless match? '|'
+          unless current == '|'
             rewind
             lex_text
             return
           end
           advance
           append Token.new(:table_start)
-          lex_inline
+          lex_text
         when '|'
           advance
           case current
             when '}'
               advance
               append Token.new(:table_end)
-              lex_inline
+              lex_text
             when '+'
               advance
               append Token.new(:table_caption)
-              lex_inline
+              lex_text
             when '-'
               advance
               append Token.new(:table_row)
-              lex_inline('|', '!')
+              lex_text(%w(| !))
             when '|'
               advance
               append Token.new(:table_column, 2)
-              lex_inline('|', '!')
+              lex_text(%w(| !))
             else
               append Token.new(:table_column, 1)
-              lex_inline('|', '!')
+              lex_text(%w(| !))
           end
         when '!'
           advance
-          if match? '!'
+          if current == '!'
             advance
             append Token.new(:table_header, 2)
           else
             append Token.new(:table_header, 1)
           end
-          lex_inline('|', '!')
+          lex_text(%w(| !))
       end
     end
   end

@@ -27,14 +27,14 @@ module WikiThat
     # @param [String] stop the character to stop at
     # @returns [String] the text read
     ##
-    def lex_inline(*stop)
+    def lex_text(stop = [])
       buff = ''
-      while not_match?(*stop) and not_match?("\n")
+      while not_match?(stop) and current != "\n"
         case current
           # Inline formatting
           when *FORMAT_SPECIAL
             fmt = lex_formatting
-            if FORMAT_SPECIAL.include? current
+            if match? FORMAT_SPECIAL
               buff += current
               advance
             else
@@ -68,16 +68,6 @@ module WikiThat
       end
       if buff.length > 0
         append Token.new(:text, buff)
-      end
-    end
-
-    ##
-    # Continue reading as raw text until a linebreak
-    ##
-    def lex_text
-      until end?
-        lex_inline
-        lex_break
       end
     end
   end

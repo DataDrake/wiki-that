@@ -30,25 +30,25 @@ module WikiThat
     def lex_header
       #Read start sequence
       count = 0
-      while match? '='
+      while match? HEADER_SPECIAL
         count += 1
         advance
       end
 
       if count < 2
         rewind
-        lex_inline
+        lex_text
         return
       else
         append Token.new(:header_start, count)
       end
 
       #Read inner content
-      lex_inline('=')
+      lex_text(HEADER_SPECIAL)
 
       #closing tag
       count = 0
-      while match? '='
+      while match? HEADER_SPECIAL
         count += 1
         advance
       end
@@ -63,7 +63,7 @@ module WikiThat
       end
 
       #trailing text
-      lex_inline
+      lex_text
     end
   end
 end

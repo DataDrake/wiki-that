@@ -29,7 +29,7 @@ module WikiThat
     ##
     def lex_list
       buff = ''
-      while match?(*LIST_SPECIAL)
+      while match? LIST_SPECIAL
         buff += current
         advance
       end
