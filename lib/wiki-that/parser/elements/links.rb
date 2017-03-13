@@ -35,8 +35,102 @@ module WikiThat
     ##
     # Parse the current text as a link to content in a namespace
     ##
-    def parse_internal
+    def parse_link_internal
       advance
+      url = ''
+      namespaces = []
+      while match? [:link_namespace,:text]
+        if match? [:link_namespace]
+          rewind
+          if current.value == 'http' or current.value == 'https'
+            break
+          end
+          namespaces.push(current.value)
+          advance 2
+        else
+          advance
+        end
+      end
+      attributes = []
+      while match? [:link_namespace,:text]
+        if match? [:link_namespace]
+          url += ':'
+        else
+          url += current.value
+        end
+        advance
+      end
+      while match? [:link_attribute]
+        advance
+        if match? [:text]
+          attributes.push(current.value)
+          advance
+        else
+          break
+        end
+      end
+      if not_match? :link_end
+        warning 'Internal Link not terminated by "]]"'
+        text = '[['
+        if namespaces.length > 0
+          text += namespaces.join(':') + ':'
+        end
+        text += url
+        if attributes.length > 0
+          text += '|' + attributes.join('|')
+        end
+        return Element.new(:text,text)
+      end
+      pieces = ['', @base_url]
+      case namespaces.length
+        when 0
+          ns_index = -1
+        when 1
+          ns_index = 0
+        when 2
+          ns_index = 1
+        else
+          ns_index = 1
+          warning 'Ignoring all but the first two namespaces'
+      end
+      if ns_index == -1 or %w(Audio Image Video).include? namespaces[ns_index]
+        pieces.push(@default_namespace)
+      else
+        pieces.push(namespaces[ns_index])
+      end
+      if url.start_with? '/'
+        url = pieces.join('/') + url
+      else
+        pieces.push(@sub_url,'')
+        url = pieces.join('/') + url
+      end
+
+      if namespaces.length > 0
+        case namespaces > 0
+          when 'Audio'
+            if attributes.length > 1
+              warning 'Ignoring all but the last link attribute'
+            end
+            parse_audio_link(url, attributes.last)
+          when 'Image'
+            parse_image_link(url, attributes)
+          when 'Video'
+            if attributes.length > 1
+              warning 'Ignoring all but the last link attribute'
+            end
+            parse_video_link(url, attributes.last)
+          else
+            anchor = Element.new(:a)
+            if attributes.length > 1
+              warning 'Ignoring all but the last link attribute'
+              anchor.set_attribute(:alt,attributes.last)
+            elsif attributes.length == 1
+              anchor.set_attribute(:alt,attributes.last)
+            end
+            anchor.set_attribute(:href,url)
+            anchor
+        end
+      end
     end
 
     ##
@@ -44,7 +138,7 @@ module WikiThat
     ##
     def parse_link
       if current.value > 1
-        parse_internal
+        parse_link_internal
       end
       advance
       url = ''
