@@ -22,24 +22,9 @@ module WikiThat
     ##
     # Parse the current text as a horizontal rule if found
     ##
-    def parse_horizontal_rule
-      buff  = ''
-      count = 0
-      while match? '-'
-        buff  += current
-        count += 1
-        advance
-      end
-      case count
-        # This is a list, not a horizontal rule
-        when 1, 2
-          rewind(count)
-          next_state :list
-          return
-        else
-
-      end
-      append '<hr/>'
+    def parse_rule
+      advance
+      append Element.new(:rule)
     end
   end
 end

@@ -78,7 +78,7 @@ module WikiThat
           when :header_start
             #parse_header
           when :rule
-            #parse_horizontal_rule
+            parse_rule
           when :list_item
             #parse_list
           when :table_start
