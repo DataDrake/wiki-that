@@ -21,7 +21,6 @@ require_relative('tokens/list')
 require_relative('tokens/rule')
 require_relative('tokens/table')
 require_relative('tokens/text')
-require_relative('helpers')
 module WikiThat
   ##
   # Lexers are disposable objects for translate a Mediawiki
@@ -29,7 +28,6 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   class Lexer
-    include WikiThat::Helpers
     include WikiThat::Break
     include WikiThat::Formatting
     include WikiThat::Header
@@ -105,6 +103,40 @@ module WikiThat
         return ''
       end
       @doc[@index]
+    end
+
+    ##
+    # Determine if the current character matches any in a list
+    # @param [Array] chars a list of characters to check
+    # @return [Boolean] True iff the current character is in the list
+    ##
+    def match?(chars)
+      if end?
+        return false
+      end
+      chars.each do |char|
+        if current == char
+          return true
+        end
+      end
+      false
+    end
+
+    ##
+    # Determine if the current character does not match any in a list
+    # @param [Array] chars a list of characters to check
+    # @return [Boolean] True iff the current character is not in the list
+    ##
+    def not_match?(chars)
+      if end?
+        return false
+      end
+      chars.each do |char|
+        if current == char
+          return false
+        end
+      end
+      true
     end
 
     ##
