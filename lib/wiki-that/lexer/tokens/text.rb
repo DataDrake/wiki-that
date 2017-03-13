@@ -51,16 +51,6 @@ module WikiThat
               buff = ''
             end
             lex_link
-          when *LIST_SPECIAL
-            rewind
-            if current == "\n"
-              advance
-              lex_list
-            else
-              advance
-              buff += current
-              advance
-            end
           else
             buff += current
             advance
