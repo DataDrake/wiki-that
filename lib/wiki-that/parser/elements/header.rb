@@ -81,7 +81,7 @@ module WikiThat
       if finish.value > start.value
         depth = start.value
       end
-      header = Element.new(:header,depth)
+      header = Element.new("h#{depth}".to_sym)
       header.add_children(*content)
       append header
     end

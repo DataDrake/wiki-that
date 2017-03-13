@@ -32,7 +32,7 @@ class TextParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:paragraph, parser.result.children[0].type)
+    assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal('abc', parser.result.children[0].children[0].value)
@@ -43,7 +43,7 @@ class TextParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:paragraph, parser.result.children[0].type)
+    assert_equal(:p, parser.result.children[0].type)
     assert_equal(2, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal('abc', parser.result.children[0].children[0].value)
@@ -56,11 +56,11 @@ class TextParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
-    assert_equal(:paragraph, parser.result.children[0].type)
+    assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal('abc', parser.result.children[0].children[0].value)
-    assert_equal(:paragraph, parser.result.children[1].type)
+    assert_equal(:p, parser.result.children[1].type)
     assert_equal(1, parser.result.children[1].children.length)
     assert_equal(:text, parser.result.children[1].children[0].type)
     assert_equal('123', parser.result.children[1].children[0].value)

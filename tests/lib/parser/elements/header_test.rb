@@ -30,7 +30,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:paragraph, parser.result.children[0].type)
+    assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal('= Incomplete Header =', parser.result.children[0].children[0].value)
@@ -68,8 +68,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:header, parser.result.children[0].type)
-    assert_equal(2, parser.result.children[0].value)
+    assert_equal(:h2, parser.result.children[0].type)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
@@ -80,8 +79,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:header, parser.result.children[0].type)
-    assert_equal(2, parser.result.children[0].value)
+    assert_equal(:h2, parser.result.children[0].type)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
@@ -92,8 +90,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:header, parser.result.children[0].type)
-    assert_equal(2, parser.result.children[0].value)
+    assert_equal(:h2, parser.result.children[0].type)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
@@ -104,8 +101,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:header, parser.result.children[0].type)
-    assert_equal(2, parser.result.children[0].value)
+    assert_equal(:h2, parser.result.children[0].type)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
@@ -132,8 +128,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:header, parser.result.children[0].type)
-    assert_equal(3, parser.result.children[0].value)
+    assert_equal(:h3, parser.result.children[0].type)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
@@ -144,8 +139,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:header, parser.result.children[0].type)
-    assert_equal(4, parser.result.children[0].value)
+    assert_equal(:h4, parser.result.children[0].type)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
@@ -156,8 +150,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:header, parser.result.children[0].type)
-    assert_equal(5, parser.result.children[0].value)
+    assert_equal(:h5, parser.result.children[0].type)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end
@@ -168,8 +161,7 @@ class HeaderParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:header, parser.result.children[0].type)
-    assert_equal(6, parser.result.children[0].value)
+    assert_equal(:h6, parser.result.children[0].type)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal(' Complete Header ', parser.result.children[0].children[0].value)
   end

@@ -46,7 +46,7 @@ module WikiThat
     # Continue reading text tokens until a linebreak
     ##
     def parse_text
-      text = Element.new(:paragraph)
+      text = Element.new(:p)
       until match? [:break] or end?
         text.add_children(*parse_inline)
       end

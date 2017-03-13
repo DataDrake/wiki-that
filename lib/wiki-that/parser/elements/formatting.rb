@@ -59,19 +59,19 @@ module WikiThat
       end
       case depth
         when 2
-          element = Element.new(:italic)
+          element = Element.new(:i)
           element.add_children(*contents)
           results.push(element)
         when 3
-          element = Element.new(:bold)
+          element = Element.new(:b)
           element.add_children(*contents)
           results.push(element)
         else
-          e1 = Element.new(:bold)
+          e1 = Element.new(:b)
           contents.each do |c|
             e1.add_child(c)
           end
-          e2 = Element.new(:italic)
+          e2 = Element.new(:i)
           e2.add_child(e1)
           results.push(e2)
       end
