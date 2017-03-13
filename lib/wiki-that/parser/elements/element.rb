@@ -15,19 +15,41 @@
 ##
 module WikiThat
   ##
-  # Tokens are typed data found by a Lexer
+  # Elements are precursors to the final document elements
   # @author Bryan T. Meyers
   ##
-  class Token
+  class Element
 
-    def initialize(type, value)
+    ##
+    # Create a new element
+    #
+    # @param [Symbol] type the type for this Element
+    # @param [Object] value optional value for this Element
+    # @return [Element] a newly created Element
+    def initialize(type, value = nil)
+      @attributes = {}
       @children = []
       @type     = type
       @value    = value
     end
 
-    attr_reader :children, :type, :value
+    attr_reader :attributes, :children, :type, :value
 
+    ##
+    # Set an attribute for this element
+    #
+    # @param [String] name the name of the attribute
+    # @param [String] value the string value of the attribute
+    ##
+    def set_attribute(name, value)
+      @attributes[name] = value
+    end
+
+    ##
+    # Add a child element to this element
+    #
+    # @param [Element] child the child element
+    ##
     def add_child(child)
       @children.push(child)
     end

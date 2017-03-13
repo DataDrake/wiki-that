@@ -20,46 +20,25 @@ module WikiThat
   ##
   module Text
 
-    # Special characters for formatting tags
-    FORMAT_SPECIAL = %w(')
-    # Special Characters for Links
-    LINK_SPECIAL   = %w([)
-
     ##
-    # Continue to parse as inline-text until the specified
-    # character or end of line
-    # @param [String] stop the character to stop at
-    # @returns [String] the text read
+    # Continue reading text tokens until a linebreak
     ##
-    def parse_inline(stop)
-      buff = ''
-      while not_match?(stop) and not_match?("\n")
-        case current
-          # Inline formatting
-          when *FORMAT_SPECIAL
-            buff += parse_formatting
-          # Inline links
-          when *LINK_SPECIAL
-            buff += parse_link
+    def parse_text
+      text = Element.new(:paragraph)
+      until end?
+        case current.type
+          when :format
+            #parse_format
+          when :link_start
+            #parse_link
+          when :text
+            text.add_child(Element.new(:text,current.value))
           else
-            buff += current
-            advance
+            break
         end
+        advance
       end
-      buff
-    end
-
-    ##
-    # Continue reading as raw text until a linebreak
-    ##
-    def parse_paragraph
-      append '<p>'
-      until end? || @state == :break
-        append parse_inline("\n")
-        parse_break
-      end
-      append '</p>'
-      next_state :line_start
+      append text
     end
   end
 end

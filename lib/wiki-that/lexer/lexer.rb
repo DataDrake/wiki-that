@@ -37,8 +37,6 @@ module WikiThat
     include WikiThat::Table
     include WikiThat::Text
 
-    # All of the errors generated while lexing
-    attr_reader :errors
     # The output of the translation to HTML
     attr_reader :result
 
@@ -55,9 +53,9 @@ module WikiThat
     end
 
     ##
-    # Translate the MediaWiki document into HTML
+    # Translate the MediaWiki document into a Token list
     #
-    # @returns [String] the resulting HTML partial
+    # @returns [Array] the resulting Token List
     ##
     def lex
       until end?

@@ -20,6 +20,12 @@ module WikiThat
   ##
   class Token
 
+    ##
+    # Create a new token
+    #
+    # @param [Symbol] type the type for this Token
+    # @param [Object] value optional value for this Token
+    # @return [Token] a newly created Token
     def initialize(type, value = nil)
       @type  = type
       @value = value
