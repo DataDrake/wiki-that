@@ -40,8 +40,6 @@ module WikiThat
           when :text
             contents.push(Element.new(:text,current.value))
             advance
-          else
-            break
         end
       end
       if finish.nil?

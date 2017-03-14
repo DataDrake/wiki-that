@@ -21,9 +21,9 @@ module WikiThat
   module List
 
     # Associate a list symbol with its list type
-    LIST_MAP     = {'*' => 'ul', '#' => 'ol', ';' => 'dl', '-' => 'dl'}
+    LIST_MAP     = {'*' => 'ul', '#' => 'ol', ';' => 'dl', ':' => 'dl'}
     # Associate a list symbol with its list item type
-    ITEM_MAP     = {'*' => 'li', '#' => 'li', ';' => 'dt', '-' => 'dd'}
+    ITEM_MAP     = {'*' => 'li', '#' => 'li', ';' => 'dt', ':' => 'dd'}
     # Special characters for List elements
     LIST_SPECIAL = %w(* # : ; -)
 

@@ -29,7 +29,7 @@ class RuleLexTest < Test::Unit::TestCase
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
     assert_equal(1, lexer.result.length)
-    assert_equal(:list_item, lexer.result[0].type)
+    assert_equal(:text, lexer.result[0].type)
     assert_equal('-', lexer.result[0].value)
   end
 

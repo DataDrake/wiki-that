@@ -51,6 +51,32 @@ class FormattingParseTest < Test::Unit::TestCase
     assert_equal(0, parser.result.children[0].children[1].children.length)
   end
 
+  def test_unbalanced_right
+    parser = WikiThat::Parser.new('\'\'thing\'\'\'', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:i, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal('thing', parser.result.children[0].children[0].children[0].value)
+  end
+
+  def test_unbalanced_left
+    parser = WikiThat::Parser.new('\'\'\'thing\'\'', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:i, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal('thing', parser.result.children[0].children[0].children[0].value)
+  end
+
   def test_italic
     parser = WikiThat::Parser.new('\'\'italic things\'\'', 'wiki', 'BOB', 'sub/folder')
     parser.parse

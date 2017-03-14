@@ -34,10 +34,7 @@ module WikiThat
       end
       case count
         # This is a list, not a horizontal rule
-        when 1
-          rewind
-          lex_list
-        when 2
+        when 1,2
           rewind(count)
           lex_text
         else

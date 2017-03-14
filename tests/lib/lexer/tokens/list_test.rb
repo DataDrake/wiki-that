@@ -104,11 +104,11 @@ class ListLexTest < Test::Unit::TestCase
   end
 
   def test_dl
-    lexer = WikiThat::Lexer.new('- ABC')
+    lexer = WikiThat::Lexer.new(': ABC')
     lexer.lex
     assert_equal(2, lexer.result.length)
     assert_equal(:list_item, lexer.result[0].type)
-    assert_equal('-', lexer.result[0].value)
+    assert_equal(':', lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
   end
@@ -124,7 +124,7 @@ class ListLexTest < Test::Unit::TestCase
   end
 
   def test_dl_dt_dn
-    lexer = WikiThat::Lexer.new("; ABC\n- DEF")
+    lexer = WikiThat::Lexer.new("; ABC\n: DEF")
     lexer.lex
     assert_equal(4, lexer.result.length)
     assert_equal(:list_item, lexer.result[0].type)
@@ -132,17 +132,17 @@ class ListLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
     assert_equal(:list_item, lexer.result[2].type)
-    assert_equal('-', lexer.result[2].value)
+    assert_equal(':', lexer.result[2].value)
     assert_equal(:text, lexer.result[3].type)
     assert_equal(' DEF', lexer.result[3].value)
   end
 
   def test_dl_dn_dt
-    lexer = WikiThat::Lexer.new("- ABC\n; DEF")
+    lexer = WikiThat::Lexer.new(": ABC\n; DEF")
     lexer.lex
     assert_equal(4, lexer.result.length)
     assert_equal(:list_item, lexer.result[0].type)
-    assert_equal('-', lexer.result[0].value)
+    assert_equal(':', lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
     assert_equal(:list_item, lexer.result[2].type)
@@ -153,7 +153,7 @@ class ListLexTest < Test::Unit::TestCase
 
 
   def test_ol_dl_dt_dn
-    lexer = WikiThat::Lexer.new("#; ABC\n#- DEF")
+    lexer = WikiThat::Lexer.new("#; ABC\n#: DEF")
     lexer.lex
     assert_equal(4, lexer.result.length)
     assert_equal(:list_item, lexer.result[0].type)
@@ -161,7 +161,7 @@ class ListLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
     assert_equal(:list_item, lexer.result[2].type)
-    assert_equal('#-', lexer.result[2].value)
+    assert_equal('#:', lexer.result[2].value)
     assert_equal(:text, lexer.result[3].type)
     assert_equal(' DEF', lexer.result[3].value)
   end

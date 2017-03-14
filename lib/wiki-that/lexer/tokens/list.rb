@@ -16,7 +16,7 @@
 module WikiThat
 
   # Special characters for List elements
-  LIST_SPECIAL = %w(* # : ; -)
+  LIST_SPECIAL = %w(* # : ;)
 
   ##
   # Lexer module for handling List elements

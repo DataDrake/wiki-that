@@ -25,8 +25,6 @@ class RuleParseTest < Test::Unit::TestCase
     assert_equal(0, parser.result.children.length, 'Nothing should have been generated')
   end
 
-  #TODO restore this test
-=begin
   def test_incomplete1
     start = '-'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
@@ -38,7 +36,6 @@ class RuleParseTest < Test::Unit::TestCase
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal('-', parser.result.children[0].children[0].value)
   end
-=end
 
   def test_incomplete2
     start = '--'
