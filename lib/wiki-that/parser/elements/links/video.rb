@@ -16,19 +16,14 @@
 module WikiThat
   module Links
     ##
-    # Generator for Video tags
-    # @author Bryan T. Meyers
+    # Create a video element from tokens
+    # @param [String] link the URL for the audio source
+    # @return [Element] the generated element
     ##
-    module Video
-      ##
-      # Create a video tag from the pre-parsed link data
-      # @param [String] link the URL for the video source
-      # @param [String] attrs the attributes for this video tag
-      # @return [String] the generated tag
-      ##
-      def self.generate(link, attrs)
-        "<video controls><source src='#{link}'></video>"
-      end
+    def parse_video_link(link)
+      e = Element.new(:video)
+      e.set_attribute(:src,link)
+      e
     end
   end
 end

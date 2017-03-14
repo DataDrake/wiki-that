@@ -16,19 +16,14 @@
 module WikiThat
   module Links
     ##
-    # Generator for Audio tags
-    # @author Bryan T. Meyers
+    # Create an audio element from tokens
+    # @param [String] link the URL for the audio source
+    # @return [Element] the generated element
     ##
-    module Audio
-      ##
-      # Create an audio tag from the pre-parsed link data
-      # @param [String] link the URL for the audio source
-      # @param [String] attrs the attributes for this audio tag
-      # @return [String] the generated tag
-      ##
-      def self.generate(link, attrs)
-        "<audio controls><source src='#{link}'></audio>"
-      end
+    def parse_audio_link(link)
+      e = Element.new(:audio)
+      e.set_attribute(:src,link)
+      e
     end
   end
 end

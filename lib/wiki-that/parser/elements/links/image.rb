@@ -15,51 +15,43 @@
 ##
 module WikiThat
   module Links
+    # Create an img tag from the pre-parsed link data
+    # @param [String] link the URL for the img source
+    # @param [String] attrs the attributes for this img tag
+    # @return [String] the generated tag
     ##
-    # Generator for Img tags
-    # @author Bryan T. Meyers
-    ##
-    module Image
-      ##
-      # Create an img tag from the pre-parsed link data
-      # @param [String] link the URL for the img source
-      # @param [String] attrs the attributes for this img tag
-      # @return [String] the generated tag
-      ##
-      def self.generate(link, attrs)
-        if attrs.length > 0
-          final   = '</div>'
-          classes = []
-          width   = nil
-          attrs.each do |a|
-            if IMAGE_ATTRIBUTES.include? a
-              classes.push(a)
-            end
-            if a =~ /\d+px/
-              width = a
-            end
+    def parse_image_link(link, attrs)
+      e = Element.new(:img)
+      e.set_attribute(:src,link)
+      if attrs.length > 0
+        classes = []
+        width   = nil
+        attrs.each do |a|
+          if IMAGE_ATTRIBUTES.include? a
+            classes.push(a)
           end
-          attrs -= classes
-          if classes.include?('frame') || classes.include?('thumb') || classes.include?('thumbnail')
-            final = "<caption>#{attrs.last}</caption>" + final
+          if a =~ /\d+px/
+            width = a
           end
-          img = "<img src='#{link}'"
-          if width
-            img += " width='#{width}'"
-          end
-          img += '>'
-          if classes.include?('thumb') || classes.include?('thumbnail')
-            img = "<a href='#{link}'>#{img}</a>"
-          end
-          final = img + final
-          if classes.length > 0
-            "<div class='#{classes.join(' ')}'>" + final
-          else
-            '<div>' + final
-          end
-        else
-          "<img src='#{link}'>"
         end
+        wrapper = Element.new(:div)
+        if classes.length > 0
+          wrapper.set_attribute(:class, classes.join(' '))
+        end
+        if width
+          e.set_attribute(:width,width)
+        end
+        attrs -= classes
+        if attrs.length > 0
+          e.add_child(Element.new(:text, attrs.last))
+        end
+        wrapper.add_child(e)
+        if classes.include?('frame') || classes.include?('thumb') || classes.include?('thumbnail')
+          wrapper.add_child(Element.new(:caption,attrs.last))
+        end
+        wrapper
+      else
+        e
       end
     end
   end

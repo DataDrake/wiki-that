@@ -40,16 +40,22 @@ module WikiThat
       url = ''
       namespaces = []
       while match? [:link_namespace,:text]
-        if match? [:link_namespace]
-          rewind
-          if current.value == 'http' or current.value == 'https'
+        if match? [:text]
+          temp = current.value
+          if temp == 'http' or temp == 'https'
             break
           end
-          namespaces.push(current.value)
-          advance 2
-        else
           advance
+          if match? [:link_namespace]
+            namespaces.push(temp)
+          else
+            rewind
+            url += temp
+          end
+        else
+          warning 'Empty Link Namespace'
         end
+        advance
       end
       attributes = []
       while match? [:link_namespace,:text]
@@ -69,7 +75,7 @@ module WikiThat
           break
         end
       end
-      if not_match? :link_end
+      if not_match? [:link_end] or (match? [:link_end] and current.value != 2)
         warning 'Internal Link not terminated by "]]"'
         text = '[['
         if namespaces.length > 0
@@ -79,8 +85,15 @@ module WikiThat
         if attributes.length > 0
           text += '|' + attributes.join('|')
         end
+        if match? [:link_end]
+          (0...current.value).each do
+            text += ']'
+          end
+          advance
+        end
         return Element.new(:text,text)
       end
+      advance
       pieces = ['', @base_url]
       case namespaces.length
         when 0
@@ -98,6 +111,7 @@ module WikiThat
       else
         pieces.push(namespaces[ns_index])
       end
+      puts url
       if url.start_with? '/'
         url = pieces.join('/') + url
       else
@@ -106,19 +120,19 @@ module WikiThat
       end
 
       if namespaces.length > 0
-        case namespaces > 0
+        case namespaces[ns_index]
           when 'Audio'
-            if attributes.length > 1
-              warning 'Ignoring all but the last link attribute'
+            if attributes.length > 0
+              warning 'Ignoring all attributes'
             end
-            parse_audio_link(url, attributes.last)
+            parse_audio_link(url)
           when 'Image'
             parse_image_link(url, attributes)
           when 'Video'
-            if attributes.length > 1
-              warning 'Ignoring all but the last link attribute'
+            if attributes.length > 0
+              warning 'Ignoring all attributes'
             end
-            parse_video_link(url, attributes.last)
+            parse_video_link(url)
           else
             anchor = Element.new(:a)
             if attributes.length > 1
@@ -130,6 +144,13 @@ module WikiThat
             anchor.set_attribute(:href,url)
             anchor
         end
+      else
+        anchor = Element.new(:a)
+        anchor.set_attribute(:href,url)
+        unless attributes.empty?
+          anchor.set_attribute(:alt,attributes.last)
+        end
+        anchor
       end
     end
 
@@ -138,7 +159,7 @@ module WikiThat
     ##
     def parse_link
       if current.value > 1
-        parse_link_internal
+        return parse_link_internal
       end
       advance
       url = ''
