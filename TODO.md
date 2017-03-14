@@ -3,9 +3,12 @@
 
 ## Parser
   * Port to Lexer backend
-  * New tests for tables
-## Tests
+    * Remaining:
+        - Lists
+        - Tables
+  * Add new tests for tables
 
 ## Generator
   * Read Parse Tree
   * Generate HTML5 doc
+  * Unit Tests
