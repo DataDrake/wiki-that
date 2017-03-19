@@ -78,6 +78,9 @@ module WikiThat
         return
       end
       depth = finish.value
+      if start.value != finish.value
+        warning "Unbalanced header tags found"
+      end
       if finish.value > start.value
         depth = start.value
       end

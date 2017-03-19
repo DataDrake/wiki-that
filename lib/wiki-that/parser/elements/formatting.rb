@@ -28,15 +28,14 @@ module WikiThat
       advance
       contents = []
       finish = nil
-      done = false
-      until end? or done
+      until end?
         case current.type
           when :format
             finish = current
             advance
             break
           when :link
-            #contents = [parse_link]
+            contents.push(parse_link)
           when :text
             contents.push(Element.new(:text,current.value))
             advance
@@ -52,6 +51,9 @@ module WikiThat
         return results
       end
       depth = finish.value
+      if start.value != finish.value
+        warning "Unbalanced inline formatting"
+      end
       if start.value < finish.value
         depth = start.value
       end
@@ -66,9 +68,7 @@ module WikiThat
           results.push(element)
         else
           e1 = Element.new(:b)
-          contents.each do |c|
-            e1.add_child(c)
-          end
+          e1.add_children(*contents)
           e2 = Element.new(:i)
           e2.add_child(e1)
           results.push(e2)

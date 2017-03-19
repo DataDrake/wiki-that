@@ -111,13 +111,10 @@ module WikiThat
       else
         pieces.push(namespaces[ns_index])
       end
-      puts url
-      if url.start_with? '/'
-        url = pieces.join('/') + url
-      else
+      unless url.start_with? '/'
         pieces.push(@sub_url,'')
-        url = pieces.join('/') + url
       end
+      url = pieces.join('/') + url
 
       if namespaces.length > 0
         case namespaces[ns_index]
@@ -137,9 +134,9 @@ module WikiThat
             anchor = Element.new(:a)
             if attributes.length > 1
               warning 'Ignoring all but the last link attribute'
-              anchor.set_attribute(:alt,attributes.last)
+              anchor.add_child(Element.new(:text,attributes.last))
             elsif attributes.length == 1
-              anchor.set_attribute(:alt,attributes.last)
+              anchor.add_child(Element.new(:text,attributes.last))
             end
             anchor.set_attribute(:href,url)
             anchor
@@ -148,7 +145,7 @@ module WikiThat
         anchor = Element.new(:a)
         anchor.set_attribute(:href,url)
         unless attributes.empty?
-          anchor.set_attribute(:alt,attributes.last)
+          anchor.add_child(Element.new(:text,attributes.last))
         end
         anchor
       end

@@ -22,6 +22,7 @@ module WikiThat
     ##
     def parse_audio_link(link)
       e = Element.new(:audio)
+      e.set_attribute(:controls,true)
       e.set_attribute(:src,link)
       e
     end

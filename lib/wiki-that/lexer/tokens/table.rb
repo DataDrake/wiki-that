@@ -53,7 +53,7 @@ module WikiThat
             when '-'
               advance
               append Token.new(:table_row)
-              lex_text(%w(| !))
+              lex_text
             when '|'
               advance
               append Token.new(:table_column, 2)

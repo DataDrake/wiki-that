@@ -201,9 +201,11 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:a, parser.result.children[0].children[0].type)
-    assert_equal(2, parser.result.children[0].children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
     assert_equal('/wiki/Test123/public/Home', parser.result.children[0].children[0].attributes[:href])
-    assert_equal('Home', parser.result.children[0].children[0].attributes[:alt])
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal('Home', parser.result.children[0].children[0].children[0].value)
   end
 
   def test_internal_audio
@@ -214,7 +216,8 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:audio, parser.result.children[0].children[0].type)
-    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal(2, parser.result.children[0].children[0].attributes.length)
+    assert_equal(true, parser.result.children[0].children[0].attributes[:controls])
     assert_equal('/wiki/BOB/public/test.wav', parser.result.children[0].children[0].attributes[:src])
   end
 
@@ -226,7 +229,8 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:video, parser.result.children[0].children[0].type)
-    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal(2, parser.result.children[0].children[0].attributes.length)
+    assert_equal(true, parser.result.children[0].children[0].attributes[:controls])
     assert_equal('/wiki/BOB/public/test.mp4', parser.result.children[0].children[0].attributes[:src])
   end
 
@@ -253,10 +257,7 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children[0].children[0].children.length)
     assert_equal(:img, parser.result.children[0].children[0].children[0].type)
     assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
-    assert_equal(1, parser.result.children[0].children[0].children[0].children.length)
-    assert_equal(:text, parser.result.children[0].children[0].children[0].children[0].type)
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].children[0].value)
-
+    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
   end
 
   def test_internal_image_caption_incomplete1
@@ -309,9 +310,7 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(2, parser.result.children[0].children[0].children.length)
     assert_equal(:img, parser.result.children[0].children[0].children[0].type)
     assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
-    assert_equal(1, parser.result.children[0].children[0].children[0].children.length)
-    assert_equal(:text, parser.result.children[0].children[0].children[0].children[0].type)
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].children[0].value)
+    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
     assert_equal(:caption, parser.result.children[0].children[0].children[1].type)
     assert_equal('Test PNG', parser.result.children[0].children[0].children[1].value)
  end
@@ -328,9 +327,7 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(2, parser.result.children[0].children[0].children.length)
     assert_equal(:img, parser.result.children[0].children[0].children[0].type)
     assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
-    assert_equal(1, parser.result.children[0].children[0].children[0].children.length)
-    assert_equal(:text, parser.result.children[0].children[0].children[0].children[0].type)
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].children[0].value)
+    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
     assert_equal(:caption, parser.result.children[0].children[0].children[1].type)
     assert_equal('Test PNG', parser.result.children[0].children[0].children[1].value)
   end
@@ -347,9 +344,7 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(:img, parser.result.children[0].children[0].children[0].type)
     assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
     assert_equal('100px', parser.result.children[0].children[0].children[0].attributes[:width])
-    assert_equal(1, parser.result.children[0].children[0].children[0].children.length)
-    assert_equal(:text, parser.result.children[0].children[0].children[0].children[0].type)
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].children[0].value)
+    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
   end
 
   def test_internal_image_left
@@ -364,8 +359,6 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children[0].children[0].children.length)
     assert_equal(:img, parser.result.children[0].children[0].children[0].type)
     assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
-    assert_equal(1, parser.result.children[0].children[0].children[0].children.length)
-    assert_equal(:text, parser.result.children[0].children[0].children[0].children[0].type)
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].children[0].value)
+    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
   end
 end

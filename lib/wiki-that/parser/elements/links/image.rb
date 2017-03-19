@@ -42,8 +42,11 @@ module WikiThat
           e.set_attribute(:width,width)
         end
         attrs -= classes
-        if attrs.length > 0
-          e.add_child(Element.new(:text, attrs.last))
+        if attrs.length > 1
+          warning "Ignoring all but the last attribute"
+          e.set_attribute(:alt, attrs.last)
+        elsif attrs.length > 0
+          e.set_attribute(:alt, attrs.last)
         end
         wrapper.add_child(e)
         if classes.include?('frame') || classes.include?('thumb') || classes.include?('thumbnail')
