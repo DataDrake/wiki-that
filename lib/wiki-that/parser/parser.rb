@@ -21,7 +21,7 @@ require_relative('elements/list')
 require_relative('elements/rule')
 require_relative('elements/table')
 require_relative('elements/text')
-require_relative('../../../lib/wiki-that/lexer/lexer')
+require_relative('../lexer/lexer')
 module WikiThat
   ##
   # Parsers are disposable objects for translate a Mediawiki
@@ -38,7 +38,7 @@ module WikiThat
     include WikiThat::Text
 
     # All of the errors generated while parsing
-    attr_reader :errors
+    attr_reader :errors, :warnings
     # The output of the translation to HTML
     attr_reader :result
 

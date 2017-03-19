@@ -18,7 +18,7 @@ require_relative 'lib/wiki-that'
 Gem::Specification.new do |s|
   s.name        = 'wiki-that'
   s.version     = WikiThat::VERSION
-  s.date        = '2017-03-09'
+  s.date        = '2017-03-18'
   s.summary     = 'wiki-that'
   s.description = 'A MediaWiki to HTML parser for the Engineering Design Guide and Environment (EDGE)'
   s.authors     = ['Bryan T. Meyers']
