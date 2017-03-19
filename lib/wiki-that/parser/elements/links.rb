@@ -49,10 +49,9 @@ module WikiThat
       end
       attributes = []
       while match? [:link_namespace,:text]
+        url += current.value
         if match? [:link_namespace]
-          url += "#{current.value}:"
-        else
-          url += current.value
+          url += ':'
         end
         advance
       end
@@ -151,10 +150,9 @@ module WikiThat
       advance
       url = ''
       while match? [:link_namespace,:text]
+        url += current.value
         if match? [:link_namespace]
-          url += "#{current.value}:"
-        else
-          url += current.value
+          url += ':'
         end
         advance
       end
