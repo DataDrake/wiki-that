@@ -39,28 +39,18 @@ module WikiThat
       advance
       url = ''
       namespaces = []
-      while match? [:link_namespace,:text]
-        if match? [:text]
-          temp = current.value
-          if temp == 'http' or temp == 'https'
-            break
-          end
-          advance
-          if match? [:link_namespace]
-            namespaces.push(temp)
-          else
-            rewind
-            url += temp
-          end
-        else
-          warning 'Empty Link Namespace'
+      while match? [:link_namespace]
+        temp = current.value
+        if temp == 'http' or temp == 'https'
+          break
         end
+        namespaces.push(temp)
         advance
       end
       attributes = []
       while match? [:link_namespace,:text]
         if match? [:link_namespace]
-          url += ':'
+          url += "#{current.value}:"
         else
           url += current.value
         end
@@ -162,7 +152,7 @@ module WikiThat
       url = ''
       while match? [:link_namespace,:text]
         if match? [:link_namespace]
-          url += ':'
+          url += "#{current.value}:"
         else
           url += current.value
         end

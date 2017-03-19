@@ -44,7 +44,11 @@ module WikiThat
         lex_text(%w(: | ] ))
         case current
           when ':'
-            append Token.new(:link_namespace)
+            value = ''
+            if @result.last != nil && @result.last.type == :text
+              value = @result.pop.value
+            end
+            append Token.new(:link_namespace,value)
             advance
           when '|'
             append Token.new(:link_attribute)
