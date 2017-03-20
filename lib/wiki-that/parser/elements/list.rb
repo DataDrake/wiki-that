@@ -27,10 +27,7 @@ module WikiThat
     # @return [Boolean] True if belongs to list
     ##
     def check_item(prefix, depth, value)
-      if prefix.length > value.length
-        return false
-      end
-      (0...depth).each do |i|
+      (0..depth).each do |i|
         case value[i]
           when prefix[i]
             # good
@@ -90,9 +87,6 @@ module WikiThat
     # @return [String] the parsed list
     ##
     def parse_list2(curr, depth)
-      if depth == curr.length
-        return []
-      end
       case curr[depth]
         when ';', ':'
           list = Element.new(:dl)
