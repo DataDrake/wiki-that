@@ -1,10 +1,12 @@
 ## Lexer
-* DONE
+* \<nowiki>
+* \_\_NOTOC\_\_
 
 ## Parser
 * Remaining:
   - Lists
   - Tables
+  - <nowiki>
 * Add new tests for tables
 
 ## Generator
