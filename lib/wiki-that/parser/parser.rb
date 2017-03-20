@@ -73,8 +73,6 @@ module WikiThat
       @tokens = @lexer.result
       until end?
         case current.type
-          when :break
-            advance
           when :header_start
             parse_header
           when :rule

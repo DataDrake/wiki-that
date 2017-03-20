@@ -92,15 +92,17 @@ class ListLexTest < Test::Unit::TestCase
   def test_ul_ol_ul
     lexer = WikiThat::Lexer.new("*# AB\n*#* ABC")
     lexer.lex
-    assert_equal(4, lexer.result.length)
+    assert_equal(5, lexer.result.length)
     assert_equal(:list_item, lexer.result[0].type)
     assert_equal('*#', lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' AB', lexer.result[1].value)
-    assert_equal(:list_item, lexer.result[2].type)
-    assert_equal('*#*', lexer.result[2].value)
-    assert_equal(:text, lexer.result[3].type)
-    assert_equal(' ABC', lexer.result[3].value)
+    assert_equal(:break, lexer.result[2].type)
+    assert_equal(1, lexer.result[2].value)
+    assert_equal(:list_item, lexer.result[3].type)
+    assert_equal('*#*', lexer.result[3].value)
+    assert_equal(:text, lexer.result[4].type)
+    assert_equal(' ABC', lexer.result[4].value)
   end
 
   def test_dl
@@ -126,44 +128,50 @@ class ListLexTest < Test::Unit::TestCase
   def test_dl_dt_dn
     lexer = WikiThat::Lexer.new("; ABC\n: DEF")
     lexer.lex
-    assert_equal(4, lexer.result.length)
+    assert_equal(5, lexer.result.length)
     assert_equal(:list_item, lexer.result[0].type)
     assert_equal(';', lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
-    assert_equal(:list_item, lexer.result[2].type)
-    assert_equal(':', lexer.result[2].value)
-    assert_equal(:text, lexer.result[3].type)
-    assert_equal(' DEF', lexer.result[3].value)
+    assert_equal(:break, lexer.result[2].type)
+    assert_equal(1, lexer.result[2].value)
+    assert_equal(:list_item, lexer.result[3].type)
+    assert_equal(':', lexer.result[3].value)
+    assert_equal(:text, lexer.result[4].type)
+    assert_equal(' DEF', lexer.result[4].value)
   end
 
   def test_dl_dn_dt
     lexer = WikiThat::Lexer.new(": ABC\n; DEF")
     lexer.lex
-    assert_equal(4, lexer.result.length)
+    assert_equal(5, lexer.result.length)
     assert_equal(:list_item, lexer.result[0].type)
     assert_equal(':', lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
-    assert_equal(:list_item, lexer.result[2].type)
-    assert_equal(';', lexer.result[2].value)
-    assert_equal(:text, lexer.result[3].type)
-    assert_equal(' DEF', lexer.result[3].value)
+    assert_equal(:break, lexer.result[2].type)
+    assert_equal(1, lexer.result[2].value)
+    assert_equal(:list_item, lexer.result[3].type)
+    assert_equal(';', lexer.result[3].value)
+    assert_equal(:text, lexer.result[4].type)
+    assert_equal(' DEF', lexer.result[4].value)
   end
 
 
   def test_ol_dl_dt_dn
     lexer = WikiThat::Lexer.new("#; ABC\n#: DEF")
     lexer.lex
-    assert_equal(4, lexer.result.length)
+    assert_equal(5, lexer.result.length)
     assert_equal(:list_item, lexer.result[0].type)
     assert_equal('#;', lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
-    assert_equal(:list_item, lexer.result[2].type)
-    assert_equal('#:', lexer.result[2].value)
-    assert_equal(:text, lexer.result[3].type)
-    assert_equal(' DEF', lexer.result[3].value)
+    assert_equal(:break, lexer.result[2].type)
+    assert_equal(1, lexer.result[2].value)
+    assert_equal(:list_item, lexer.result[3].type)
+    assert_equal('#:', lexer.result[3].value)
+    assert_equal(:text, lexer.result[4].type)
+    assert_equal(' DEF', lexer.result[4].value)
   end
 
 end

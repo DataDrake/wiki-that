@@ -37,7 +37,7 @@ class TextGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new("abc\n123", 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p>abc123</p>', gen.result)
+    assert_equal('<p>abc&nbsp;123</p>', gen.result)
   end
 
   def test_double_break

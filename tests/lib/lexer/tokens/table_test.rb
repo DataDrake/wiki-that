@@ -58,11 +58,13 @@ class TableLexTest < Test::Unit::TestCase
   def test_caption
     lexer = WikiThat::Lexer.new("{|\n|+Caption Here")
     lexer.lex
-    assert_equal(3, lexer.result.length)
+    assert_equal(4, lexer.result.length)
     assert_equal(:table_start, lexer.result[0].type)
-    assert_equal(:table_caption, lexer.result[1].type)
-    assert_equal(:text, lexer.result[2].type)
-    assert_equal('Caption Here', lexer.result[2].value)
+    assert_equal(:break, lexer.result[1].type)
+    assert_equal(1, lexer.result[1].value)
+    assert_equal(:table_caption, lexer.result[2].type)
+    assert_equal(:text, lexer.result[3].type)
+    assert_equal('Caption Here', lexer.result[3].value)
   end
 
   def test_caption2
@@ -77,11 +79,13 @@ class TableLexTest < Test::Unit::TestCase
   def test_row
     lexer = WikiThat::Lexer.new("{|\n|-Row Here")
     lexer.lex
-    assert_equal(3, lexer.result.length)
+    assert_equal(4, lexer.result.length)
     assert_equal(:table_start, lexer.result[0].type)
-    assert_equal(:table_row, lexer.result[1].type)
-    assert_equal(:text, lexer.result[2].type)
-    assert_equal('Row Here', lexer.result[2].value)
+    assert_equal(:break, lexer.result[1].type)
+    assert_equal(1, lexer.result[1].value)
+    assert_equal(:table_row, lexer.result[2].type)
+    assert_equal(:text, lexer.result[3].type)
+    assert_equal('Row Here', lexer.result[3].value)
   end
 
   def test_row2

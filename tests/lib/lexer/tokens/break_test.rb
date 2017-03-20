@@ -27,7 +27,9 @@ class BreakLexTest < Test::Unit::TestCase
   def test_newline
     lexer = WikiThat::Lexer.new("\n")
     lexer.lex
-    assert_equal(0, lexer.result.length)
+    assert_equal(1, lexer.result.length)
+    assert_equal(:break, lexer.result[0].type)
+    assert_equal(1, lexer.result[0].value)
   end
 
   def test_break1
@@ -49,25 +51,29 @@ class BreakLexTest < Test::Unit::TestCase
   def test_break3
     lexer = WikiThat::Lexer.new("Hello\nGoodbye\n\n")
     lexer.lex
-    assert_equal(3, lexer.result.length)
+    assert_equal(4, lexer.result.length)
     assert_equal(:text, lexer.result[0].type)
     assert_equal('Hello', lexer.result[0].value)
-    assert_equal(:text, lexer.result[1].type)
-    assert_equal('Goodbye', lexer.result[1].value)
-    assert_equal(:break, lexer.result[2].type)
-    assert_equal(2, lexer.result[2].value)
+    assert_equal(:break, lexer.result[1].type)
+    assert_equal(1, lexer.result[1].value)
+    assert_equal(:text, lexer.result[2].type)
+    assert_equal('Goodbye', lexer.result[2].value)
+    assert_equal(:break, lexer.result[3].type)
+    assert_equal(2, lexer.result[3].value)
   end
 
   def test_break4
     lexer = WikiThat::Lexer.new("Hello\n\nGoodbye\n")
     lexer.lex
-    assert_equal(3, lexer.result.length)
+    assert_equal(4, lexer.result.length)
     assert_equal(:text, lexer.result[0].type)
     assert_equal('Hello', lexer.result[0].value)
     assert_equal(:break, lexer.result[1].type)
     assert_equal(2, lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('Goodbye', lexer.result[2].value)
+    assert_equal(:break, lexer.result[3].type)
+    assert_equal(1, lexer.result[3].value)
   end
 
 end

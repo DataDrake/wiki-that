@@ -172,7 +172,7 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p>[[Image:/public/test.png|Test PNG</p>', gen.result)
+    assert_equal('<p>[[Image:/public/test.png|Test PNG&nbsp;</p>', gen.result)
   end
 
   def test_internal_image_caption_incomplete3

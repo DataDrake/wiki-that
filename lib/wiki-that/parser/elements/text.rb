@@ -47,7 +47,17 @@ module WikiThat
     ##
     def parse_text
       text = Element.new(:p)
-      until match? [:break] or end?
+      done = false
+      until end?
+        if match? [:break]
+          if current.value == 1
+            text.add_child(Element.new(:text, '&nbsp;'))
+            advance
+          else
+            advance
+            break
+          end
+        end
         text.add_children(*parse_inline)
       end
       append text

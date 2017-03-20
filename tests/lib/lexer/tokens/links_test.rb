@@ -251,7 +251,7 @@ class LinkLexTest < Test::Unit::TestCase
     start = "[[Image:/public/test.png|Test PNG\n"
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
-    assert_equal(5, lexer.result.length)
+    assert_equal(6, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
     assert_equal(2, lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
@@ -261,6 +261,8 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:link_attribute, lexer.result[3].type)
     assert_equal(:text, lexer.result[4].type)
     assert_equal('Test PNG', lexer.result[4].value)
+    assert_equal(:break, lexer.result[5].type)
+    assert_equal(1, lexer.result[5].value)
   end
 
   def test_internal_image_caption_incomplete3

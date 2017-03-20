@@ -32,10 +32,7 @@ module WikiThat
         advance
       end
 
-      # Break if more than 1
-      if count > 1
-        append Token.new(:break, count)
-      end
+      append Token.new(:break, count)
     end
   end
 end

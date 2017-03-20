@@ -35,11 +35,13 @@ class TextLexTest < Test::Unit::TestCase
   def test_double
     lexer = WikiThat::Lexer.new("abc\n123")
     lexer.lex
-    assert_equal(2, lexer.result.length)
+    assert_equal(3, lexer.result.length)
     assert_equal(:text, lexer.result[0].type)
     assert_equal('abc', lexer.result[0].value)
-    assert_equal(:text, lexer.result[1].type)
-    assert_equal('123', lexer.result[1].value)
+    assert_equal(:break, lexer.result[1].type)
+    assert_equal(1, lexer.result[1].value)
+    assert_equal(:text, lexer.result[2].type)
+    assert_equal('123', lexer.result[2].value)
   end
 
   def test_double_break

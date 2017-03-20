@@ -44,17 +44,22 @@ class TextParseTest < Test::Unit::TestCase
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:p, parser.result.children[0].type)
-    assert_equal(2, parser.result.children[0].children.length)
+    puts parser.result.children[0].children.inspect
+
+    assert_equal(3, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal('abc', parser.result.children[0].children[0].value)
     assert_equal(:text, parser.result.children[0].children[1].type)
-    assert_equal('123', parser.result.children[0].children[1].value)
+    assert_equal('&nbsp;', parser.result.children[0].children[1].value)
+    assert_equal(:text, parser.result.children[0].children[2].type)
+    assert_equal('123', parser.result.children[0].children[2].value)
   end
 
   def test_double_break
     parser = WikiThat::Parser.new("abc\n\n123", 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
+    puts parser.result.children.inspect
     assert_equal(2, parser.result.children.length)
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
