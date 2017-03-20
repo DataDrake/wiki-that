@@ -55,7 +55,7 @@ class RuleParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:rule, parser.result.children[0].type)
+    assert_equal(:hr, parser.result.children[0].type)
     assert_equal(0, parser.result.children[0].children.length)
   end
 
@@ -65,7 +65,7 @@ class RuleParseTest < Test::Unit::TestCase
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
-    assert_equal(:rule, parser.result.children[0].type)
+    assert_equal(:hr, parser.result.children[0].type)
     assert_equal(0, parser.result.children[0].children.length)
   end
 end

@@ -148,7 +148,7 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><img src="/wiki/BOB/public/test.png"></img></p>', gen.result)
+    assert_equal('<p><img src="/wiki/BOB/public/test.png" /></p>', gen.result)
   end
 
   #TODO: alt text should tnot require div
@@ -156,7 +156,7 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div><img src="/wiki/BOB/public/test.png" alt="Test PNG"></img></div></p>', gen.result)
+    assert_equal('<p><div><img src="/wiki/BOB/public/test.png" alt="Test PNG" /></div></p>', gen.result)
   end
 
   def test_internal_image_caption_incomplete1
@@ -187,27 +187,27 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|frame|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div class="frame"><img src="/wiki/BOB/public/test.png" alt="Test PNG"></img><caption>Test PNG</caption></div></p>', gen.result)
+    assert_equal('<p><div class="frame"><img src="/wiki/BOB/public/test.png" alt="Test PNG" /><caption>Test PNG</caption></div></p>', gen.result)
  end
 
   def test_internal_image_thumb
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|thumb|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div class="thumb"><img src="/wiki/BOB/public/test.png" alt="Test PNG"></img><caption>Test PNG</caption></div></p>', gen.result)
+    assert_equal('<p><div class="thumb"><img src="/wiki/BOB/public/test.png" alt="Test PNG" /><caption>Test PNG</caption></div></p>', gen.result)
   end
 
   def test_internal_image_width
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|100px|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div><img src="/wiki/BOB/public/test.png" width="100px" alt="Test PNG"></img></div></p>', gen.result)
+    assert_equal('<p><div><img src="/wiki/BOB/public/test.png" width="100px" alt="Test PNG" /></div></p>', gen.result)
   end
 
   def test_internal_image_left
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|left|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div class="left"><img src="/wiki/BOB/public/test.png" alt="Test PNG"></img></div></p>', gen.result)
+    assert_equal('<p><div class="left"><img src="/wiki/BOB/public/test.png" alt="Test PNG" /></div></p>', gen.result)
   end
 end

@@ -78,11 +78,16 @@ module WikiThat
       end
       buff = "<#{element.type.to_s}"
       buff += generate_attributes(element)
-      buff += '>'
-      element.children.each do |c|
-        buff += generate_element(c)
+      case element.type
+        when :hr, :img
+          buff += ' />'
+        else
+          buff += '>'
+          element.children.each do |c|
+            buff += generate_element(c)
+          end
+          buff += "</#{element.type.to_s}>"
       end
-      buff += "</#{element.type.to_s}>"
       buff
     end
 

@@ -24,7 +24,7 @@ module WikiThat
     ##
     def parse_rule
       advance
-      append Element.new(:rule)
+      append Element.new(:hr)
     end
   end
 end
