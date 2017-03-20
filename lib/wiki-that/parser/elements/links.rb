@@ -42,17 +42,15 @@ module WikiThat
       while match? [:link_namespace]
         temp = current.value
         if temp == 'http' or temp == 'https'
-          break
+          error 'External link in internal link brackets?'
+          return
         end
         namespaces.push(temp)
         advance
       end
       attributes = []
-      while match? [:link_namespace,:text]
+      while match? [:text]
         url += current.value
-        if match? [:link_namespace]
-          url += ':'
-        end
         advance
       end
       while match? [:link_attribute]
@@ -60,8 +58,6 @@ module WikiThat
         if match? [:text]
           attributes.push(current.value)
           advance
-        else
-          break
         end
       end
       if not_match? [:link_end] or (match? [:link_end] and current.value != 2)
