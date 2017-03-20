@@ -11,5 +11,7 @@
 ## Generator
 * Unit Tests
   - Tables
-## Stretch Goal
+  
+## Stretch Goals
 * Line numbers for meaningful messages
+* TOC support

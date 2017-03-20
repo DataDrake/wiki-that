@@ -74,6 +74,13 @@ class LinkGenTest < Test::Unit::TestCase
     assert_equal('<p><a href="http://example.com">Example</a></p>', gen.result)
   end
 
+  def test_external_long_alt
+    gen = WikiThat::HTMLGenerator.new('[http://example.com Example Link]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><a href="http://example.com">Example Link</a></p>', gen.result)
+  end
+
   def test_internal_incomplete
     gen = WikiThat::HTMLGenerator.new('[[', 'wiki', 'BOB', 'sub/folder')
     gen.generate
@@ -95,6 +102,14 @@ class LinkGenTest < Test::Unit::TestCase
     assert_equal('<p><a href="/wiki/BOB/sub/folder/"></a></p>', gen.result)
   end
 
+  #TODO: this should really fail, if I'm honest
+  def test_internal_external
+    gen = WikiThat::HTMLGenerator.new('[[http://example.com]]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><a href="/wiki/http//example.com"></a></p>', gen.result)
+  end
+
   def test_internal_relative
     gen = WikiThat::HTMLGenerator.new('[[public/Home]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
@@ -107,6 +122,13 @@ class LinkGenTest < Test::Unit::TestCase
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p><a href="/wiki/BOB/public/Home"></a></p>', gen.result)
+  end
+
+  def test_internal_absolute_named
+    gen = WikiThat::HTMLGenerator.new('[[/public/Home|Home]]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><a href="/wiki/BOB/public/Home">Home</a></p>', gen.result)
   end
 
   def test_interwiki
@@ -130,6 +152,13 @@ class LinkGenTest < Test::Unit::TestCase
     assert_equal('<p><a href="/wiki/Test123/public/Home">Home</a></p>', gen.result)
   end
 
+  def test_interwiki_extra_attributes
+    gen = WikiThat::HTMLGenerator.new('[[Test123:/public/Home|center|Home]]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><a href="/wiki/Test123/public/Home">Home</a></p>', gen.result)
+  end
+
   def test_internal_audio
     gen = WikiThat::HTMLGenerator.new('[[Audio:/public/test.wav]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
@@ -137,8 +166,36 @@ class LinkGenTest < Test::Unit::TestCase
     assert_equal('<p><audio src="/wiki/BOB/public/test.wav" controls></audio></p>', gen.result)
   end
 
+  def test_internal_audio_extra_attributes
+    gen = WikiThat::HTMLGenerator.new('[[Audio:/public/test.wav|Test]]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><audio src="/wiki/BOB/public/test.wav" controls></audio></p>', gen.result)
+  end
+
+  def test_interwiki_audio
+    gen = WikiThat::HTMLGenerator.new('[[Audio:Test123:/public/test.wav]]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><audio src="/wiki/Test123/public/test.wav" controls></audio></p>', gen.result)
+  end
+
+  def test_extra_namespace
+    gen = WikiThat::HTMLGenerator.new('[[Audio:Test123:Bob:/public/test.wav]]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><audio src="/wiki/Test123/public/test.wav" controls></audio></p>', gen.result)
+  end
+
   def test_internal_video
     gen = WikiThat::HTMLGenerator.new('[[Video:/public/test.mp4]]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><video src="/wiki/BOB/public/test.mp4" controls></video></p>', gen.result)
+  end
+
+  def test_internal_video_extra_attributes
+    gen = WikiThat::HTMLGenerator.new('[[Video:/public/test.mp4|Test]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p><video src="/wiki/BOB/public/test.mp4" controls></video></p>', gen.result)

@@ -42,8 +42,7 @@ module WikiThat
       while match? [:link_namespace]
         temp = current.value
         if temp == 'http' or temp == 'https'
-          error 'External link in internal link brackets?'
-          return
+          warning 'External link in internal link brackets?'
         end
         namespaces.push(temp)
         advance
@@ -102,7 +101,7 @@ module WikiThat
       url = pieces.join('/') + url
 
       if namespaces.length > 0
-        case namespaces[ns_index]
+        case namespaces[0]
           when 'Audio'
             if attributes.length > 0
               warning 'Ignoring all attributes'

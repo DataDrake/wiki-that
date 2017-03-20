@@ -35,7 +35,6 @@ class FormattingLexTest < Test::Unit::TestCase
   def test_short2
     lexer = WikiThat::Lexer.new('\'\'thing\'')
     lexer.lex
-    puts lexer.result.inspect
     assert_equal(2, lexer.result.length)
     assert_equal(:format, lexer.result[0].type)
     assert_equal(2, lexer.result[0].value)

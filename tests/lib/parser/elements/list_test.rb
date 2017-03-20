@@ -144,7 +144,6 @@ class ListParseTest < Test::Unit::TestCase
     parser = WikiThat::Parser.new("*# AB\n* ABC", 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
-    puts parser.result.children[1].inspect
     assert_equal(1, parser.result.children.length)
     assert_equal(:ul, parser.result.children[0].type)
     assert_equal(2, parser.result.children[0].children.length)
