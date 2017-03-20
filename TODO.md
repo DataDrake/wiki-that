@@ -1,10 +1,9 @@
 ## Lexer
-* \<nowiki>
+* DONE
 
 ## Parser
 * Remaining:
   - Tables
-  - \<nowiki>
 * Add new tests for tables
 
 ## Generator

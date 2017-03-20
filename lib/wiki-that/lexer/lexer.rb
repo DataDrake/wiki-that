@@ -18,6 +18,7 @@ require_relative('tokens/formatting')
 require_relative('tokens/header')
 require_relative('tokens/links')
 require_relative('tokens/list')
+require_relative('tokens/nowiki')
 require_relative('tokens/rule')
 require_relative('tokens/table')
 require_relative('tokens/text')
@@ -34,6 +35,7 @@ module WikiThat
     include WikiThat::Header
     include WikiThat::Links
     include WikiThat::List
+    include WikiThat::NoWiki
     include WikiThat::Rule
     include WikiThat::Table
     include WikiThat::Text
@@ -74,6 +76,8 @@ module WikiThat
             lex_table
           when *TOC_SPECIAL
             lex_toc
+          when *NOWIKI_SPECIAL
+            lex_nowiki
           else
             lex_text
         end

@@ -24,12 +24,12 @@ module WikiThat
   ##
   module TableOfContents
     ##
-    # Lex the current text as a line break
+    # Lex the current text as a NOTOC
     ##
     def lex_toc
       buff = ''
       count = 0
-      #Find all consecutive newlines
+
       while match? TOC_SPECIAL
         buff += current
         count += 1
@@ -50,7 +50,6 @@ module WikiThat
       end
 
       count = 0
-      #Find all consecutive newlines
       while match? TOC_SPECIAL
         buff += current
         count += 1

@@ -18,6 +18,7 @@ require_relative('elements/formatting')
 require_relative('elements/header')
 require_relative('elements/links')
 require_relative('elements/list')
+require_relative('elements/nowiki')
 require_relative('elements/rule')
 require_relative('elements/table')
 require_relative('elements/text')
@@ -33,6 +34,7 @@ module WikiThat
     include WikiThat::Header
     include WikiThat::Links
     include WikiThat::List
+    include WikiThat::NoWiki
     include WikiThat::Rule
     include WikiThat::Table
     include WikiThat::Text
@@ -79,6 +81,8 @@ module WikiThat
             parse_rule
           when :list_item
             parse_list
+          when :nowiki
+            parse_nowiki
           when :table_start
             #parse_table
           else
