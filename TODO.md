@@ -1,6 +1,5 @@
 ## Lexer
 * \<nowiki>
-* \_\_NOTOC\_\_
 
 ## Parser
 * Remaining:

@@ -21,6 +21,7 @@ require_relative('tokens/list')
 require_relative('tokens/rule')
 require_relative('tokens/table')
 require_relative('tokens/text')
+require_relative('tokens/toc')
 module WikiThat
   ##
   # Lexers are disposable objects for translate a Mediawiki
@@ -36,6 +37,7 @@ module WikiThat
     include WikiThat::Rule
     include WikiThat::Table
     include WikiThat::Text
+    include WikiThat::TableOfContents
 
     # The output of the translation to HTML
     attr_reader :result
@@ -70,6 +72,8 @@ module WikiThat
             lex_list
           when *TABLE_SPECIAL
             lex_table
+          when *TOC_SPECIAL
+            lex_toc
           else
             lex_text
         end
