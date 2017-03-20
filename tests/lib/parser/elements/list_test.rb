@@ -16,7 +16,7 @@
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
 
-class ListTest < Test::Unit::TestCase
+class ListParseTest < Test::Unit::TestCase
   def test_empty
     lexer = WikiThat::Lexer.new('', 'wiki', 'BOB', 'sub/folder')
     lexer.lex

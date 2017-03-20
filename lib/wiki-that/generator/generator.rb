@@ -92,22 +92,15 @@ module WikiThat
     ##
     def generate_attributes(element)
       buff = ''
-      first = true
       element.attributes.each do |k,v|
-        if first
-          first = false
+        buff += ' '
+        if v.is_a? TrueClass
+          buff += k.to_s
         else
-          buff += ' '
-        end
-        if v.is_a? Boolean
-          if v
-            buff += k
-          end
-        else
-          buff += "#{k}=\"#{v}\""
+          buff += "#{k.to_s}=\"#{v}\""
         end
       end
-      buff.strip!
+      buff.rstrip!
       buff
     end
 

@@ -50,7 +50,9 @@ module WikiThat
         end
         wrapper.add_child(e)
         if classes.include?('frame') || classes.include?('thumb') || classes.include?('thumbnail')
-          wrapper.add_child(Element.new(:caption,attrs.last))
+          caption = Element.new(:caption)
+          caption.add_child(Element.new(:text,attrs.last))
+          wrapper.add_child(caption)
         end
         wrapper
       else

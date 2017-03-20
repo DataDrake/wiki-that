@@ -106,9 +106,11 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:a, parser.result.children[0].children[0].type)
-    assert_equal(2, parser.result.children[0].children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
     assert_equal('http://example.com', parser.result.children[0].children[0].attributes[:href])
-    assert_equal('Example', parser.result.children[0].children[0].attributes[:alt])
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal('Example', parser.result.children[0].children[0].children[0].value)
   end
 
   def test_internal_incomplete
@@ -312,7 +314,9 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
     assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
     assert_equal(:caption, parser.result.children[0].children[0].children[1].type)
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[1].value)
+    assert_equal(1, parser.result.children[0].children[0].children[1].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[1].children[0].type)
+    assert_equal('Test PNG', parser.result.children[0].children[0].children[1].children[0].value)
  end
 
   def test_internal_image_thumb
@@ -329,7 +333,9 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
     assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
     assert_equal(:caption, parser.result.children[0].children[0].children[1].type)
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[1].value)
+    assert_equal(1, parser.result.children[0].children[0].children[1].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[1].children[0].type)
+    assert_equal('Test PNG', parser.result.children[0].children[0].children[1].children[0].value)
   end
 
   def test_internal_image_width

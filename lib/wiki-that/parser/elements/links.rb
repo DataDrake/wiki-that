@@ -165,9 +165,9 @@ module WikiThat
       url = url.split(' ')
       anchor.set_attribute(:href, url[0])
       if url.length > 2
-        anchor.set_attribute(:alt, url[1...url.length].join(' '))
+        anchor.add_child(Element.new(:text, url[1...url.length].join(' ')))
       elsif url.length == 2
-        anchor.set_attribute(:alt, url[1])
+        anchor.add_child(Element.new(:text, url[1]))
       end
       anchor
     end
