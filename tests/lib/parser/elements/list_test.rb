@@ -13,107 +13,214 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
+require 'awesome_print'
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
 
 class ListParseTest < Test::Unit::TestCase
   def test_empty
-    lexer = WikiThat::Lexer.new('', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('', lexer.result, 'Nothing should have been generated')
+    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(0, parser.result.children.length)
   end
 
   def test_ul
-    lexer = WikiThat::Lexer.new('*', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ul><li></li></ul>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new('*', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ul, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(0, parser.result.children[0].children[0].children.length)
   end
 
   def test_ul_li
-    lexer = WikiThat::Lexer.new('*A', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ul><li>A</li></ul>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new('*A', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ul, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal('A', parser.result.children[0].children[0].children[0].value)
   end
 
   def test_ul_li2
-    lexer = WikiThat::Lexer.new('* ABC', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ul><li> ABC</li></ul>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new('* ABC', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ul, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].value)
   end
 
   def test_ol
-    lexer = WikiThat::Lexer.new('#', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ol><li></li></ol>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new('#', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ol, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(0, parser.result.children[0].children[0].children.length)
   end
 
   def test_ol_li
-    lexer = WikiThat::Lexer.new('#A', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ol><li>A</li></ol>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new('#A', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ol, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal('A', parser.result.children[0].children[0].children[0].value)
   end
 
   def test_ol_li2
-    lexer = WikiThat::Lexer.new('# ABC', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ol><li> ABC</li></ol>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new('# ABC', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ol, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].value)
   end
 
   def test_ol_ul
-    lexer = WikiThat::Lexer.new('#* ABC', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ol><li><ul><li> ABC</li></ul></li></ol>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new('#* ABC', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ol, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:ul, parser.result.children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].children[0].children[0].value)
   end
 
   def test_ul_ol_ul
-    lexer = WikiThat::Lexer.new("*# AB\n*#* ABC", 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ul><li><ol><li> AB</li><li><ul><li> ABC</li></ul></li></ol></li></ul>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new("*# AB\n*#* ABC", 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ul, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:ol, parser.result.children[0].children[0].children[0].type)
+    assert_equal(2, parser.result.children[0].children[0].children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].children[0].children[0].type)
+    assert_equal(' AB', parser.result.children[0].children[0].children[0].children[0].children[0].value)
+    assert_equal(:li, parser.result.children[0].children[0].children[0].children[1].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[1].children.length)
+    assert_equal(:ul, parser.result.children[0].children[0].children[0].children[1].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[1].children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].children[0].children[1].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[1].children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].children[1].children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].children[1].children[0].children[0].children[0].value)
   end
 
   def test_dl
-    lexer = WikiThat::Lexer.new('- ABC', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<dl><dd> ABC</dd></dl>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new(': ABC', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:dl, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:dd, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].value)
   end
 
   def test_dl2
-    lexer = WikiThat::Lexer.new('; ABC', 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<dl><dt> ABC</dt></dl>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new('; ABC', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:dl, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:dt, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].value)
   end
 
-  def test_dl_dt_dn
-    lexer = WikiThat::Lexer.new("; ABC\n- DEF", 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<dl><dt> ABC</dt><dd> DEF</dd></dl>', lexer.result, 'Unordered List should have been generated')
+  def test_dl_dt_dd
+    parser = WikiThat::Parser.new("; ABC\n: DEF", 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:dl, parser.result.children[0].type)
+    assert_equal(2, parser.result.children[0].children.length)
+    assert_equal(:dt, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].value)
+    assert_equal(:dd, parser.result.children[0].children[1].type)
+    assert_equal(1, parser.result.children[0].children[1].children.length)
+    assert_equal(:text, parser.result.children[0].children[1].children[0].type)
+    assert_equal(' DEF', parser.result.children[0].children[1].children[0].value)
   end
 
   def test_dl_dn_dt
-    lexer = WikiThat::Lexer.new("- ABC\n; DEF", 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<dl><dd> ABC</dd><dt> DEF</dt></dl>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new(": ABC\n; DEF", 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:dl, parser.result.children[0].type)
+    assert_equal(2, parser.result.children[0].children.length)
+    assert_equal(:dd, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].value)
+    assert_equal(:dt, parser.result.children[0].children[1].type)
+    assert_equal(1, parser.result.children[0].children[1].children.length)
+    assert_equal(:text, parser.result.children[0].children[1].children[0].type)
+    assert_equal(' DEF', parser.result.children[0].children[1].children[0].value)
   end
 
 
   def test_ol_dl_dt_dn
-    lexer = WikiThat::Lexer.new("#; ABC\n#- DEF", 'wiki', 'BOB', 'sub/folder')
-    lexer.lex
-
-    assert_equal('<ol><li><dl><dt> ABC</dt><dd> DEF</dd></dl></li></ol>', lexer.result, 'Unordered List should have been generated')
+    parser = WikiThat::Parser.new("#; ABC\n#: DEF", 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:ol, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:dl, parser.result.children[0].children[0].children[0].type)
+    assert_equal(2, parser.result.children[0].children[0].children[0].children.length)
+    assert_equal(:dt, parser.result.children[0].children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[0].children[0].children[0].value)
+    assert_equal(:dd, parser.result.children[0].children[0].children[0].children[1].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[1].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].children[1].children[0].type)
+    assert_equal(' DEF', parser.result.children[0].children[0].children[0].children[1].children[0].value)
   end
 
 end

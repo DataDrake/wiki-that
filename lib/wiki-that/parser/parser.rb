@@ -78,7 +78,7 @@ module WikiThat
           when :rule
             parse_rule
           when :list_item
-            #parse_list
+            parse_list
           when :table_start
             #parse_table
           else

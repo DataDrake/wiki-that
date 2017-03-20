@@ -19,102 +19,97 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   module List
-
-    # Associate a list symbol with its list type
-    LIST_MAP     = {'*' => 'ul', '#' => 'ol', ';' => 'dl', ':' => 'dl'}
-    # Associate a list symbol with its list item type
-    ITEM_MAP     = {'*' => 'li', '#' => 'li', ';' => 'dt', ':' => 'dd'}
-    # Special characters for List elements
-    LIST_SPECIAL = %w(* # : ; -)
-
     ##
-    # Parse a single list item
-    # @return [Boolean,String] True if a new list, False with a value if a parsed item
+    # Check if this item belongs to the current list
+    # @param [String] prefix the prefix of the current list
+    # @param [Integer] depth the depth of the current list
+    # @param [String] value the value of the current list item
+    # @return [Boolean] True if belongs to list
     ##
-    def parse_item
-      local_stack = []
-      @stack.each do |s|
-        case s
-          when current
-            local_stack.push(s)
-            advance
-          when '-'
-            if match? ';'
-              local_stack.push(s)
-              advance
+    def check_item(prefix, depth, value)
+      if prefix.length > value.length
+        return false
+      end
+      (0...depth).each do |i|
+        case value[i]
+          when prefix[i]
+            # good
+          when ':'
+            unless prefix[i] == ';'
+              return false
             end
           when ';'
-            if match? '-'
-              local_stack.push(s)
-              advance
+            unless prefix[i] == ':'
+              return false
             end
           else
-            break
+            return false
         end
       end
-      if local_stack.length == @stack.length
-        rewind
-        [false, parse_first_item]
-      else
-        local_stack.length < @stack.length
-        [true, '']
-      end
+      true
     end
-
     ##
-    # Parse the first item of a new list
-    # @return [String] the HTML list item
+    # Parse all the items at the current depth
+    # @param [String] curr the list item string
+    # @param [Integer] depth the current nesting depth
     ##
-    def parse_first_item
-      start_tag = "<#{ITEM_MAP[current]}>"
-      end_tag   = "</#{ITEM_MAP[current]}>"
-      advance
-      case current
-        when *LIST_SPECIAL
-          buff = parse_list2
+    def parse_items(curr, depth)
+      items = []
+      while not end? and current.type == :list_item and check_item(curr, depth, current.value)
+        case current.value[depth]
+          when ';'
+            item = Element.new(:dt)
+          when ':'
+            item = Element.new(:dd)
+          else
+            item = Element.new(:li)
+        end
+        if depth < (current.value.length - 1)
+          item.add_child(parse_list2(current.value,depth+1))
         else
-          buff = parse_inline("\n")
           advance
+          item.add_children(*parse_inline("\n"))
+        end
+        items.push(item)
+        if not end? and current.type == :break
+          if current.value == 1
+            advance
+          else
+            advance
+            break
+          end
+        end
       end
-      start_tag + buff + end_tag
+      items
     end
 
     ##
-    # Parse all of the items of a list
-    # @return [String] the translated list items
-    ##
-    def parse_items
-      buff = ''
-      ## get first list item
-      buff += parse_first_item
-      done = false
-      ## while not end of list
-      until end? || done
-        done, partial = parse_item
-        buff          += partial
-      end
-      buff
-    end
-
-    ##
-    # Parse an entire list
+    # Parse a level of a list
+    # @param [String] curr the list item string
+    # @param [Integer] depth the current nesting depth
     # @return [String] the parsed list
     ##
-    def parse_list2
-      start_tag = "<#{LIST_MAP[current]}>"
-      end_tag   = "</#{LIST_MAP[current]}>"
-      @stack.push(current)
-      buff = parse_items
-      @stack.pop
-      start_tag + buff + end_tag
+    def parse_list2(curr, depth)
+      if depth == curr.length
+        return []
+      end
+      case curr[depth]
+        when ';', ':'
+          list = Element.new(:dl)
+        when '#'
+          list = Element.new(:ol)
+        else
+          list = Element.new(:ul)
+      end
+      list.add_children(*parse_items(curr, depth))
+      list
     end
 
     ##
     # Parse the current text as a list
     ##
     def parse_list
-      append parse_list2
-      next_state :line_start
+      append parse_list2(current.value,0)
     end
   end
 end
