@@ -7,6 +7,31 @@ in order to support richer use of namespaces in a
 project-oriented system. It does not strive for full compatibilty
 with MediaWiki proper.
 
+## Deviations from Wikimedia MediaWiki
+
+### Link Namespace Handling
+Usually link namespaces are used for grouping pages and content
+in a MediaWiki document. This helps a MediaWiki engine with knowing 
+where to look in storage for a document, for example.
+
+In our "flavor" of MediaWiki, link namespaces serve two purposes:
+
+1. **Embedded Media**   
+   The namespaces `Audio`, `Image`, and `Video` are reserved
+   to inform the parser that an internal link represents a file
+   to be embedded into the document. This enables authors to embed
+   any W3C standardized media file format into a document. The
+   Project or Category of these files may be specified after this
+   media namespace or fallback to the configured `default_namespace` 
+   variable.
+   
+2. **Projects or Categories**  
+   Non-reserved namespaces may be used to group multiple documents
+   into the same document root. This allows these documents to be
+   grouped according to a particular category or project. This has
+   the additional benefit of allowing for ***interwiki links***
+   which enabling linking to objects in other namespaces.
+
 ## License
 
 Copyright 2017 Bryan T. Meyers
