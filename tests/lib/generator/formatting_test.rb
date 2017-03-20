@@ -94,4 +94,11 @@ class FormattingGenTest < Test::Unit::TestCase
     assert_equal('<p>not <i><b>both things</b></i> not</p>', gen.result)
   end
 
+  def test_link
+    gen = WikiThat::HTMLGenerator.new('\'\'[https://example.com]\'\'', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><i><a href="https://example.com"></a></i></p>', gen.result)
+  end
+
 end

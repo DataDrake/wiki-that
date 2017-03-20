@@ -80,7 +80,23 @@ class HeaderGenTest < Test::Unit::TestCase
   end
 
   def test_h2_trailing_text
-    start = '== Complete Header == text'
+    start = '== Complete Header ==text'
+    gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_false(gen.success?, 'Generation should have failed')
+    assert_equal('', gen.result)
+  end
+
+  def test_h2_trailing_link
+    start = '== Complete Header ==[http://example.com]'
+    gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_false(gen.success?, 'Generation should have failed')
+    assert_equal('', gen.result)
+  end
+
+  def test_h2_trailing_multiple
+    start = '== Complete Header ==[http://example.com] text'
     gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_false(gen.success?, 'Generation should have failed')

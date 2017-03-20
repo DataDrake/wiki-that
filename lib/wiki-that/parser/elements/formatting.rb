@@ -34,7 +34,7 @@ module WikiThat
             finish = current
             advance
             break
-          when :link
+          when :link_start
             contents.push(parse_link)
           when :text
             contents.push(Element.new(:text,current.value))
