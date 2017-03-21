@@ -121,7 +121,7 @@ class TableLexTest < Test::Unit::TestCase
     lexer = WikiThat::Lexer.new("|Column Here")
     lexer.lex
     assert_equal(2, lexer.result.length)
-    assert_equal(:table_column, lexer.result[0].type)
+    assert_equal(:table_data, lexer.result[0].type)
     assert_equal(1, lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal('Column Here', lexer.result[1].value)
@@ -131,7 +131,7 @@ class TableLexTest < Test::Unit::TestCase
     lexer = WikiThat::Lexer.new("||Column Here")
     lexer.lex
     assert_equal(2, lexer.result.length)
-    assert_equal(:table_column, lexer.result[0].type)
+    assert_equal(:table_data, lexer.result[0].type)
     assert_equal(2, lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal('Column Here', lexer.result[1].value)

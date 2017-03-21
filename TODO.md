@@ -2,9 +2,7 @@
 * DONE
 
 ## Parser
-* Remaining:
-  - Tables
-* Add new tests for tables
+* DONE
 
 ## Generator
 * Unit Tests

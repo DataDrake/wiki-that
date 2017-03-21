@@ -84,9 +84,9 @@ module WikiThat
           when :nowiki
             parse_nowiki
           when :table_start
-            #parse_table
+            parse_table
           else
-            parse_text
+            append parse_text
         end
       end
     end
@@ -128,9 +128,6 @@ module WikiThat
     # @return [String] the character being pointed at
     ##
     def current
-      if end?
-        return nil
-      end
       @tokens[@index]
     end
 
@@ -166,14 +163,6 @@ module WikiThat
         end
       end
       true
-    end
-
-    ##
-    # Move the parser tape backward
-    # @param [Integer] dist how many steps to move backward, default 1
-    ##
-    def rewind(dist = 1)
-      @index -= dist
     end
 
     ##

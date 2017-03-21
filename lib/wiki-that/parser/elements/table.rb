@@ -15,49 +15,114 @@
 ##
 module WikiThat
   ##
-  # Lexer module for MediaWiki Tables
+  # Parser module for MediaWiki Tables
   # @author Bryan T. Meyers
   ##
   module Table
 
-    def self.parse_attributes(doc, i)
-      buff = ''
-      while i != doc.length && doc[i] != "\n"
-        buff += doc[i]
-        i    += 1
+    def parse_attributes(elem)
+      if match? [:text]
+        found = false
+        current.value.scan(/(\w+)="(\S+?)"/) do |m|
+          elem.set_attribute(m[0],m[1])
+          found = true
+        end
+        if found
+          advance
+        end
       end
-      if i != doc.length
-        buff += doc[i]
-        i    += 1
-      end
-      attrs = buff.scan(/\w+=".*?"/)
-      if attrs.length > 0
-        attrs = ' ' + attrs.join(' ')
-      end
-      [i, buff, attrs]
+      elem
     end
 
-    def self.parse_caption(doc, i)
+    def parse_caption(elem)
+      if match? [:table_caption]
+        advance
+        if match? [:text]
+          caption = Element.new(:caption)
+          caption.add_child(Element.new(:text,current.value))
+          elem.add_child(caption)
+          advance
+        end
+      end
+      elem
+    end
 
+    def parse_row(elem)
+      case current.type
+        when :table_row
+          advance
+          row = Element.new(:tr)
+          row = parse_attributes(row)
+          if match? [:break]
+            advance
+          end
+          row = parse_cells(row)
+          elem.add_child(row)
+        when :table_header, :table_data
+          row = Element.new(:tr)
+          row = parse_cells(row)
+          elem.add_child(row)
+      end
+      elem
+    end
+
+    def parse_cells(row)
+      first = true
+      while match? [:table_header,:table_data]
+        if match? [:table_header]
+          cell = Element.new(:th)
+        else
+          cell = Element.new(:td)
+        end
+        if first
+          if current.value == 2
+            warning 'First cell on a new line should be "|" or "!" '
+          end
+          first = false
+        end
+        advance
+        cell = parse_attributes(cell)
+        if cell.attributes.length > 0
+          advance
+        end
+        contents = parse_inline
+        puts contents.inspect
+        if contents.length > 0
+          cell.add_children(*contents)
+        end
+        if match? [:break]
+          advance
+          first = true
+        end
+        until match? [:table_header,:table_data,:table_row, :table_end]
+          p = parse_text
+          if p.children.length == 0
+            break
+          end
+          cell.add_child(p)
+        end
+        row.add_child(cell)
+      end
+      row
     end
 
     def parse_table
-      table = '<table'
-      buff  = '' + doc[i]
-      i     += 1
-      if doc[i] != '|'
-        return [i, buff]
+      advance
+      table = Element.new(:table)
+      table = parse_attributes(table)
+      if match? [:break]
+        advance
       end
-      buff            += doc[i]
-      i               += 1
-      i, pbuff, attrs = parse_attributes(doc, i)
-      buff            += pbuff
-      table           += "#{attrs}>"
-      i, pbuff, ptab  = parse_caption(doc, i)
-      buff            += pbuff
-      if ptab.length > 0
-        table += ptab
+      table = parse_caption(table)
+      while not end? and match? [:table_row,:table_header,:table_data]
+        table = parse_row(table)
       end
+      if match? [:table_end]
+        advance
+      else
+        warning 'Could not find end of table, missing "|}"'
+      end
+      append table
     end
   end
 end

@@ -56,10 +56,10 @@ module WikiThat
               lex_text
             when '|'
               advance
-              append Token.new(:table_column, 2)
+              append Token.new(:table_data, 2)
               lex_text(%w(| !))
             else
-              append Token.new(:table_column, 1)
+              append Token.new(:table_data, 1)
               lex_text(%w(| !))
           end
         when '!'
