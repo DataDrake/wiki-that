@@ -2,7 +2,7 @@
 * DONE
 
 ## Parser
-* DONE
+* Non-inline elements in multiline Table Cells
 
 ## Generator
 * Unit Tests

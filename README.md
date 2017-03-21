@@ -7,6 +7,31 @@ in order to support richer use of namespaces in a
 project-oriented system. It does not strive for full compatibilty
 with MediaWiki proper.
 
+## Supported Features
+
+1. Headings
+2. Formatting
+    * Bold / Italic / Both
+3. Lists
+    * Unordered
+    * Ordered
+    * Definition
+4. Links
+    * Internal / External
+    * Embedded Media
+        * Audio
+        * Images
+            * Captions, Frames, Thumbnails, etc.
+        * Videos
+5. Tables
+    * Captions
+    * Table/Row/Cell Attributes
+    * Inline Cells
+    * Multi-line Cells
+6. MISC
+    * Horizontal Rules
+    * \<nowiki> Tag
+
 ## Deviations from Wikimedia MediaWiki
 
 ### Link Namespace Handling
