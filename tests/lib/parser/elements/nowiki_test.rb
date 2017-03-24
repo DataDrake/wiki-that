@@ -26,7 +26,7 @@ class NoWikiParseTest < Test::Unit::TestCase
   end
 
   def test_complete
-    start = '<nowiki>this is not wiki markup</nowiki>'
+    start  = '<nowiki>this is not wiki markup</nowiki>'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')

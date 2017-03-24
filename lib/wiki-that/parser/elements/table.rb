@@ -20,11 +20,15 @@ module WikiThat
   ##
   module Table
 
+    ##
+    # Parse all K-V pairs on this line
+    # @param [Element] elem the element to set the attributes on
+    ##
     def parse_attributes(elem)
       if match? [:text]
         found = false
         current.value.scan(/(\w+)="([^"]*?)"/) do |m|
-          elem.set_attribute(m[0],m[1])
+          elem.set_attribute(m[0], m[1])
           found = true
         end
         if found
@@ -37,6 +41,10 @@ module WikiThat
       elem
     end
 
+    ##
+    # Parse a caption if it exists on this line
+    # @param [Element] elem the table to add the caption to
+    ##
     def parse_caption(elem)
       if match? [:table_caption]
         advance
@@ -49,7 +57,7 @@ module WikiThat
           end
           caption = Element.new(:caption)
           unless whitespace
-            caption.add_child(Element.new(:text,current.value))
+            caption.add_child(Element.new(:text, current.value))
           end
           elem.add_child(caption)
           advance
@@ -61,6 +69,10 @@ module WikiThat
       elem
     end
 
+    ##
+    # Parse a table row
+    # @param [Element] elem the table to add the row to
+    ##
     def parse_row(elem)
       case current.type
         when :table_row
@@ -94,9 +106,13 @@ module WikiThat
       elem
     end
 
+    ##
+    # Parse all the table cells on this row
+    # @param [Element] row the row to add cells to
+    ##
     def parse_cells(row)
       first = true
-      while match? [:table_header,:table_data]
+      while match? [:table_header, :table_data]
         if match? [:table_header]
           cell = Element.new(:th)
         else
@@ -122,7 +138,7 @@ module WikiThat
           cell.add_children(*contents)
         end
         ## Parse multi-line cell
-        until end? or match? [:table_header,:table_data,:table_row, :table_end]
+        until end? or match? [:table_header, :table_data, :table_row, :table_end]
           if match? [:break]
             advance
           end
@@ -137,12 +153,16 @@ module WikiThat
       row
     end
 
+    ##
+    # Parse an entire table
+    # @return [Element] the parsed tabel
+    ##
     def parse_table
       advance
       table = Element.new(:table)
       table = parse_attributes(table)
       table = parse_caption(table)
-      while not end? and match? [:table_row,:table_header,:table_data]
+      while not end? and match? [:table_row, :table_header, :table_data]
         table = parse_row(table)
       end
       if match? [:table_end]

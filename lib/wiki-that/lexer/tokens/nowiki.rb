@@ -27,11 +27,11 @@ module WikiThat
     # Lex the current text as a nowiki
     ##
     def lex_nowiki
-      buff = ''
+      buff  = ''
       count = 0
       #Find all consecutive newlines
       while match? NOWIKI_SPECIAL
-        buff += current
+        buff  += current
         count += 1
         advance
       end
@@ -53,7 +53,7 @@ module WikiThat
 
       count = 0
       while current == '>'
-        buff += current
+        buff  += current
         count += 1
         advance
       end
@@ -72,7 +72,7 @@ module WikiThat
       #closing tag
       count = 0
       while match? NOWIKI_SPECIAL
-        buff += current
+        buff  += current
         count += 1
         advance
       end
@@ -92,7 +92,7 @@ module WikiThat
       end
       count = 0
       while current == '>'
-        buff += current
+        buff  += current
         count += 1
         advance
       end

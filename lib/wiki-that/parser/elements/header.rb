@@ -25,7 +25,7 @@ module WikiThat
     ##
     def parse_header
       result = []
-      start = current
+      start  = current
       advance
       content = parse_inline(:header_end)
       if not_match? [:header_end]
@@ -33,7 +33,7 @@ module WikiThat
         (0...start.value).each do
           buff += '='
         end
-        result.push( Element.new(:text,buff) )
+        result.push(Element.new(:text, buff))
         content.each do |c|
           result.push(c)
         end
@@ -63,7 +63,7 @@ module WikiThat
         (0...start.value).each do
           buff += '='
         end
-        result.push(Element.new(:text,buff))
+        result.push(Element.new(:text, buff))
         content.each do |c|
           result.push(c)
         end
@@ -71,7 +71,7 @@ module WikiThat
         (0...finish.value).each do
           buff += '='
         end
-        result.push(Element.new(:text,buff))
+        result.push(Element.new(:text, buff))
         post.each do |c|
           result.push(c)
         end
@@ -87,7 +87,7 @@ module WikiThat
       end
       header = Element.new("h#{depth}".to_sym)
       header.add_children(*content)
-      return header
+      header
     end
   end
 end

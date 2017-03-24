@@ -22,8 +22,8 @@ module WikiThat
     ##
     def parse_video_link(link)
       e = Element.new(:video)
-      e.set_attribute(:src,link)
-      e.set_attribute(:controls,true)
+      e.set_attribute(:src, link)
+      e.set_attribute(:controls, true)
       e
     end
   end

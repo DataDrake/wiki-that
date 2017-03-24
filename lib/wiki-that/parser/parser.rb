@@ -54,15 +54,15 @@ module WikiThat
     # @returns [WikiThat::Parser] a newly configured Parser
     ##
     def initialize(doc, base_url, default_namespace, sub_url)
-      @lexer = WikiThat::Lexer.new(doc)
-      @base_url = base_url
-      @default_namespace  = default_namespace
-      @index = 0
-      @sub_url = sub_url
-      @errors = []
-      @warnings = []
-      @tokens = []
-      @result = Element.new(:root)
+      @lexer             = WikiThat::Lexer.new(doc)
+      @base_url          = base_url
+      @default_namespace = default_namespace
+      @index             = 0
+      @sub_url           = sub_url
+      @errors            = []
+      @warnings          = []
+      @tokens            = []
+      @result            = Element.new(:root)
     end
 
     ##

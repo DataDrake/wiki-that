@@ -27,11 +27,11 @@ module WikiThat
     # Lex the current text as a NOTOC
     ##
     def lex_toc
-      buff = ''
+      buff  = ''
       count = 0
 
       while match? TOC_SPECIAL
-        buff += current
+        buff  += current
         count += 1
         advance
       end
@@ -51,7 +51,7 @@ module WikiThat
 
       count = 0
       while match? TOC_SPECIAL
-        buff += current
+        buff  += current
         count += 1
         advance
       end

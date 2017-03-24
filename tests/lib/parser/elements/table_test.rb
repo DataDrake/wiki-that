@@ -25,7 +25,7 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete1
-    start = '{'
+    start  = '{'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
@@ -37,69 +37,69 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete2
-    start = '{|'
+    start  = '{|'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
   end
 
   def test_incomplete3
-    start = '{| not an attribute'
+    start  = '{| not an attribute'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
     assert_equal(:p, parser.result.children[1].type)
   end
 
   def test_incomplete4
-    start = '{| a="b"'
+    start  = '{| a="b"'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(1,parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].attributes.length)
     assert_equal('b', parser.result.children[0].attributes['a'])
   end
 
   def test_incomplete5
-    start = '{| a="b" c="1234&"'
+    start  = '{| a="b" c="1234&"'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(2,parser.result.children[0].attributes.length)
+    assert_equal(2, parser.result.children[0].attributes.length)
     assert_equal('b', parser.result.children[0].attributes['a'])
     assert_equal('1234&', parser.result.children[0].attributes['c'])
   end
 
   def test_incomplete6
-    start = "{|\n|+"
+    start  = "{|\n|+"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(0,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(0, parser.result.children[0].children.length)
   end
 
   def test_incomplete7
-    start = "{|\n|+this is a caption"
+    start  = "{|\n|+this is a caption"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:caption, parser.result.children[0].children[0].type)
     assert_equal(1, parser.result.children[0].children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].children[0].type)
@@ -107,14 +107,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete8
-    start = "{|\n|- these are not attributes"
+    start  = "{|\n|- these are not attributes"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(0, parser.result.children[0].children[0].children.length)
     assert_equal(0, parser.result.children[0].children[0].attributes.length)
@@ -122,14 +122,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete9
-    start = "{|\n|- a=\"b\""
+    start  = "{|\n|- a=\"b\""
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(0, parser.result.children[0].children[0].children.length)
     assert_equal(1, parser.result.children[0].children[0].attributes.length)
@@ -137,59 +137,59 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete10
-    start = "{|\n|- \n"
+    start  = "{|\n|- \n"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(0, parser.result.children[0].children[0].children.length)
     assert_equal(0, parser.result.children[0].children[0].attributes.length)
   end
 
   def test_caption_whitespace
-    start = "{|\n|+ \n"
+    start  = "{|\n|+ \n"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:caption, parser.result.children[0].children[0].type)
     assert_equal(0, parser.result.children[0].children[0].children.length)
   end
 
   def test_incomplete11
-    start = "{|\n|-\n1234"
+    start  = "{|\n|-\n1234"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(0, parser.result.children[0].children[0].children.length)
     assert_equal(0, parser.result.children[0].children[0].attributes.length)
     assert_equal(:p, parser.result.children[1].type)
-    assert_equal(1,parser.result.children[1].children.length)
+    assert_equal(1, parser.result.children[1].children.length)
     assert_equal(:text, parser.result.children[1].children[0].type)
     assert_equal('1234', parser.result.children[1].children[0].value)
   end
 
   def test_incomplete12
-    start = "{|\n|-\n| 1234"
+    start  = "{|\n|-\n| 1234"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(1, parser.result.children[0].children[0].children.length)
     assert_equal(:td, parser.result.children[0].children[0].children[0].type)
@@ -199,14 +199,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete13
-    start = "{|\n| 1234"
+    start  = "{|\n| 1234"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(1, parser.result.children[0].children[0].children.length)
     assert_equal(:td, parser.result.children[0].children[0].children[0].type)
@@ -216,14 +216,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete14
-    start = "{|\n|-\n| a=\"b\" | 1234"
+    start  = "{|\n|-\n| a=\"b\" | 1234"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(1, parser.result.children[0].children[0].children.length)
     assert_equal(:td, parser.result.children[0].children[0].children[0].type)
@@ -235,14 +235,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete15
-    start = "{|\n|-\n| a=\"b\" | 1234 ! bob"
+    start  = "{|\n|-\n| a=\"b\" | 1234 ! bob"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(2, parser.result.children[0].children[0].children.length)
     assert_equal(:td, parser.result.children[0].children[0].children[0].type)
@@ -258,14 +258,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete16
-    start = "{|\n|-\n| a=\"b\" | 1234 \n|-\n! bob"
+    start  = "{|\n|-\n| a=\"b\" | 1234 \n|-\n! bob"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(2,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(2, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(1, parser.result.children[0].children[0].children.length)
     assert_equal(:td, parser.result.children[0].children[0].children[0].type)
@@ -283,14 +283,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete17
-    start = "{|\n| 1234 \nparagraph\n! bob"
+    start  = "{|\n| 1234 \nparagraph\n! bob"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(2, parser.result.children[0].children[0].children.length)
     assert_equal(:td, parser.result.children[0].children[0].children[0].type)
@@ -310,14 +310,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_complete
-    start = "{|\n| 1234 \nparagraph\n! bob\n|}"
+    start  = "{|\n| 1234 \nparagraph\n! bob\n|}"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(2, parser.result.children[0].children[0].children.length)
     assert_equal(:td, parser.result.children[0].children[0].children[0].type)
@@ -337,14 +337,14 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_complete2
-    start = "{|\n|| 1234 \nparagraph\n! bob\n|}"
+    start  = "{|\n|| 1234 \nparagraph\n! bob\n|}"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(0,parser.result.children[0].attributes.length)
-    assert_equal(1,parser.result.children[0].children.length)
+    assert_equal(0, parser.result.children[0].attributes.length)
+    assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:tr, parser.result.children[0].children[0].type)
     assert_equal(2, parser.result.children[0].children[0].children.length)
     assert_equal(:td, parser.result.children[0].children[0].children[0].type)
@@ -364,39 +364,39 @@ class TableParseTest < Test::Unit::TestCase
   end
 
   def test_nested
-    start = "{|\n|-\n|\n{|\n|}\n|}"
+    start  = "{|\n|-\n|\n{|\n|}\n|}"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(1,parser.result.children[0].children.length)
-    assert_equal(:tr,parser.result.children[0].children[0].type)
-    assert_equal(1,parser.result.children[0].children[0].children.length)
-    assert_equal(:td,parser.result.children[0].children[0].children[0].type)
-    assert_equal(1,parser.result.children[0].children[0].children[0].children.length)
-    assert_equal(:table,parser.result.children[0].children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:tr, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:td, parser.result.children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children.length)
+    assert_equal(:table, parser.result.children[0].children[0].children[0].children[0].type)
   end
 
   def test_nested2
-    start = "{|\n|-\n|\n{|\n|-\n|\n* ABC\n|}\n|}"
+    start  = "{|\n|-\n|\n{|\n|-\n|\n* ABC\n|}\n|}"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
-    assert_equal(1,parser.result.children[0].children.length)
-    assert_equal(:tr,parser.result.children[0].children[0].type)
-    assert_equal(1,parser.result.children[0].children[0].children.length)
-    assert_equal(:td,parser.result.children[0].children[0].children[0].type)
-    assert_equal(1,parser.result.children[0].children[0].children[0].children.length)
-    assert_equal(:table,parser.result.children[0].children[0].children[0].children[0].type)
-    assert_equal(1,parser.result.children[0].children[0].children[0].children[0].children.length)
-    assert_equal(:tr,parser.result.children[0].children[0].children[0].children[0].children[0].type)
-    assert_equal(1,parser.result.children[0].children[0].children[0].children[0].children[0].children.length)
-    assert_equal(:td,parser.result.children[0].children[0].children[0].children[0].children[0].children[0].type)
-    assert_equal(1,parser.result.children[0].children[0].children[0].children[0].children[0].children[0].children.length)
-    assert_equal(:ul,parser.result.children[0].children[0].children[0].children[0].children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:tr, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:td, parser.result.children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children.length)
+    assert_equal(:table, parser.result.children[0].children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[0].children.length)
+    assert_equal(:tr, parser.result.children[0].children[0].children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[0].children[0].children.length)
+    assert_equal(:td, parser.result.children[0].children[0].children[0].children[0].children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[0].children[0].children[0].children[0].children.length)
+    assert_equal(:ul, parser.result.children[0].children[0].children[0].children[0].children[0].children[0].children[0].type)
   end
 
 end

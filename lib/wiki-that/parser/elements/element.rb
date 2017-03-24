@@ -28,9 +28,9 @@ module WikiThat
     # @return [Element] a newly created Element
     def initialize(type, value = nil)
       @attributes = {}
-      @children = []
-      @type     = type
-      @value    = value
+      @children   = []
+      @type       = type
+      @value      = value
     end
 
     attr_reader :attributes, :children, :type

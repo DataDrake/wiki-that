@@ -40,7 +40,7 @@ class LinkGenTest < Test::Unit::TestCase
 
   def test_external_incomplete
     start = '[http://example.com Hello'
-    gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p>[http://example.com Hello</p>', gen.result)
@@ -218,7 +218,7 @@ class LinkGenTest < Test::Unit::TestCase
 
   def test_internal_image_caption_incomplete1
     start = '[[Image:/public/test.png|Test PNG'
-    gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p>[[Image:/public/test.png|Test PNG</p>', gen.result)
@@ -226,7 +226,7 @@ class LinkGenTest < Test::Unit::TestCase
 
   def test_internal_image_caption_incomplete2
     start = "[[Image:/public/test.png|Test PNG\n"
-    gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p>[[Image:/public/test.png|Test PNG&nbsp;</p>', gen.result)
@@ -234,7 +234,7 @@ class LinkGenTest < Test::Unit::TestCase
 
   def test_internal_image_caption_incomplete3
     start = '[[Image:/public/test.png|Test PNG]'
-    gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p>[[Image:/public/test.png|Test PNG]</p>', gen.result)
@@ -245,7 +245,7 @@ class LinkGenTest < Test::Unit::TestCase
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p><div class="frame"><img src="/wiki/BOB/public/test.png" alt="Test PNG" /><caption>Test PNG</caption></div></p>', gen.result)
- end
+  end
 
   def test_internal_image_thumb
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|thumb|Test PNG]]', 'wiki', 'BOB', 'sub/folder')

@@ -24,10 +24,10 @@ module WikiThat
     ##
     def parse_format
       results = []
-      start = current
+      start   = current
       advance
       contents = []
-      finish = nil
+      finish   = nil
       until end?
         case current.type
           when :format
@@ -37,12 +37,12 @@ module WikiThat
           when :link_start
             contents.push(parse_link)
           when :text
-            contents.push(Element.new(:text,current.value))
+            contents.push(Element.new(:text, current.value))
             advance
         end
       end
       if finish.nil?
-        element = Element.new(:text,'')
+        element = Element.new(:text, '')
         (0...start.value).each do
           element.value += "'"
         end

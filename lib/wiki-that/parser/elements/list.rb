@@ -45,6 +45,7 @@ module WikiThat
       end
       true
     end
+
     ##
     # Parse all the items at the current depth
     # @param [String] curr the list item string
@@ -62,7 +63,7 @@ module WikiThat
             item = Element.new(:li)
         end
         if depth < (current.value.length - 1)
-          item.add_child(parse_list2(current.value,depth+1))
+          item.add_child(parse_list2(current.value, depth+1))
         else
           advance
           item.add_children(*parse_inline("\n"))
@@ -103,7 +104,7 @@ module WikiThat
     # Parse the current text as a list
     ##
     def parse_list
-      parse_list2(current.value,0)
+      parse_list2(current.value, 0)
     end
   end
 end

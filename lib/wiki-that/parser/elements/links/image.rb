@@ -22,7 +22,7 @@ module WikiThat
     ##
     def parse_image_link(link, attrs)
       e = Element.new(:img)
-      e.set_attribute(:src,link)
+      e.set_attribute(:src, link)
       if attrs.length > 0
         classes = []
         width   = nil
@@ -39,11 +39,11 @@ module WikiThat
           wrapper.set_attribute(:class, classes.join(' '))
         end
         if width
-          e.set_attribute(:width,width)
+          e.set_attribute(:width, width)
         end
         attrs -= classes
         if attrs.length > 1
-          warning "Ignoring all but the last attribute"
+          warning 'Ignoring all but the last attribute'
           e.set_attribute(:alt, attrs.last)
         elsif attrs.length > 0
           e.set_attribute(:alt, attrs.last)
@@ -51,7 +51,7 @@ module WikiThat
         wrapper.add_child(e)
         if classes.include?('frame') || classes.include?('thumb') || classes.include?('thumbnail')
           caption = Element.new(:caption)
-          caption.add_child(Element.new(:text,attrs.last))
+          caption.add_child(Element.new(:text, attrs.last))
           wrapper.add_child(caption)
         end
         wrapper

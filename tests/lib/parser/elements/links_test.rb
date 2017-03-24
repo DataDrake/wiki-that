@@ -48,7 +48,7 @@ class LinkParseTest < Test::Unit::TestCase
   end
 
   def test_external_incomplete
-    start = '[http://example.com Hello'
+    start  = '[http://example.com Hello'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_equal(1, parser.result.children.length)
@@ -263,7 +263,7 @@ class LinkParseTest < Test::Unit::TestCase
   end
 
   def test_internal_image_caption_incomplete1
-    start = '[[Image:/public/test.png|Test PNG'
+    start  = '[[Image:/public/test.png|Test PNG'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
@@ -275,7 +275,7 @@ class LinkParseTest < Test::Unit::TestCase
   end
 
   def test_internal_image_caption_incomplete2
-    start = "[[Image:/public/test.png|Test PNG\n"
+    start  = "[[Image:/public/test.png|Test PNG\n"
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
@@ -289,7 +289,7 @@ class LinkParseTest < Test::Unit::TestCase
   end
 
   def test_internal_image_caption_incomplete3
-    start = '[[Image:/public/test.png|Test PNG] '
+    start  = '[[Image:/public/test.png|Test PNG] '
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
@@ -319,7 +319,7 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children[0].children[0].children[1].children.length)
     assert_equal(:text, parser.result.children[0].children[0].children[1].children[0].type)
     assert_equal('Test PNG', parser.result.children[0].children[0].children[1].children[0].value)
- end
+  end
 
   def test_internal_image_thumb
     parser = WikiThat::Parser.new('[[Image:/public/test.png|thumb|Test PNG]]', 'wiki', 'BOB', 'sub/folder')

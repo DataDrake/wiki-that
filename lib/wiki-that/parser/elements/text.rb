@@ -33,7 +33,7 @@ module WikiThat
           when :link_start
             children.push(parse_link)
           when :text
-            children.push(Element.new(:text,current.value))
+            children.push(Element.new(:text, current.value))
             advance
           else
             return children
@@ -47,7 +47,7 @@ module WikiThat
     ##
     def parse_text
       text = Element.new(:p)
-      while not end? and match? [:text,:break,:link_start,:format]
+      while not end? and match? [:text, :break, :link_start, :format]
         if match? [:break]
           if current.value == 1
             text.add_child(Element.new(:text, '&nbsp;'))

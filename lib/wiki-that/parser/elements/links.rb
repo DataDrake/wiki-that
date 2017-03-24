@@ -37,7 +37,7 @@ module WikiThat
     ##
     def parse_link_internal
       advance
-      url = ''
+      url        = ''
       namespaces = []
       while match? [:link_namespace]
         temp = current.value
@@ -75,7 +75,7 @@ module WikiThat
           end
           advance
         end
-        return Element.new(:text,text)
+        return Element.new(:text, text)
       end
       advance
       pieces = ['', @base_url]
@@ -96,7 +96,7 @@ module WikiThat
         pieces.push(namespaces[ns_index])
       end
       unless url.start_with? '/'
-        pieces.push(@sub_url,'')
+        pieces.push(@sub_url, '')
       end
       url = pieces.join('/') + url
 
@@ -118,18 +118,18 @@ module WikiThat
             anchor = Element.new(:a)
             if attributes.length > 1
               warning 'Ignoring all but the last link attribute'
-              anchor.add_child(Element.new(:text,attributes.last))
+              anchor.add_child(Element.new(:text, attributes.last))
             elsif attributes.length == 1
-              anchor.add_child(Element.new(:text,attributes.last))
+              anchor.add_child(Element.new(:text, attributes.last))
             end
-            anchor.set_attribute(:href,url)
+            anchor.set_attribute(:href, url)
             anchor
         end
       else
         anchor = Element.new(:a)
-        anchor.set_attribute(:href,url)
+        anchor.set_attribute(:href, url)
         unless attributes.empty?
-          anchor.add_child(Element.new(:text,attributes.last))
+          anchor.add_child(Element.new(:text, attributes.last))
         end
         anchor
       end
@@ -144,7 +144,7 @@ module WikiThat
       end
       advance
       url = ''
-      while match? [:link_namespace,:text]
+      while match? [:link_namespace, :text]
         url += current.value
         if match? [:link_namespace]
           url += ':'
@@ -153,11 +153,11 @@ module WikiThat
       end
       unless match? [:link_end] and current.value == 1
         warning 'External link not closed by "]"'
-        return Element.new(:text,"[#{url}")
+        return Element.new(:text, "[#{url}")
       end
       advance
       anchor = Element.new(:a)
-      url = url.split(' ')
+      url    = url.split(' ')
       anchor.set_attribute(:href, url[0])
       if url.length > 2
         anchor.add_child(Element.new(:text, url[1...url.length].join(' ')))

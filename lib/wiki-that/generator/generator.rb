@@ -36,12 +36,12 @@ module WikiThat
     # @returns [WikiThat::HTMLGenerator] a newly configured HTMLGenerator
     ##
     def initialize(doc, base_url, default_namespace, sub_url)
-      @parser = WikiThat::Parser.new(doc, base_url, default_namespace, sub_url)
-      @index = 0
-      @errors = []
+      @parser   = WikiThat::Parser.new(doc, base_url, default_namespace, sub_url)
+      @index    = 0
+      @errors   = []
       @warnings = []
-      @root = nil
-      @result = ''
+      @root     = nil
+      @result   = ''
     end
 
     ##
@@ -51,9 +51,9 @@ module WikiThat
     ##
     def generate
       @parser.parse
-      @errors = @parser.errors
+      @errors   = @parser.errors
       @warnings = @parser.warnings
-      @root = @parser.result
+      @root     = @parser.result
       unless success?
         return
       end
@@ -97,7 +97,7 @@ module WikiThat
     ##
     def generate_attributes(element)
       buff = ''
-      element.attributes.each do |k,v|
+      element.attributes.each do |k, v|
         buff += ' '
         if v.is_a? TrueClass
           buff += k.to_s

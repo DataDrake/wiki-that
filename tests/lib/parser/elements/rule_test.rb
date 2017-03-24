@@ -26,7 +26,7 @@ class RuleParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete1
-    start = '-'
+    start  = '-'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
@@ -38,7 +38,7 @@ class RuleParseTest < Test::Unit::TestCase
   end
 
   def test_incomplete2
-    start = '--'
+    start  = '--'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
@@ -50,7 +50,7 @@ class RuleParseTest < Test::Unit::TestCase
   end
 
   def test_complete1
-    start = '---'
+    start  = '---'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
@@ -60,7 +60,7 @@ class RuleParseTest < Test::Unit::TestCase
   end
 
   def test_complete2
-    start = '----'
+    start  = '----'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')

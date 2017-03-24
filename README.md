@@ -28,6 +28,7 @@ with MediaWiki proper.
     * Table/Row/Cell Attributes
     * Inline Cells
     * Multi-line Cells
+    * Nested Tables and non-inline elements
 6. MISC
     * Horizontal Rules
     * \<nowiki> Tag
