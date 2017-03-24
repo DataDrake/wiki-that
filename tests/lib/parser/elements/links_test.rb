@@ -255,11 +255,9 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children.length)
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
-    assert_equal(:div, parser.result.children[0].children[0].type)
-    assert_equal(1, parser.result.children[0].children[0].children.length)
-    assert_equal(:img, parser.result.children[0].children[0].children[0].type)
-    assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
+    assert_equal(:img, parser.result.children[0].children[0].type)
+    assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].attributes[:src])
+    assert_equal('Test PNG', parser.result.children[0].children[0].attributes[:alt])
   end
 
   def test_internal_image_caption_incomplete1
@@ -347,12 +345,10 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children.length)
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
-    assert_equal(:div, parser.result.children[0].children[0].type)
-    assert_equal(1, parser.result.children[0].children[0].children.length)
-    assert_equal(:img, parser.result.children[0].children[0].children[0].type)
-    assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
-    assert_equal('100px', parser.result.children[0].children[0].children[0].attributes[:width])
-    assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
+    assert_equal(:img, parser.result.children[0].children[0].type)
+    assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].attributes[:src])
+    assert_equal('100px', parser.result.children[0].children[0].attributes[:width])
+    assert_equal('Test PNG', parser.result.children[0].children[0].attributes[:alt])
   end
 
   def test_internal_image_left

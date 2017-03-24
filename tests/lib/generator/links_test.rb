@@ -102,7 +102,6 @@ class LinkGenTest < Test::Unit::TestCase
     assert_equal('<p><a href="/wiki/BOB/sub/folder/"></a></p>', gen.result)
   end
 
-  #TODO: this should really fail, if I'm honest
   def test_internal_external
     gen = WikiThat::HTMLGenerator.new('[[http://example.com]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
@@ -208,12 +207,11 @@ class LinkGenTest < Test::Unit::TestCase
     assert_equal('<p><img src="/wiki/BOB/public/test.png" /></p>', gen.result)
   end
 
-  #TODO: alt text should not require div
   def test_internal_image_alt
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div><img src="/wiki/BOB/public/test.png" alt="Test PNG" /></div></p>', gen.result)
+    assert_equal('<p><img src="/wiki/BOB/public/test.png" alt="Test PNG" /></p>', gen.result)
   end
 
   def test_internal_image_caption_incomplete1
@@ -258,7 +256,7 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|100px|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div><img src="/wiki/BOB/public/test.png" width="100px" alt="Test PNG" /></div></p>', gen.result)
+    assert_equal('<p><img src="/wiki/BOB/public/test.png" width="100px" alt="Test PNG" /></p>', gen.result)
   end
 
   def test_internal_image_left

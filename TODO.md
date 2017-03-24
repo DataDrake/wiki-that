@@ -1,12 +1,11 @@
 ## Lexer
-* HTML Tags?
+* DONE
 
 ## Parser
 * DONE
 
 ## Generator
-* Unit Tests
-  - Tables
+* DONE
   
 ## Stretch Goals
 * Line numbers for meaningful messages

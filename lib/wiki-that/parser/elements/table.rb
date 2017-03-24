@@ -55,11 +55,11 @@ module WikiThat
               whitespace = false
             end
           end
-          caption = Element.new(:caption)
           unless whitespace
+            caption = Element.new(:caption)
             caption.add_child(Element.new(:text, current.value))
+            elem.add_child(caption)
           end
-          elem.add_child(caption)
           advance
         end
       end
@@ -100,8 +100,6 @@ module WikiThat
           row = Element.new(:tr)
           row = parse_cells(row)
           elem.add_child(row)
-        else
-          return elem
       end
       elem
     end

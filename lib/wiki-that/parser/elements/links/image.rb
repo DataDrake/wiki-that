@@ -48,6 +48,9 @@ module WikiThat
         elsif attrs.length > 0
           e.set_attribute(:alt, attrs.last)
         end
+        if classes.empty?
+          return e
+        end
         wrapper.add_child(e)
         if classes.include?('frame') || classes.include?('thumb') || classes.include?('thumbnail')
           caption = Element.new(:caption)
