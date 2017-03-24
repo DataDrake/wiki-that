@@ -199,4 +199,109 @@ class TableGenTest < Test::Unit::TestCase
     assert_equal('<table><tr><td><table><tr><td><ul><li> ABC</li></ul></td></tr></table></td></tr></table>', gen.result)
   end
 
+
+  def test_doc
+    start = <<-DOC
+[[Image:public/banner.jpg|634px]]
+
+RIT engineering faculty are active in many research areas. Research takes place across engineering disciplines and often involves other colleges at RIT, local health care institutions, and major industry partners.
+
+Externally sponsored projects are a vital and integral component of RIT's educational and research activity. Faculty and students undertake sponsored projects for a variety of important reasons: to add to the body of knowledge, for professional development, and to strengthen academic programs. Sponsored projects enhance the Institute's academic programs, broaden its research resources, provide opportunities for student participation in research, strengthen university-industrial partnerships, and serve the wider community.
+
+RIT's major public sponsors include the National Science Foundation (NSF), the National Institutes of Health (NIH), the Department of Education (USDE), the Department of Defense (DOD), the National Aeronautics and Science Administration (NASA), and New York State.
+
+== Disciplinary Backgrounds  ==
+
+All of the existing degree programs in the KGCOE contribute to the solution of problems across a variety of application domains, and employ a wide range of technological tools in the process. Students may conduct research in a wide range of academic disciplines, and at both undergraduate and graduate level across the KGCOE:
+
+* Biomedical engineering (BS, PhD)
+* Chemical engineering (BS, PhD)
+* Computer engineering  (BS, MEng, MS, PhD)
+* Electrical and Microelectronic engineering (BS, MEng, MS, PhD)
+* Industrial and Systems engineering (BS, MEng, MS, PhD)
+* Mechanical engineering (BS, MEng, MS, PhD)
+* Microsystems engineering (PhD)
+
+Whatever engineering discipline you may come from, we have a path for your research! The list of Technology Domains presented below provides you with some sense of the breadth of technological tools that our faculty and students use. And, the list of Application Domains illustrates the variety of societal needs that our research seeks to address.
+
+== Technology Domains ==
+
+The technology domains describe WHAT technical tools we bring to bear to address societal needs. If you are interested in a particular technology, the chances are high that some of our faculty are applying these tools across one or more of the application domains listed below.
+
+; Nano-Science & Engineering
+: Micro and Nano-electronics
+: Semiconductor Devices
+: Carbon nano-tubes for energy &gas storage
+: Carbon nano-tubes for energy transmission
+: Nano-material separation and characterization
+
+; Signal & Image Processing
+: Real Time Vision & Image Processing
+: Biomedical Signal & Image Analysis
+: Wireless Communication & Sensor Systems
+: Radio Frequency technology
+
+; Manufacturing & Materials
+: Direct Print Electronics
+: 3D printing, additive manufacturing and advanced manufacturing
+: Nano-materials Development
+: Biomaterials Technology
+
+; Robotics & Mechatronics
+: Compliant Robotics
+: Hardware In the Loop Control Modeling
+: Autonomous Vehicles, Devices & Systems
+: Multi-agent systems & swarm Intelligence
+
+; Simulation, Modeling & Optimization
+: High Performance Computing
+: Deterministic & Stochastic Modeling
+: Operations Research & Logistics
+: Big Data, Analytics & Industrial Statistics
+: Operations Management
+
+; Heat Transfer & Thermo-Fluids
+: Thermal Analysis & Micro-fluidics
+: Water treatment & Purification
+: Particle Imaging & Velocimetry
+: Roll to Roll Coating
+
+; Performance and Power-Aware Computing
+: Bio-inspired computing
+: Chip multiprocessors
+: Low power circuits and architectures
+
+; Safety & Security
+: Resilient and Secure Systems
+:  (Hardware, Software and Networks)
+: Fault Analysis and Diagnosis
+: Physical Security and Safety
+: Cryptographic Engineering
+
+; Access & Assistive Technologies
+: Universal  Access Technologies
+: Artificial Organs, Joints and Limbs
+: Human Performance
+
+== Application Domains ==
+
+The application domains describe the societal problem sets that we focus our research efforts on -- WHY we conduct our research.
+
+Engineers solve problems -- and we have developed a particular focus on addressing both fundamental and applied research problems of global importance for the 21st Century, centered on four key industries: Transportation, Energy, Communications and Healthcare (T/E/C/H). Global challenges in T/E/C/H impact every individual on the planet and demand highly trained engineers with deep disciplinary skills and a thorough contextual understanding for their research efforts.
+
+* Transportation
+* Energy
+* Communications
+* Healthcare
+
+
+----
+[[KGCOE-Research]]  | [[Spring 2017 Seminars]] | [[Fall 2016 Seminars]] | [[Spring 2016 Seminars]] | [[Fall 2015 Seminars]]
+DOC
+    gen = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    puts gen.result
+    assert_true(gen.result.length == 0)
+  end
+
 end

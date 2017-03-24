@@ -82,6 +82,9 @@ module WikiThat
         when :hr, :img
           buff += ' />'
         else
+          if element.type == :p and element.children.length == 0
+            return ''
+          end
           buff += '>'
           element.children.each do |c|
             buff += generate_element(c)

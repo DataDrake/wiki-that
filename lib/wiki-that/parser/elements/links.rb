@@ -48,7 +48,18 @@ module WikiThat
         advance
       end
       attributes = []
+      alt = ''
+      first = true
       while match? [:text]
+        if first
+          alt = current.value.strip
+          if alt.start_with? '/'
+            alt = ''
+          end
+          first = false
+        else
+          alt = ''
+        end
         url += current.value.strip
         advance
       end
@@ -125,11 +136,18 @@ module WikiThat
             parse_video_link(url)
           else
             anchor = Element.new(:a)
-            if attributes.length > 1
-              warning 'Ignoring all but the last link attribute'
-              anchor.add_child(Element.new(:text, attributes.last))
-            elsif attributes.length == 1
-              anchor.add_child(Element.new(:text, attributes.last))
+            case attributes.length
+              when 0
+                if alt.empty? or url.end_with? alt
+                  anchor.add_child(Element.new(:text, url))
+                else
+                  anchor.add_child(Element.new(:text, alt))
+                end
+              when 1
+                anchor.add_child(Element.new(:text, attributes.last))
+              else
+                warning 'Ignoring all but the last link attribute'
+                anchor.add_child(Element.new(:text, attributes.last))
             end
             anchor.set_attribute(:href, url)
             anchor
@@ -137,8 +155,18 @@ module WikiThat
       else
         anchor = Element.new(:a)
         anchor.set_attribute(:href, url)
-        unless attributes.empty?
-          anchor.add_child(Element.new(:text, attributes.last))
+        case attributes.length
+          when 0
+            if alt.empty?
+              anchor.add_child(Element.new(:text, url))
+            else
+              anchor.add_child(Element.new(:text, alt))
+            end
+          when 1
+            anchor.add_child(Element.new(:text, attributes.last))
+          else
+            warning 'Ignoring all but the last link attribute'
+            anchor.add_child(Element.new(:text, attributes.last))
         end
         anchor
       end

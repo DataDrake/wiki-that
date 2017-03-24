@@ -39,7 +39,8 @@ module WikiThat
           wrapper.set_attribute(:class, classes.join(' '))
         end
         if width
-          e.set_attribute(:width, width)
+          attrs -= [width]
+          e.set_attribute(:width, width.sub('px',''))
         end
         attrs -= classes
         if attrs.length > 1

@@ -171,6 +171,21 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal('/wiki/BOB/sub/folder/public/Home', parser.result.children[0].children[0].attributes[:href])
   end
 
+  def test_internal_page
+    parser = WikiThat::Parser.new('[[Home]]', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('/wiki/BOB/sub/folder/Home', parser.result.children[0].children[0].attributes[:href])
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal('Home', parser.result.children[0].children[0].children[0].value)
+  end
+
   def test_internal_no_base_url
     parser = WikiThat::Parser.new('[[public/Home]]', nil , 'BOB', 'sub/folder')
     parser.parse
@@ -434,7 +449,7 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:img, parser.result.children[0].children[0].type)
     assert_equal('/wiki/BOB/public/test.png', parser.result.children[0].children[0].attributes[:src])
-    assert_equal('100px', parser.result.children[0].children[0].attributes[:width])
+    assert_equal('100', parser.result.children[0].children[0].attributes[:width])
     assert_equal('Test PNG', parser.result.children[0].children[0].attributes[:alt])
   end
 

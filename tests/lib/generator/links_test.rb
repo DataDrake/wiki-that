@@ -99,28 +99,28 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><a href="/wiki/BOB/sub/folder/"></a></p>', gen.result)
+    assert_equal('<p><a href="/wiki/BOB/sub/folder/">/wiki/BOB/sub/folder/</a></p>', gen.result)
   end
 
   def test_internal_external
     gen = WikiThat::HTMLGenerator.new('[[http://example.com]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><a href="/wiki/http//example.com"></a></p>', gen.result)
+    assert_equal('<p><a href="/wiki/http//example.com">/wiki/http//example.com</a></p>', gen.result)
   end
 
   def test_internal_relative
     gen = WikiThat::HTMLGenerator.new('[[public/Home]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><a href="/wiki/BOB/sub/folder/public/Home"></a></p>', gen.result)
+    assert_equal('<p><a href="/wiki/BOB/sub/folder/public/Home">/wiki/BOB/sub/folder/public/Home</a></p>', gen.result)
   end
 
   def test_internal_absolute
     gen = WikiThat::HTMLGenerator.new('[[/public/Home]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><a href="/wiki/BOB/public/Home"></a></p>', gen.result)
+    assert_equal('<p><a href="/wiki/BOB/public/Home">/wiki/BOB/public/Home</a></p>', gen.result)
   end
 
   def test_internal_absolute_named
@@ -134,14 +134,14 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[Test123:public/Home]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><a href="/wiki/Test123/sub/folder/public/Home"></a></p>', gen.result)
+    assert_equal('<p><a href="/wiki/Test123/sub/folder/public/Home">/wiki/Test123/sub/folder/public/Home</a></p>', gen.result)
   end
 
   def test_interwiki_relative
     gen = WikiThat::HTMLGenerator.new('[[Test123:/public/Home]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><a href="/wiki/Test123/public/Home"></a></p>', gen.result)
+    assert_equal('<p><a href="/wiki/Test123/public/Home">/wiki/Test123/public/Home</a></p>', gen.result)
   end
 
   def test_interwiki_named
@@ -256,7 +256,14 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|100px|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><img src="/wiki/BOB/public/test.png" width="100px" alt="Test PNG" /></p>', gen.result)
+    assert_equal('<p><img src="/wiki/BOB/public/test.png" width="100" alt="Test PNG" /></p>', gen.result)
+  end
+
+  def test_internal_image_width2
+    gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|100px]]', 'wiki', 'BOB', 'sub/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><img src="/wiki/BOB/public/test.png" width="100" /></p>', gen.result)
   end
 
   def test_internal_image_left
