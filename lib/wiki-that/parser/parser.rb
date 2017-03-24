@@ -66,6 +66,31 @@ module WikiThat
     end
 
     ##
+    # Translate the current Tokens into sero or more elements
+    #
+    # @returns [Object] the resulting element(s)
+    ##
+    def parse2
+      if match? [:table_end, :table_data, :table_header, :table_row]
+        return []
+      end
+      case current.type
+        when :header_start
+          parse_header
+        when :rule
+          parse_rule
+        when :list_item
+          parse_list
+        when :nowiki
+          parse_nowiki
+        when :table_start
+          parse_table
+        else
+          parse_text
+      end
+    end
+
+    ##
     # Translate the MediaWiki document into an element tree
     #
     # @returns [Element] the resulting root element
@@ -74,19 +99,11 @@ module WikiThat
       @lexer.lex
       @tokens = @lexer.result
       until end?
-        case current.type
-          when :header_start
-            parse_header
-          when :rule
-            parse_rule
-          when :list_item
-            parse_list
-          when :nowiki
-            parse_nowiki
-          when :table_start
-            parse_table
-          else
-            append parse_text
+        r = parse2
+        if r.is_a? Array
+          @result.add_children(*r)
+        else
+          @result.add_child(r)
         end
       end
     end
@@ -97,14 +114,6 @@ module WikiThat
     ##
     def advance(dist = 1)
       @index += dist
-    end
-
-    ##
-    # Append Element to the result
-    # @param [Element] element the Element to append
-    ##
-    def append(element)
-      @result.add_child(element)
     end
 
     ##

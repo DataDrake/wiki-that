@@ -24,6 +24,7 @@ module WikiThat
     # Parse the current line as a header
     ##
     def parse_header
+      result = []
       start = current
       advance
       content = parse_inline(:header_end)
@@ -32,12 +33,12 @@ module WikiThat
         (0...start.value).each do
           buff += '='
         end
-        append Element.new(:text,buff)
+        result.push( Element.new(:text,buff) )
         content.each do |c|
-          append c
+          result.push(c)
         end
         warning 'Incomplete Header Parsed'
-        return
+        return result
       end
       finish = current
       advance
@@ -62,31 +63,31 @@ module WikiThat
         (0...start.value).each do
           buff += '='
         end
-        append Element.new(:text,buff)
+        result.push(Element.new(:text,buff))
         content.each do |c|
-          append c
+          result.push(c)
         end
         buff = ''
         (0...finish.value).each do
           buff += '='
         end
-        append Element.new(:text,buff)
+        result.push(Element.new(:text,buff))
         post.each do |c|
-          append c
+          result.push(c)
         end
         error 'Only trailing whitespace characters are allowed on the same line as a header'
-        return
+        return result
       end
       depth = finish.value
       if start.value != finish.value
-        warning "Unbalanced header tags found"
+        warning 'Unbalanced header tags found'
       end
       if finish.value > start.value
         depth = start.value
       end
       header = Element.new("h#{depth}".to_sym)
       header.add_children(*content)
-      append header
+      return header
     end
   end
 end

@@ -103,7 +103,7 @@ module WikiThat
     # Parse the current text as a list
     ##
     def parse_list
-      append parse_list2(current.value,0)
+      parse_list2(current.value,0)
     end
   end
 end

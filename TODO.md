@@ -1,8 +1,8 @@
 ## Lexer
-* DONE
+* HTML Tags?
 
 ## Parser
-* Non-inline elements in multiline Table Cells
+* DONE
 
 ## Generator
 * Unit Tests

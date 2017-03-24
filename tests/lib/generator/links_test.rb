@@ -208,7 +208,7 @@ class LinkGenTest < Test::Unit::TestCase
     assert_equal('<p><img src="/wiki/BOB/public/test.png" /></p>', gen.result)
   end
 
-  #TODO: alt text should tnot require div
+  #TODO: alt text should not require div
   def test_internal_image_alt
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|Test PNG]]', 'wiki', 'BOB', 'sub/folder')
     gen.generate

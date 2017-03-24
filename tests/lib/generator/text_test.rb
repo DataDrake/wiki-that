@@ -32,7 +32,6 @@ class TextGenTest < Test::Unit::TestCase
     assert_equal('<p>abc</p>', gen.result)
   end
 
-  #TODO: is this right?
   def test_double
     gen = WikiThat::HTMLGenerator.new("abc\n123", 'wiki', 'BOB', 'sub/folder')
     gen.generate

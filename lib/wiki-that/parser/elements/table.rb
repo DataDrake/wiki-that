@@ -23,13 +23,16 @@ module WikiThat
     def parse_attributes(elem)
       if match? [:text]
         found = false
-        current.value.scan(/(\w+)="(\S+?)"/) do |m|
+        current.value.scan(/(\w+)="([^"]*?)"/) do |m|
           elem.set_attribute(m[0],m[1])
           found = true
         end
         if found
           advance
         end
+      end
+      if match? [:break]
+        advance
       end
       elem
     end
@@ -38,11 +41,22 @@ module WikiThat
       if match? [:table_caption]
         advance
         if match? [:text]
+          whitespace = true
+          current.value.each_char do |c|
+            unless "\t ".include? c
+              whitespace = false
+            end
+          end
           caption = Element.new(:caption)
-          caption.add_child(Element.new(:text,current.value))
+          unless whitespace
+            caption.add_child(Element.new(:text,current.value))
+          end
           elem.add_child(caption)
           advance
         end
+      end
+      if match? [:break]
+        advance
       end
       elem
     end
@@ -53,6 +67,18 @@ module WikiThat
           advance
           row = Element.new(:tr)
           row = parse_attributes(row)
+          if match? [:text]
+            whitespace = true
+            current.value.each_char do |c|
+              unless "\t ".include? c
+                whitespace = false
+                break
+              end
+            end
+            if whitespace
+              advance
+            end
+          end
           if match? [:break]
             advance
           end
@@ -62,6 +88,8 @@ module WikiThat
           row = Element.new(:tr)
           row = parse_cells(row)
           elem.add_child(row)
+        else
+          return elem
       end
       elem
     end
@@ -79,6 +107,10 @@ module WikiThat
             warning 'First cell on a new line should be "|" or "!" '
           end
           first = false
+        else
+          if current.value != 2
+            warning 'Inline cells should be "||" or "!!"'
+          end
         end
         advance
         cell = parse_attributes(cell)
@@ -86,17 +118,16 @@ module WikiThat
           advance
         end
         contents = parse_inline
-        puts contents.inspect
         if contents.length > 0
           cell.add_children(*contents)
         end
-        if match? [:break]
-          advance
-          first = true
-        end
-        until match? [:table_header,:table_data,:table_row, :table_end]
-          p = parse_text
-          if p.children.length == 0
+        ## Parse multi-line cell
+        until end? or match? [:table_header,:table_data,:table_row, :table_end]
+          if match? [:break]
+            advance
+          end
+          p = parse2
+          if p.is_a? Array and p.length == 0
             break
           end
           cell.add_child(p)
@@ -110,9 +141,6 @@ module WikiThat
       advance
       table = Element.new(:table)
       table = parse_attributes(table)
-      if match? [:break]
-        advance
-      end
       table = parse_caption(table)
       while not end? and match? [:table_row,:table_header,:table_data]
         table = parse_row(table)
@@ -122,7 +150,7 @@ module WikiThat
       else
         warning 'Could not find end of table, missing "|}"'
       end
-      append table
+      table
     end
   end
 end
