@@ -70,6 +70,18 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal('http://example.com', parser.result.children[0].children[0].attributes[:href])
   end
 
+  def test_external_space
+    parser = WikiThat::Parser.new('[ http://example.com ]', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('http://example.com', parser.result.children[0].children[0].attributes[:href])
+  end
+
   def test_external_inline
     parser = WikiThat::Parser.new('Go Here: [http://example.com]', 'wiki', 'BOB', 'sub/folder')
     parser.parse
@@ -159,6 +171,54 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal('/wiki/BOB/sub/folder/public/Home', parser.result.children[0].children[0].attributes[:href])
   end
 
+  def test_internal_no_base_url
+    parser = WikiThat::Parser.new('[[public/Home]]', nil , 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('/BOB/sub/folder/public/Home', parser.result.children[0].children[0].attributes[:href])
+  end
+
+  def test_internal_no_sub_url
+    parser = WikiThat::Parser.new('[[public/Home]]', 'wiki' , 'BOB', '')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('/wiki/BOB/public/Home', parser.result.children[0].children[0].attributes[:href])
+  end
+
+  def test_internal_no_namespace
+    parser = WikiThat::Parser.new('[[public/Home]]', 'wiki' , '', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('/wiki/sub/folder/public/Home', parser.result.children[0].children[0].attributes[:href])
+  end
+
+  def test_internal_space
+    parser = WikiThat::Parser.new('[[ public/Home ]]', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('/wiki/BOB/sub/folder/public/Home', parser.result.children[0].children[0].attributes[:href])
+  end
+
   def test_internal_relative
     parser = WikiThat::Parser.new('[[/public/Home]]', 'wiki', 'BOB', 'sub/folder')
     parser.parse
@@ -183,6 +243,18 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal('/wiki/Test123/sub/folder/public/Home', parser.result.children[0].children[0].attributes[:href])
   end
 
+  def test_interwiki_space
+    parser = WikiThat::Parser.new('[[ Test123 : public/Home ]]', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('/wiki/Test123/sub/folder/public/Home', parser.result.children[0].children[0].attributes[:href])
+  end
+
   def test_interwiki_relative
     parser = WikiThat::Parser.new('[[Test123:/public/Home]]', 'wiki', 'BOB', 'sub/folder')
     parser.parse
@@ -197,6 +269,21 @@ class LinkParseTest < Test::Unit::TestCase
 
   def test_interwiki_named
     parser = WikiThat::Parser.new('[[Test123:/public/Home|Home]]', 'wiki', 'BOB', 'sub/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('/wiki/Test123/public/Home', parser.result.children[0].children[0].attributes[:href])
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal('Home', parser.result.children[0].children[0].children[0].value)
+  end
+
+  def test_interwiki_named_space
+    parser = WikiThat::Parser.new('[[ Test123 : /public/Home | Home ]]', 'wiki', 'BOB', 'sub/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)

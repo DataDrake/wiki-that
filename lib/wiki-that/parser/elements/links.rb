@@ -40,7 +40,7 @@ module WikiThat
       url        = ''
       namespaces = []
       while match? [:link_namespace]
-        temp = current.value
+        temp = current.value.strip
         if temp == 'http' or temp == 'https'
           warning 'External link in internal link brackets?'
         end
@@ -49,13 +49,13 @@ module WikiThat
       end
       attributes = []
       while match? [:text]
-        url += current.value
+        url += current.value.strip
         advance
       end
       while match? [:link_attribute]
         advance
         if match? [:text]
-          attributes.push(current.value)
+          attributes.push(current.value.strip)
           advance
         end
       end
@@ -78,7 +78,10 @@ module WikiThat
         return Element.new(:text, text)
       end
       advance
-      pieces = ['', @base_url]
+      pieces = ['']
+      if @base_url and not @base_url.empty?
+        pieces.push(@base_url)
+      end
       case namespaces.length
         when 0
           ns_index = -1
@@ -91,12 +94,18 @@ module WikiThat
           warning 'Ignoring all but the first two namespaces'
       end
       if ns_index == -1 or %w(Audio Image Video).include? namespaces[ns_index]
-        pieces.push(@default_namespace)
+        if @default_namespace and not @default_namespace.empty?
+          pieces.push(@default_namespace)
+        end
       else
         pieces.push(namespaces[ns_index])
       end
       unless url.start_with? '/'
-        pieces.push(@sub_url, '')
+        if @sub_url and not @sub_url.empty?
+          pieces.push(@sub_url, '')
+        else
+          pieces.push('')
+        end
       end
       url = pieces.join('/') + url
 

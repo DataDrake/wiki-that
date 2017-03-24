@@ -55,10 +55,10 @@ module WikiThat
     ##
     def initialize(doc, base_url, default_namespace, sub_url)
       @lexer             = WikiThat::Lexer.new(doc)
-      @base_url          = base_url
-      @default_namespace = default_namespace
+      @base_url          = base_url ? base_url.strip : base_url
+      @default_namespace = default_namespace ? default_namespace.strip : default_namespace
       @index             = 0
-      @sub_url           = sub_url
+      @sub_url           = sub_url ? sub_url.strip : sub_url
       @errors            = []
       @warnings          = []
       @tokens            = []
