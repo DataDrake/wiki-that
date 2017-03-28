@@ -32,14 +32,7 @@ module WikiThat
         count += 1
         advance
       end
-      case count
-        # This is a list, not a horizontal rule
-        when 1, 2
-          rewind(count)
-          lex_text
-        else
-          append Token.new(:rule, count)
-      end
+      append Token.new(:rule, count)
     end
   end
 end

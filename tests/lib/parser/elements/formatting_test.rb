@@ -19,14 +19,14 @@ require_relative('../../../../lib/wiki-that')
 class FormattingParseTest < Test::Unit::TestCase
 
   def test_empty
-    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(0, parser.result.children.length)
   end
 
   def test_short
-    parser = WikiThat::Parser.new('\'', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('\'', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -37,7 +37,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_short2
-    parser = WikiThat::Parser.new('\'\'thing\'', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('\'\'thing\'', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -52,7 +52,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_unbalanced_right
-    parser = WikiThat::Parser.new('\'\'thing\'\'\'', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('\'\'thing\'\'\'', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -65,7 +65,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_unbalanced_left
-    parser = WikiThat::Parser.new('\'\'\'thing\'\'', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('\'\'\'thing\'\'', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -78,7 +78,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_italic
-    parser = WikiThat::Parser.new('\'\'italic things\'\'', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('\'\'italic things\'\'', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -91,7 +91,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_italic_inline
-    parser = WikiThat::Parser.new('not \'\'italic things\'\' not', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('not \'\'italic things\'\' not', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -110,7 +110,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_bold
-    parser = WikiThat::Parser.new('\'\'\'bold things\'\'\'', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('\'\'\'bold things\'\'\'', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -123,7 +123,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_bold_inline
-    parser = WikiThat::Parser.new('not \'\'\'bold things\'\'\' not', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('not \'\'\'bold things\'\'\' not', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -142,7 +142,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_both
-    parser = WikiThat::Parser.new('\'\'\'\'\'both things\'\'\'\'\'', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('\'\'\'\'\'both things\'\'\'\'\'', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -158,7 +158,7 @@ class FormattingParseTest < Test::Unit::TestCase
   end
 
   def test_both_inline
-    parser = WikiThat::Parser.new('not \'\'\'\'\'both things\'\'\'\'\' not', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('not \'\'\'\'\'both things\'\'\'\'\' not', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)

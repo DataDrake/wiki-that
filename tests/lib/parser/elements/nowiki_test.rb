@@ -19,7 +19,7 @@ require_relative('../../../../lib/wiki-that')
 class NoWikiParseTest < Test::Unit::TestCase
 
   def test_empty
-    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(0, parser.result.children.length, 'Nothing should have been generated')
@@ -27,7 +27,7 @@ class NoWikiParseTest < Test::Unit::TestCase
 
   def test_complete
     start  = '<nowiki>this is not wiki markup</nowiki>'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)

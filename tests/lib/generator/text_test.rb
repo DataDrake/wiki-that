@@ -19,28 +19,28 @@ require_relative('../../../lib/wiki-that')
 class TextGenTest < Test::Unit::TestCase
 
   def test_empty
-    gen = WikiThat::HTMLGenerator.new('', 'wiki', 'BOB', 'sub/folder')
+    gen = WikiThat::HTMLGenerator.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('', gen.result)
   end
 
   def test_single
-    gen = WikiThat::HTMLGenerator.new('abc', 'wiki', 'BOB', 'sub/folder')
+    gen = WikiThat::HTMLGenerator.new('abc', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p>abc</p>', gen.result)
   end
 
   def test_double
-    gen = WikiThat::HTMLGenerator.new("abc\n123", 'wiki', 'BOB', 'sub/folder')
+    gen = WikiThat::HTMLGenerator.new("abc\n123", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p>abc&nbsp;123</p>', gen.result)
   end
 
   def test_double_break
-    gen = WikiThat::HTMLGenerator.new("abc\n\n123", 'wiki', 'BOB', 'sub/folder')
+    gen = WikiThat::HTMLGenerator.new("abc\n\n123", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p>abc</p><p>123</p>', gen.result)

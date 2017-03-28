@@ -18,14 +18,14 @@ require_relative('../../../../lib/wiki-that')
 
 class ListParseTest < Test::Unit::TestCase
   def test_empty
-    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(0, parser.result.children.length)
   end
 
   def test_ul
-    parser = WikiThat::Parser.new('*', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('*', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -36,7 +36,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ul_li
-    parser = WikiThat::Parser.new('*A', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('*A', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -49,7 +49,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ul_li2
-    parser = WikiThat::Parser.new('* ABC', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('* ABC', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -62,7 +62,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ol
-    parser = WikiThat::Parser.new('#', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('#', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -73,7 +73,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ol_li
-    parser = WikiThat::Parser.new('#A', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('#A', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -86,7 +86,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ol_li2
-    parser = WikiThat::Parser.new('# ABC', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('# ABC', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -99,7 +99,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ol_ul
-    parser = WikiThat::Parser.new('#* ABC', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('#* ABC', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -116,7 +116,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ul_ol_ul
-    parser = WikiThat::Parser.new("*# AB\n*#* ABC", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("*# AB\n*#* ABC", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -141,7 +141,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ul_ol
-    parser = WikiThat::Parser.new("*# AB\n* ABC", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("*# AB\n* ABC", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -160,7 +160,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ul_break_ul
-    parser = WikiThat::Parser.new("* AB\n\n* ABC", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("* AB\n\n* ABC", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
@@ -179,7 +179,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_dl
-    parser = WikiThat::Parser.new(': ABC', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(': ABC', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -192,7 +192,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_dl2
-    parser = WikiThat::Parser.new('; ABC', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('; ABC', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -205,7 +205,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_dl_dt_dd
-    parser = WikiThat::Parser.new("; ABC\n: DEF", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("; ABC\n: DEF", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -222,7 +222,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ol_li_dl_dt
-    parser = WikiThat::Parser.new("# ABC\n; DEF", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("# ABC\n; DEF", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
@@ -241,7 +241,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_ol_li_dl_dd
-    parser = WikiThat::Parser.new("# ABC\n: DEF", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("# ABC\n: DEF", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
@@ -260,7 +260,7 @@ class ListParseTest < Test::Unit::TestCase
   end
 
   def test_dl_dn_dt
-    parser = WikiThat::Parser.new(": ABC\n; DEF", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(": ABC\n; DEF", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -278,7 +278,7 @@ class ListParseTest < Test::Unit::TestCase
 
 
   def test_ol_dl_dt_dn
-    parser = WikiThat::Parser.new("#; ABC\n#: DEF", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("#; ABC\n#: DEF", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)

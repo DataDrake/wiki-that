@@ -23,8 +23,16 @@ module WikiThat
     # Parse the current text as a horizontal rule if found
     ##
     def parse_rule
+      case current.value
+        when 1
+          e = Element.new(:text,'-')
+        when 2
+          e = Element.new(:text,'&mdash;')
+        else
+          e = Element.new(:hr)
+      end
       advance
-      Element.new(:hr)
+      e
     end
   end
 end

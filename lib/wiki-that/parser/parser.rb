@@ -50,15 +50,17 @@ module WikiThat
     # @param [String] base_url the base URL for relative links
     # @param [String] default_namespace the default namespace for relative links
     # @param [String] sub_url the sub URL for relative links
+    # @param [String] media_base the base URL for media sources
     #
     # @returns [WikiThat::Parser] a newly configured Parser
     ##
-    def initialize(doc, base_url, default_namespace, sub_url)
+    def initialize(doc, base_url, default_namespace, sub_url, media_base)
       @lexer             = WikiThat::Lexer.new(doc)
       @base_url          = base_url ? base_url.strip : base_url
       @default_namespace = default_namespace ? default_namespace.strip : default_namespace
       @index             = 0
       @sub_url           = sub_url ? sub_url.strip : sub_url
+      @media_base        = media_base ? media_base.strip : media_base
       @errors            = []
       @warnings          = []
       @tokens            = []

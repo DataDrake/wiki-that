@@ -88,9 +88,9 @@ class LinkLexTest < Test::Unit::TestCase
   end
 
   def test_external_inline2
-    lexer = WikiThat::Lexer.new('[http://example.com] <-- Follow')
+    lexer = WikiThat::Lexer.new('[http://example.com] -- Follow')
     lexer.lex
-    assert_equal(5, lexer.result.length)
+    assert_equal(7, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
     assert_equal(1, lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
@@ -100,7 +100,11 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:link_end, lexer.result[3].type)
     assert_equal(1, lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)
-    assert_equal(' <-- Follow', lexer.result[4].value)
+    assert_equal(' ', lexer.result[4].value)
+    assert_equal(:rule, lexer.result[5].type)
+    assert_equal(2, lexer.result[5].value)
+    assert_equal(:text, lexer.result[6].type)
+    assert_equal(' Follow', lexer.result[6].value)
   end
 
   def test_external_alt

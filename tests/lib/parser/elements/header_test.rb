@@ -18,7 +18,7 @@ require_relative('../../../../lib/wiki-that')
 class HeaderParseTest < Test::Unit::TestCase
   # Fake test
   def test_empty
-    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(0, parser.result.children.length)
@@ -26,7 +26,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_short
     start  = '= Incomplete Header ='
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -38,7 +38,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_incomplete
     start  = '== Incomplete Header'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
@@ -50,7 +50,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_incomplete2
     start  = '== Incomplete Header ='
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(3, parser.result.children.length)
@@ -64,7 +64,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h2
     start  = '== Complete Header =='
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -75,7 +75,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h2_unbalanced_right
     start  = '== Complete Header ==='
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -86,7 +86,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h2_unbalanced_left
     start  = '=== Complete Header =='
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -97,7 +97,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h2_trailing_whitespace
     start  = '== Complete Header ==     '
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -108,7 +108,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h2_trailing_text
     start  = '== Complete Header == text'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_false(parser.success?, 'Parsing should have failed')
     assert_equal(4, parser.result.children.length)
@@ -124,7 +124,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h3
     start  = '=== Complete Header ==='
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -135,7 +135,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h4
     start  = '==== Complete Header ===='
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -146,7 +146,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h5
     start  = '===== Complete Header ====='
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -157,7 +157,7 @@ class HeaderParseTest < Test::Unit::TestCase
 
   def test_h6
     start  = '====== Complete Header ======'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)

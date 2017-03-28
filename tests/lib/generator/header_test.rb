@@ -18,7 +18,7 @@ require_relative('../../../lib/wiki-that')
 class HeaderGenTest < Test::Unit::TestCase
   # Fake test
   def test_empty
-    gen = WikiThat::HTMLGenerator.new('', 'wiki', 'BOB', 'sub/folder')
+    gen = WikiThat::HTMLGenerator.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('', gen.result)
@@ -26,7 +26,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_short
     start = '= Incomplete Header ='
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<p>= Incomplete Header =</p>', gen.result)
@@ -34,7 +34,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_incomplete
     start = '== Incomplete Header'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('== Incomplete Header', gen.result)
@@ -42,7 +42,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_incomplete2
     start = '== Incomplete Header ='
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('== Incomplete Header =', gen.result)
@@ -50,14 +50,14 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h2
     start = '== Complete Header =='
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_equal('<h2> Complete Header </h2>', gen.result)
   end
 
   def test_h2_unbalanced_right
     start = '== Complete Header ==='
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<h2> Complete Header </h2>', gen.result)
@@ -65,7 +65,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h2_unbalanced_left
     start = '=== Complete Header =='
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<h2> Complete Header </h2>', gen.result)
@@ -73,7 +73,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h2_trailing_whitespace
     start = '== Complete Header ==     '
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<h2> Complete Header </h2>', gen.result)
@@ -81,7 +81,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h2_trailing_text
     start = '== Complete Header ==text'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_false(gen.success?, 'Generation should have failed')
     assert_equal('', gen.result)
@@ -89,7 +89,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h2_trailing_link
     start = '== Complete Header ==[http://example.com]'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_false(gen.success?, 'Generation should have failed')
     assert_equal('', gen.result)
@@ -97,7 +97,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h2_trailing_multiple
     start = '== Complete Header ==[http://example.com] text'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_false(gen.success?, 'Generation should have failed')
     assert_equal('', gen.result)
@@ -105,7 +105,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h3
     start = '=== Complete Header ==='
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<h3> Complete Header </h3>', gen.result)
@@ -113,7 +113,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h4
     start = '==== Complete Header ===='
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<h4> Complete Header </h4>', gen.result)
@@ -121,7 +121,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h5
     start = '===== Complete Header ====='
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<h5> Complete Header </h5>', gen.result)
@@ -129,7 +129,7 @@ class HeaderGenTest < Test::Unit::TestCase
 
   def test_h6
     start = '====== Complete Header ======'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_equal('<h6> Complete Header </h6>', gen.result)
   end

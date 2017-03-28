@@ -19,7 +19,7 @@ require_relative('../../../lib/wiki-that')
 class NoWikiGenTest < Test::Unit::TestCase
 
   def test_empty
-    gen = WikiThat::HTMLGenerator.new('', 'wiki', 'BOB', 'sub/folder')
+    gen = WikiThat::HTMLGenerator.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('', gen.result)
@@ -27,7 +27,7 @@ class NoWikiGenTest < Test::Unit::TestCase
 
   def test_complete
     start = '<nowiki>this is not wiki markup</nowiki>'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<nowiki>this is not wiki markup</nowiki>', gen.result)

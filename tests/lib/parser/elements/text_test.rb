@@ -19,7 +19,7 @@ require_relative('../../../../lib/wiki-that')
 class TextParseTest < Test::Unit::TestCase
 
   def test_empty
-    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(:root, parser.result.type)
@@ -28,7 +28,7 @@ class TextParseTest < Test::Unit::TestCase
   end
 
   def test_single
-    parser = WikiThat::Parser.new('abc', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('abc', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -39,7 +39,7 @@ class TextParseTest < Test::Unit::TestCase
   end
 
   def test_double
-    parser = WikiThat::Parser.new("abc\n123", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("abc\n123", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -54,7 +54,7 @@ class TextParseTest < Test::Unit::TestCase
   end
 
   def test_double_break
-    parser = WikiThat::Parser.new("abc\n\n123", 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new("abc\n\n123", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)

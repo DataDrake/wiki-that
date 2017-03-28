@@ -32,11 +32,12 @@ module WikiThat
     # @param [String] base_url the base URL for relative links
     # @param [String] default_namespace the default namespace for relative links
     # @param [String] sub_url the sub URL for relative links
+    # @param [String] media_base the base URL for media sources
     #
     # @returns [WikiThat::HTMLGenerator] a newly configured HTMLGenerator
     ##
-    def initialize(doc, base_url, default_namespace, sub_url)
-      @parser   = WikiThat::Parser.new(doc, base_url, default_namespace, sub_url)
+    def initialize(doc, base_url, default_namespace, sub_url, media_base)
+      @parser   = WikiThat::Parser.new(doc, base_url, default_namespace, sub_url, media_base)
       @index    = 0
       @errors   = []
       @warnings = []

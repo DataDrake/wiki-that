@@ -29,8 +29,8 @@ class RuleLexTest < Test::Unit::TestCase
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
     assert_equal(1, lexer.result.length)
-    assert_equal(:text, lexer.result[0].type)
-    assert_equal('-', lexer.result[0].value)
+    assert_equal(:rule, lexer.result[0].type)
+    assert_equal(1, lexer.result[0].value)
   end
 
   def test_incomplete2
@@ -38,8 +38,8 @@ class RuleLexTest < Test::Unit::TestCase
     lexer = WikiThat::Lexer.new(start)
     lexer.lex
     assert_equal(1, lexer.result.length)
-    assert_equal(:text, lexer.result[0].type)
-    assert_equal('--', lexer.result[0].value)
+    assert_equal(:rule, lexer.result[0].type)
+    assert_equal(2, lexer.result[0].value)
   end
 
   def test_complete1

@@ -30,6 +30,8 @@ module WikiThat
         case current.type
           when :format
             children.push(*parse_format)
+          when :rule
+            children.push(parse_rule)
           when :link_start
             children.push(parse_link)
           when :text

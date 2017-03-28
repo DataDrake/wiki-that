@@ -19,7 +19,7 @@ require_relative('../../../lib/wiki-that')
 class RuleGenTest < Test::Unit::TestCase
 
   def test_empty
-    gen = WikiThat::HTMLGenerator.new('', 'wiki', 'BOB', 'sub/folder')
+    gen = WikiThat::HTMLGenerator.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('', gen.result)
@@ -27,23 +27,23 @@ class RuleGenTest < Test::Unit::TestCase
 
   def test_incomplete1
     start = '-'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p>-</p>', gen.result)
+    assert_equal('-', gen.result)
   end
 
   def test_incomplete2
     start = '--'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p>--</p>', gen.result)
+    assert_equal('&mdash;', gen.result)
   end
 
   def test_complete1
     start = '---'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<hr />', gen.result)
@@ -51,7 +51,7 @@ class RuleGenTest < Test::Unit::TestCase
 
   def test_complete2
     start = '----'
-    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder')
+    gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
     assert_equal('<hr />', gen.result)

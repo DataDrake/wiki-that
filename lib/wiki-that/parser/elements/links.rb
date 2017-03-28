@@ -118,7 +118,6 @@ module WikiThat
           pieces.push('')
         end
       end
-      url = pieces.join('/') + url
 
       if namespaces.length > 0
         case namespaces[0]
@@ -126,19 +125,26 @@ module WikiThat
             if attributes.length > 0
               warning 'Ignoring all attributes'
             end
+            pieces[1] = @media_base
+            url = pieces.join('/') + url
             parse_audio_link(url)
           when 'Image'
+            pieces[1] = @media_base
+            url = pieces.join('/') + url
             parse_image_link(url, attributes)
           when 'Video'
             if attributes.length > 0
               warning 'Ignoring all attributes'
             end
+            pieces[1] = @media_base
+            url = pieces.join('/') + url
             parse_video_link(url)
           else
+            url = pieces.join('/') + url
             anchor = Element.new(:a)
             case attributes.length
               when 0
-                if alt.empty? or url.end_with? alt
+                if alt.empty? or alt.include? '/'
                   anchor.add_child(Element.new(:text, url))
                 else
                   anchor.add_child(Element.new(:text, alt))
@@ -153,11 +159,12 @@ module WikiThat
             anchor
         end
       else
+        url = pieces.join('/') + url
         anchor = Element.new(:a)
         anchor.set_attribute(:href, url)
         case attributes.length
           when 0
-            if alt.empty?
+            if alt.empty? or alt.include? '/'
               anchor.add_child(Element.new(:text, url))
             else
               anchor.add_child(Element.new(:text, alt))

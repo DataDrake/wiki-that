@@ -18,7 +18,7 @@ require_relative('../../../../lib/wiki-that')
 class TableParseTest < Test::Unit::TestCase
   # Fake test
   def test_empty
-    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(0, parser.result.children.length)
@@ -26,7 +26,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete1
     start  = '{'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -38,7 +38,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete2
     start  = '{|'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -48,7 +48,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete3
     start  = '{| not an attribute'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
@@ -59,7 +59,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete4
     start  = '{| a="b"'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -70,7 +70,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete5
     start  = '{| a="b" c="1234&"'
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -82,7 +82,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete6
     start  = "{|\n|+"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -93,7 +93,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete7
     start  = "{|\n|+this is a caption"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -108,7 +108,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete8
     start  = "{|\n|- these are not attributes"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
@@ -123,7 +123,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete9
     start  = "{|\n|- a=\"b\""
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -138,7 +138,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete10
     start  = "{|\n|- \n"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -152,7 +152,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_caption_whitespace
     start  = "{|\n|+ \n"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -163,7 +163,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete11
     start  = "{|\n|-\n1234"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(2, parser.result.children.length)
@@ -181,7 +181,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete12
     start  = "{|\n|-\n| 1234"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -198,7 +198,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete13
     start  = "{|\n| 1234"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -215,7 +215,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete14
     start  = "{|\n|-\n| a=\"b\" | 1234"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -234,7 +234,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete15
     start  = "{|\n|-\n| a=\"b\" | 1234 ! bob"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -257,7 +257,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete16
     start  = "{|\n|-\n| a=\"b\" | 1234 \n|-\n! bob"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -282,7 +282,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_incomplete17
     start  = "{|\n| 1234 \nparagraph\n! bob"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -309,7 +309,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_complete
     start  = "{|\n| 1234 \nparagraph\n! bob\n|}"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -336,7 +336,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_complete2
     start  = "{|\n|| 1234 \nparagraph\n! bob\n|}"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -363,7 +363,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_nested
     start  = "{|\n|-\n|\n{|\n|}\n|}"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -378,7 +378,7 @@ class TableParseTest < Test::Unit::TestCase
 
   def test_nested2
     start  = "{|\n|-\n|\n{|\n|-\n|\n* ABC\n|}\n|}"
-    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder')
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
