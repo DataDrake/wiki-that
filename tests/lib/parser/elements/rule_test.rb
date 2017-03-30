@@ -72,7 +72,6 @@ class RuleParseTest < Test::Unit::TestCase
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:p, parser.result.children[0].type)
-    puts parser.result.children[0].children.inspect
     assert_equal(3, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
     assert_equal('A ', parser.result.children[0].children[0].value)
