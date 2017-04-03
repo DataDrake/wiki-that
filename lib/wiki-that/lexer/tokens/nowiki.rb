@@ -27,81 +27,95 @@ module WikiThat
     # Lex the current text as a nowiki
     ##
     def lex_nowiki
-      buff  = ''
+      read = 0
       count = 0
-      #Find all consecutive newlines
+      #Find all consecutive '<'
       while match? NOWIKI_SPECIAL
-        buff  += current
+        read += 1
         count += 1
         advance
       end
       if count != 1
-        rewind buff.length
+        rewind read
         lex_text
         return
       end
 
-      'nowiki'.each_char do |c|
+      case current
+        when 'n'
+          tag = 'nowiki'
+        when 'p'
+          tag = 'pre'
+        else
+          rewind read
+          lex_text
+          return
+      end
+
+      tag.each_char do |c|
         unless current == c
-          rewind buff.length
+          rewind read
           lex_text
           return
         end
-        buff += current
+        read += 1
         advance
       end
 
       count = 0
       while current == '>'
-        buff  += current
+        read += 1
         count += 1
         advance
       end
       if count != 1
-        rewind buff.length
+        rewind read
         lex_text
         return
       end
       body = ''
-      until end? or match? NOWIKI_SPECIAL
+      done = false
+      until end? or done
+        if match? NOWIKI_SPECIAL
+          #closing tag
+          buff = ''
+          while match? NOWIKI_SPECIAL
+            read += 1
+            buff += current
+            advance
+          end
+          if buff.length != 1 or not_match? %w(/)
+            body += buff
+            redo
+          end
+          read += 1
+          buff += current
+          advance
+          tag.each_char do |c|
+            unless current == c
+              break
+            end
+            read += 1
+            buff += current
+            advance
+          end
+          unless current == '>'
+            body += buff
+            redo
+          end
+          advance
+          done = true
+        end
         body += current
-        buff += current
+        read += 1
         advance
+      end
+      if done
+        append Token.new(tag.to_sym, body)
+      else
+        append Token.new(:text, "<#{tag}>" + body)
       end
 
-      #closing tag
-      count = 0
-      while match? NOWIKI_SPECIAL
-        buff  += current
-        count += 1
-        advance
-      end
-      if count != 1
-        rewind buff.length
-        lex_text
-        return
-      end
-      '/nowiki'.each_char do |c|
-        unless current == c
-          rewind buff.length
-          lex_text
-          return
-        end
-        buff += current
-        advance
-      end
-      count = 0
-      while current == '>'
-        buff  += current
-        count += 1
-        advance
-      end
-      if count != 1
-        rewind buff.length
-        lex_text
-        return
-      end
-      append Token.new(:nowiki, body)
     end
   end
 end

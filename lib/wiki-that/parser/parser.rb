@@ -83,7 +83,7 @@ module WikiThat
           parse_rule
         when :list_item
           parse_list
-        when :nowiki
+        when :nowiki, :pre
           parse_nowiki
         when :table_start
           parse_table

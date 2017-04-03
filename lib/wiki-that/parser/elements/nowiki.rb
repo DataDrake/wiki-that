@@ -23,7 +23,7 @@ module WikiThat
     # Parse the current token as a nowiki tag
     ##
     def parse_nowiki
-      nowiki = Element.new(:nowiki)
+      nowiki = Element.new(current.type)
       nowiki.add_child(Element.new(:text, current.value))
       advance
       nowiki

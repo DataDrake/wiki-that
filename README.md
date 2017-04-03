@@ -58,6 +58,11 @@ In our "flavor" of MediaWiki, link namespaces serve two purposes:
    the additional benefit of allowing for ***interwiki links***
    which enabling linking to objects in other namespaces.
 
+### Table of Contents
+
+At the moment we do not support embedding a TOC on the page. As such, 
+both `__NOTOC__` and `__TOC__` are stripped from the document. 
+
 ## License
 
 Copyright 2017 Bryan T. Meyers
