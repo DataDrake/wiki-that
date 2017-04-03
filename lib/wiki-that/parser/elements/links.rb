@@ -124,7 +124,7 @@ module WikiThat
       end
 
       if namespaces.length > 0
-        case namespaces[0]
+        case namespaces[0].capitalize
           when 'Audio'
             if attributes.length > 0
               warning 'Ignoring all attributes'
