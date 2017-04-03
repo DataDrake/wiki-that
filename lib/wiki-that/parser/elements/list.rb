@@ -70,12 +70,7 @@ module WikiThat
         end
         items.push(item)
         if not end? and current.type == :break
-          if current.value == 1
-            advance
-          else
-            advance
-            break
-          end
+          advance
         end
       end
       items

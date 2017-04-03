@@ -163,19 +163,17 @@ class ListParseTest < Test::Unit::TestCase
     parser = WikiThat::Parser.new("* AB\n\n* ABC", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
-    assert_equal(2, parser.result.children.length)
+    assert_equal(1, parser.result.children.length)
     assert_equal(:ul, parser.result.children[0].type)
-    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(2, parser.result.children[0].children.length)
     assert_equal(:li, parser.result.children[0].children[0].type)
     assert_equal(1, parser.result.children[0].children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].children[0].type)
     assert_equal(' AB', parser.result.children[0].children[0].children[0].value)
-    assert_equal(:ul, parser.result.children[1].type)
-    assert_equal(1, parser.result.children[1].children.length)
-    assert_equal(:li, parser.result.children[1].children[0].type)
-    assert_equal(1, parser.result.children[1].children[0].children.length)
-    assert_equal(:text, parser.result.children[1].children[0].children[0].type)
-    assert_equal(' ABC', parser.result.children[1].children[0].children[0].value)
+    assert_equal(:li, parser.result.children[0].children[1].type)
+    assert_equal(1, parser.result.children[0].children[1].children.length)
+    assert_equal(:text, parser.result.children[0].children[1].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[1].children[0].value)
   end
 
   def test_dl

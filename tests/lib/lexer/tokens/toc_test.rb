@@ -56,6 +56,16 @@ class TableOfContentsLexTest < Test::Unit::TestCase
     assert_equal('__NOTOC_', lexer.result[0].value)
   end
 
+  def test_invalid
+    lexer = WikiThat::Lexer.new('__NOPOC__')
+    lexer.lex
+    assert_equal(2, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('__NO', lexer.result[0].value)
+    assert_equal(:text, lexer.result[1].type)
+    assert_equal('POC__', lexer.result[1].value)
+  end
+
   def test_complete
     lexer = WikiThat::Lexer.new('__NOTOC__')
     lexer.lex
@@ -70,6 +80,12 @@ class TableOfContentsLexTest < Test::Unit::TestCase
 
   def test_complete_trailing_newline
     lexer = WikiThat::Lexer.new("__NOTOC__ this should be ignored\n")
+    lexer.lex
+    assert_equal(0, lexer.result.length)
+  end
+
+  def test_complete2
+    lexer = WikiThat::Lexer.new('__TOC__')
     lexer.lex
     assert_equal(0, lexer.result.length)
   end

@@ -40,7 +40,16 @@ module WikiThat
         return
       end
 
-      'NOTOC'.each_char do |c|
+      case current
+        when 'N'
+          text = 'NOTOC'
+        when 'T'
+          text = 'TOC'
+        else
+          append Token.new(:text, buff)
+          return
+      end
+      text.each_char do |c|
         unless current == c
           append Token.new(:text, buff)
           return
