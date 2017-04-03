@@ -65,9 +65,13 @@ module WikiThat
       end
       while match? [:link_attribute]
         advance
-        if match? [:text]
-          attributes.push(current.value.strip)
+        attr = ''
+        while match? [:text]
+          attr += current.value
           advance
+        end
+        if attr.length > 0
+          attributes.push(attr.strip)
         end
       end
       if not_match? [:link_end] or (match? [:link_end] and current.value != 2)
@@ -196,9 +200,6 @@ module WikiThat
         advance
       end
       unless match? [:link_end] and current.value == 1
-        if match? [:link_end]
-          advance
-        end
         warning 'External link not closed by "]"'
         return Element.new(:text, "[#{url}")
       end

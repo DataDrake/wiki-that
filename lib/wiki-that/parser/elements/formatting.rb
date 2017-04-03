@@ -29,6 +29,7 @@ module WikiThat
       contents = []
       finish   = nil
       until end?
+        $stderr.puts @tokens[@index - 1].value
         case current.type
           when :format
             finish = current
@@ -39,6 +40,8 @@ module WikiThat
           when :text
             contents.push(Element.new(:text, current.value))
             advance
+          else
+            break
         end
       end
       if finish.nil?
