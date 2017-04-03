@@ -47,7 +47,7 @@ module WikiThat
       if post.length == 1
         if post[0].type == :text
           post[0].value.each_char do |c|
-            unless " \n\t".include? c
+            unless BREAK_SPECIAL.include? c or " \t".include? c
               fail = true
               break
             end

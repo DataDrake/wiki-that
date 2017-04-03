@@ -15,6 +15,9 @@
 ##
 require_relative('token')
 module WikiThat
+
+  # Special characters for break tags
+  BREAK_SPECIAL = %W(\n \r)
   ##
   # Lexer module for handline line breaks
   # @author Bryan T. Meyers
@@ -27,7 +30,7 @@ module WikiThat
       count = 0
 
       #Find all consecutive newlines
-      while current == "\n"
+      while match? BREAK_SPECIAL
         count += 1
         advance
       end

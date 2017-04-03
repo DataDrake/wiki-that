@@ -64,7 +64,7 @@ module WikiThat
     def lex
       until end?
         case current
-          when "\n"
+          when *BREAK_SPECIAL
             lex_break
           when *HEADER_SPECIAL
             lex_header

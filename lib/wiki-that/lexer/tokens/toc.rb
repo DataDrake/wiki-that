@@ -60,10 +60,10 @@ module WikiThat
         return
       end
       ## Read to the end fo the line. We want to remove this entirely
-      until end? or match? ["\n"]
+      until end? or match? BREAK_SPECIAL
         advance
       end
-      if match? ["\n"]
+      if match? BREAK_SPECIAL
         advance
       end
     end

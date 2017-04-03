@@ -66,7 +66,7 @@ module WikiThat
           item.add_child(parse_list2(current.value, depth+1))
         else
           advance
-          item.add_children(*parse_inline("\n"))
+          item.add_children(*parse_inline)
         end
         items.push(item)
         if not end? and current.type == :break
