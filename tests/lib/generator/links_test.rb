@@ -207,6 +207,13 @@ class LinkGenTest < Test::Unit::TestCase
     assert_equal('<p><img src="/media/folder/BOB/public/test.png" /></p>', gen.result)
   end
 
+  def test_internal_image2
+    gen = WikiThat::HTMLGenerator.new('[[Image:test.png]]', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    gen.generate
+    assert_true(gen.success?, 'Generation should have succeeded')
+    assert_equal('<p><img src="/media/folder/BOB/sub/folder/test.png" /></p>', gen.result)
+  end
+
   def test_internal_image_alt
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|Test PNG]]', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
@@ -242,14 +249,14 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|frame|Test PNG]]', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div class="frame"><img src="/media/folder/BOB/public/test.png" alt="Test PNG" /><caption>Test PNG</caption></div></p>', gen.result)
+    assert_equal('<p><figure class="frame"><img src="/media/folder/BOB/public/test.png" alt="Test PNG" /><figcaption>Test PNG</figcaption></figure></p>', gen.result)
   end
 
   def test_internal_image_thumb
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|thumb|Test PNG]]', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div class="thumb"><img src="/media/folder/BOB/public/test.png" alt="Test PNG" /><caption>Test PNG</caption></div></p>', gen.result)
+    assert_equal('<p><figure class="thumb"><img src="/media/folder/BOB/public/test.png" alt="Test PNG" /><figcaption>Test PNG</figcaption></figure></p>', gen.result)
   end
 
   def test_internal_image_width
@@ -270,6 +277,6 @@ class LinkGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('[[Image:/public/test.png|left|Test PNG]]', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<p><div class="left"><img src="/media/folder/BOB/public/test.png" alt="Test PNG" /></div></p>', gen.result)
+    assert_equal('<p><figure class="left"><img src="/media/folder/BOB/public/test.png" alt="Test PNG" /></figure></p>', gen.result)
   end
 end

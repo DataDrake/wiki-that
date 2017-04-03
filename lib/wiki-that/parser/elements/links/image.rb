@@ -34,7 +34,7 @@ module WikiThat
             width = a
           end
         end
-        wrapper = Element.new(:div)
+        wrapper = Element.new(:figure)
         if classes.length > 0
           wrapper.set_attribute(:class, classes.join(' '))
         end
@@ -54,7 +54,7 @@ module WikiThat
         end
         wrapper.add_child(e)
         if classes.include?('frame') || classes.include?('thumb') || classes.include?('thumbnail')
-          caption = Element.new(:caption)
+          caption = Element.new(:figcaption)
           caption.add_child(Element.new(:text, attrs.last))
           wrapper.add_child(caption)
         end

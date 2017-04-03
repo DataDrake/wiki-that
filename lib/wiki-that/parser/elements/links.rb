@@ -108,7 +108,7 @@ module WikiThat
           ns_index = 1
           warning 'Ignoring all but the first two namespaces'
       end
-      if ns_index == -1 or %w(Audio Image Video).include? namespaces[ns_index]
+      if ns_index == -1 or %w(Audio Image Video).include? namespaces[ns_index].capitalize
         if @default_namespace and not @default_namespace.empty?
           pieces.push(@default_namespace)
         end

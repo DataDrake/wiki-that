@@ -46,61 +46,73 @@ class TextGenTest < Test::Unit::TestCase
     assert_equal('<p>abc</p><p>123</p>', gen.result)
   end
 
+=begin
   def test_doc
     doc =<<-DOC
 
-__TOC__
+== Images ==
 
-== Hello World ==
+This describes how to include images in a Wiki page. 
 
-This page was created using the code shown below. 
-It begins with a table of contents and a top level heading. 
-Headings within the page start at the second level (two equal signs). 
-First level headings are reserved for the EDGE site itself, 
-to make it have a common look and feel for all users.
-===Subheading 1===
-Subheadings can be included to a number of levels, 
-simply by encapsulating the text of each sub heading 
-within equal signs. As you increase the number of equal signs, 
-you make the headings smaller and smaller.
-
-Start a new paragraph by leaving a blank line.
-===Subheading 2===
-For example, check out this fourth level heading.
-
-{| class="wikitable"
-|+ '''Hello World Table'''
-! Heading 1 
-! Heading 2  
+{| class="center" width="100%" border="1" cellpadding="1" cellspacing="0"
 |-
-|Row 1 Col 1
-|Row 1 Col 2 
+!What it looks like
+!What you type
 |-
-|Row 2 Col 1
-|Row 2 Col 2 
-|}
+|
+[[Image:tiger.jpg|frame|right|50px|This is a tiger.]]
+This paragraph is attached to this image. 
+Do not include any blank lines.
+This image is right justified.
+|<pre>
+[[Image:tiger.jpg|frame|right|50px|This is a tiger.]]
+This paragraph is attached to this image. 
+Do not include any blank lines.
+This image is right justified.
+</pre>
+|-
+!What it looks like
+!What you type
+|-
+|
+[[Image:tiger.jpg|frame|left|50px|This is a tiger.]]
+This paragraph is attached to this image. 
+Do not include any blank lines.
+This image is left justified.
+|<pre>
+[[Image:tiger.jpg|frame|left|50px|This is a tiger.]]
+This paragraph is attached to this image. 
+Do not include any blank lines.
+This image is left justified.
+</pre>
+|-
+!What it looks like
+!What you type
+|-
+|
+[[Image:tiger.jpg|frame|center|50px|This is a tiger.]]
 
-====Sub-subheading====
-
-And now, the excitement builds with fifth level headings!
-[[Image:conceptdiagram.jpg|frame|center|50px|This is a tiger.]]
+This paragraph is not to this image. 
+This has a blank line.
+This image is centered.
+|<pre>
+[[Image:tiger.jpg|frame|center|50px|This is a tiger.]]
 
 This paragraph is not attached to this image. 
 This has a blank line.
 This image is centered.
+</pre>
+|}
+ 
 
-====sub-sub-subheading====
-The fun never stops!
-====sub-sub-subheading====
-;Terms
-:Can be conveniently defined in this manner.
-== Good bye World==
-Another heading can be included at any point in the page.
+
+[[Wiki Help|Look for more Wiki Help]]
 DOC
     gen = WikiThat::HTMLGenerator.new(doc, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
 
     assert_equal('<p>abc</p><p>123</p>', gen.result)
   end
+=end
 
 end

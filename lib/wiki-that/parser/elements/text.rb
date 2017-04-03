@@ -30,6 +30,8 @@ module WikiThat
         case current.type
           when :format
             children.push(*parse_format)
+          when :nowiki,:pre
+            children.push(parse_nowiki)
           when :rule
             children.push(parse_rule)
           when :link_start
@@ -49,7 +51,7 @@ module WikiThat
     ##
     def parse_text
       text = Element.new(:p)
-      while not end? and match? [:text, :break, :link_start, :format]
+      while not end? and match? [:text, :break, :link_start, :format, :pre, :nowiki]
         if match? [:break]
           if current.value == 1
             text.add_child(Element.new(:text, '&nbsp;'))

@@ -68,7 +68,7 @@ module WikiThat
     ##
     def generate_element(element)
       if element.type == :text
-        return element.value
+        return element.value ? element.value : ''
       end
       if element.type == :root
         buff = ''

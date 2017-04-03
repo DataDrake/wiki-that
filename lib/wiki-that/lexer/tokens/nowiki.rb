@@ -28,16 +28,15 @@ module WikiThat
     ##
     def lex_nowiki
       read = 0
-      count = 0
+      buff = ''
       #Find all consecutive '<'
       while match? NOWIKI_SPECIAL
         read += 1
-        count += 1
+        buff += current
         advance
       end
-      if count != 1
-        rewind read
-        lex_text
+      if buff.length != 1
+        append Token.new(:text, buff)
         return
       end
 
@@ -47,32 +46,30 @@ module WikiThat
         when 'p'
           tag = 'pre'
         else
-          rewind read
-          lex_text
+          append Token.new(:text, buff)
           return
       end
 
       tag.each_char do |c|
         unless current == c
-          rewind read
-          lex_text
+          append Token.new(:text, buff)
           return
         end
-        read += 1
+        buff += current
         advance
       end
 
-      count = 0
+      read = 0
       while current == '>'
         read += 1
-        count += 1
+        buff += current
         advance
       end
-      if count != 1
-        rewind read
-        lex_text
+      if read != 1
+        append Token.new(:text, buff)
         return
       end
+      buff = ''
       body = ''
       done = false
       until end? or done

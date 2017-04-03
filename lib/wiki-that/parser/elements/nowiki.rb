@@ -24,6 +24,7 @@ module WikiThat
     ##
     def parse_nowiki
       nowiki = Element.new(current.type)
+      $stderr.puts current.value
       nowiki.add_child(Element.new(:text, current.value))
       advance
       nowiki

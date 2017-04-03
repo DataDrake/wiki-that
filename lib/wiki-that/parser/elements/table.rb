@@ -56,6 +56,18 @@ module WikiThat
             elem.add_child(caption)
           end
         end
+        if match? [:text]
+          whitespace = true
+          current.value.each_char do |c|
+            unless "\t ".include? c
+              whitespace = false
+            end
+          end
+          unless whitespace
+
+          end
+          advance
+        end
       end
       if match? [:break]
         advance

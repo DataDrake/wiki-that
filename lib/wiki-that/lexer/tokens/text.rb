@@ -57,6 +57,12 @@ module WikiThat
               buff = ''
             end
             lex_horizontal_rule
+          when *NOWIKI_SPECIAL
+            if buff.length > 0
+              append Token.new(:text, buff)
+              buff = ''
+            end
+            lex_nowiki
           else
             buff += current
             advance
