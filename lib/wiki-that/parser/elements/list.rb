@@ -63,7 +63,7 @@ module WikiThat
             item = Element.new(:li)
         end
         if depth < (current.value.length - 1)
-          item.add_child(parse_list2(current.value, depth+1))
+          item = parse_list2(current.value, depth+1)
         else
           advance
           item.add_children(*parse_inline)

@@ -30,7 +30,7 @@ class RuleGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('-', gen.result)
+    assert_equal('<p>-</p>', gen.result)
   end
 
   def test_incomplete2

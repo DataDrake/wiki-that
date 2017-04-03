@@ -99,7 +99,6 @@ class NoWikiLexTest < Test::Unit::TestCase
   def test_complete2
     lexer = WikiThat::Lexer.new('<pre>def hello()</pre>')
     lexer.lex
-    puts lexer.result.inspect
     assert_equal(1, lexer.result.length)
     assert_equal(:pre, lexer.result[0].type)
     assert_equal('def hello()', lexer.result[0].value)
@@ -108,7 +107,6 @@ class NoWikiLexTest < Test::Unit::TestCase
   def test_complete3
     lexer = WikiThat::Lexer.new('<pre><code>def hello()</code></pre>')
     lexer.lex
-    puts lexer.result.inspect
     assert_equal(1, lexer.result.length)
     assert_equal(:pre, lexer.result[0].type)
     assert_equal('<code>def hello()</code>', lexer.result[0].value)

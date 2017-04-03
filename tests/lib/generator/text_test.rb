@@ -46,4 +46,19 @@ class TextGenTest < Test::Unit::TestCase
     assert_equal('<p>abc</p><p>123</p>', gen.result)
   end
 
+=begin
+  def test_doc
+    doc =<<-DOC
+[[EDGE:public/Home| EDGE Home]] |
+[[EDGE:public/Help/Help|EDGE Help]] |
+[[EDGE:public/Help/EDGE Mission|EDGE Mission]] |
+[[EDGE:public/Development/Development|EDGE Development]]
+    DOC
+    gen = WikiThat::HTMLGenerator.new(doc, 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    gen.generate
+
+    assert_equal('<p>abc</p><p>123</p>', gen.result)
+  end
+=end
+
 end

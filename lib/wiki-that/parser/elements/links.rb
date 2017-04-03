@@ -196,6 +196,9 @@ module WikiThat
         advance
       end
       unless match? [:link_end] and current.value == 1
+        if match? [:link_end]
+          advance
+        end
         warning 'External link not closed by "]"'
         return Element.new(:text, "[#{url}")
       end

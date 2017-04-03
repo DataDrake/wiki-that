@@ -32,7 +32,12 @@ module WikiThat
         count += 1
         advance
       end
-      append Token.new(:rule, count)
+      if count == 1
+        append Token.new(:text, '-')
+      else
+        append Token.new(:rule, count)
+      end
+
     end
   end
 end
