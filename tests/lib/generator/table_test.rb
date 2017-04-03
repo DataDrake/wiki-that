@@ -108,7 +108,7 @@ class TableGenTest < Test::Unit::TestCase
     start = "{|\n|+ \n"
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
-    assert_equal('<table></table>', gen.result)
+    assert_equal('<table><caption> </caption></table>', gen.result)
   end
 
   def test_incomplete11

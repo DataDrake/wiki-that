@@ -158,7 +158,11 @@ class TableParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children.length)
     assert_equal(:table, parser.result.children[0].type)
     assert_equal(0, parser.result.children[0].attributes.length)
-    assert_equal(0, parser.result.children[0].children.length)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:caption, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[0].type)
+    assert_equal(' ', parser.result.children[0].children[0].children[0].value)
   end
 
   def test_incomplete11

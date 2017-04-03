@@ -48,19 +48,13 @@ module WikiThat
     def parse_caption(elem)
       if match? [:table_caption]
         advance
-        if match? [:text]
-          whitespace = true
-          current.value.each_char do |c|
-            unless "\t ".include? c
-              whitespace = false
-            end
-          end
-          unless whitespace
+        if not_match? [:break]
+          p = parse_inline
+          if p.length > 0
             caption = Element.new(:caption)
-            caption.add_child(Element.new(:text, current.value))
+            caption.add_children(*p)
             elem.add_child(caption)
           end
-          advance
         end
       end
       if match? [:break]
@@ -100,6 +94,8 @@ module WikiThat
           row = Element.new(:tr)
           row = parse_cells(row)
           elem.add_child(row)
+        else
+          elem
       end
       elem
     end

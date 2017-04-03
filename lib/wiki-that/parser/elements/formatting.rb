@@ -29,7 +29,6 @@ module WikiThat
       contents = []
       finish   = nil
       until end?
-        $stderr.puts @tokens[@index - 1].value
         case current.type
           when :format
             finish = current
