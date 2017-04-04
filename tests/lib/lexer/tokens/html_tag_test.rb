@@ -52,46 +52,42 @@ class NoWikiLexTest < Test::Unit::TestCase
     lexer = WikiThat::Lexer.new('<nowiki>')
     lexer.lex
     assert_equal(1, lexer.result.length)
-    assert_equal(:text, lexer.result[0].type)
-    assert_equal('<nowiki>', lexer.result[0].value)
+    assert_equal(:nowiki, lexer.result[0].type)
+    assert_equal('', lexer.result[0].value)
   end
 
   def test_incomplete5
     lexer = WikiThat::Lexer.new('<nowiki>blah blah blah')
     lexer.lex
     assert_equal(1, lexer.result.length)
-    assert_equal(:text, lexer.result[0].type)
-    assert_equal('<nowiki>blah blah blah', lexer.result[0].value)
+    assert_equal(:nowiki, lexer.result[0].type)
+    assert_equal('blah blah blah', lexer.result[0].value)
   end
 
   def test_incomplete6
     lexer = WikiThat::Lexer.new('<nowiki>blah blah blah<')
     lexer.lex
     assert_equal(1, lexer.result.length)
-    assert_equal(:text, lexer.result[0].type)
-    assert_equal('<nowiki>blah blah blah<', lexer.result[0].value)
+    assert_equal(:nowiki, lexer.result[0].type)
+    assert_equal('blah blah blah<', lexer.result[0].value)
   end
 
   def test_incomplete7
     lexer = WikiThat::Lexer.new('<nowiki>blah blah blah</nowiki')
     lexer.lex
     assert_equal(1, lexer.result.length)
-    assert_equal(:text, lexer.result[0].type)
-    assert_equal('<nowiki>blah blah blah</nowiki', lexer.result[0].value)
+    assert_equal(:nowiki, lexer.result[0].type)
+    assert_equal('blah blah blah</nowiki', lexer.result[0].value)
   end
 
   def test_extra
     lexer = WikiThat::Lexer.new('<<nowiki>blah blah blah</nowiki')
     lexer.lex
-    assert_equal(4, lexer.result.length)
+    assert_equal(2, lexer.result.length)
     assert_equal(:text, lexer.result[0].type)
-    assert_equal('<<', lexer.result[0].value)
-    assert_equal(:text, lexer.result[1].type)
-    assert_equal('nowiki>blah blah blah', lexer.result[1].value)
-    assert_equal(:text, lexer.result[2].type)
-    assert_equal('<', lexer.result[2].value)
-    assert_equal(:text, lexer.result[3].type)
-    assert_equal('/nowiki', lexer.result[3].value)
+    assert_equal('<', lexer.result[0].value)
+    assert_equal(:nowiki, lexer.result[1].type)
+    assert_equal('blah blah blah</nowiki', lexer.result[1].value)
   end
 
   def test_complete
@@ -113,6 +109,7 @@ class NoWikiLexTest < Test::Unit::TestCase
   def test_complete3
     lexer = WikiThat::Lexer.new('<pre><code>def hello()</code></pre>')
     lexer.lex
+
     assert_equal(1, lexer.result.length)
     assert_equal(:pre, lexer.result[0].type)
     assert_equal('<code>def hello()</code>', lexer.result[0].value)

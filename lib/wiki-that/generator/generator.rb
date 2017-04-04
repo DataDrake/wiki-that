@@ -70,6 +70,9 @@ module WikiThat
       if element.type == :text
         return element.value ? element.value : ''
       end
+      if element.type == :nowiki or element.type == :pre
+        return "<#{element.type.to_s}>#{element.value}</#{element.type.to_s}>"
+      end
       if element.type == :root
         buff = ''
         element.children.each do |c|
