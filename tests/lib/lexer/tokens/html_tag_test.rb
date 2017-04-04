@@ -125,4 +125,18 @@ class NoWikiLexTest < Test::Unit::TestCase
     assert_equal('<code>def hello()</code>', lexer.result[1].value)
   end
 
+  def test_complete5
+    lexer = WikiThat::Lexer.new('1234 <tt>code</tt>')
+    lexer.lex
+    assert_equal(4, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('1234 ', lexer.result[0].value)
+    assert_equal(:tag_open, lexer.result[1].type)
+    assert_equal('tt', lexer.result[1].value)
+    assert_equal(:text, lexer.result[2].type)
+    assert_equal('code', lexer.result[2].value)
+    assert_equal(:tag_close, lexer.result[3].type)
+    assert_equal('tt', lexer.result[3].value)
+  end
+
 end

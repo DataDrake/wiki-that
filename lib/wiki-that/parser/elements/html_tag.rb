@@ -34,7 +34,7 @@ module WikiThat
           name = current.value
           tag = Element.new(name.to_sym)
           advance
-          if name == 'nowiki' or 'pre'
+          if name == 'nowiki' or name == 'pre'
             until end?
               if current.type == :tag_close and current.value == name
                 break
@@ -42,7 +42,7 @@ module WikiThat
               tag.add_child(current)
             end
           end
-          p = parse_text
+          p = parse_inline
           if not_match? [:tag_close]
             warning "HTML tag '#{name}' not terminated, but closing anyways"
           else
