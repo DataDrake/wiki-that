@@ -17,5 +17,5 @@ require_relative('wiki-that/generator/generator')
 require_relative('wiki-that/lexer/lexer')
 require_relative('wiki-that/parser/parser')
 module WikiThat
-  VERSION = '0.9.5'
+  VERSION = '0.9.6'
 end

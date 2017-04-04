@@ -66,16 +66,16 @@ module WikiThat
         if type == :comment
           tag.chomp!('--')
         end
-        if tag == 'nowiki' or tag == 'pre'
+        if type == :tag_open and (tag == 'nowiki' or tag == 'pre')
           content = ''
           done = false
           until done or end?
             until end? or match? TAG_SPECIAL
-              if end?
-                break
-              end
               content += current
               advance
+            end
+            if end?
+              break
             end
             lex_tag
             t = @result.pop

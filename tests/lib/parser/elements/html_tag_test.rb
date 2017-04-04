@@ -58,4 +58,22 @@ class NoWikiParseTest < Test::Unit::TestCase
     assert_equal(:text, parser.result.children[0].children[1].children[0].type)
     assert_equal('code', parser.result.children[0].children[1].children[0].value)
   end
+
+  def test_complete4
+    start  = '1234 <pre>this is not wiki markup</pre> hello world'
+    parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(3, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('1234 ', parser.result.children[0].children[0].value)
+    assert_equal(:pre, parser.result.children[1].type)
+    assert_equal('this is not wiki markup', parser.result.children[1].value)
+    assert_equal(:p, parser.result.children[2].type)
+    assert_equal(1, parser.result.children[2].children.length)
+    assert_equal(:text, parser.result.children[2].children[0].type)
+    assert_equal(' hello world', parser.result.children[2].children[0].value)
+  end
 end

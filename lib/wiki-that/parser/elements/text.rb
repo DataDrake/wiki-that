@@ -51,6 +51,9 @@ module WikiThat
     ##
     def parse_text
       text = Element.new(:p)
+      while match? [:break]
+        advance
+      end
       while not end? and match? [:text, :break, :link_start, :format, :comment, :tag_open]
         if match? [:break]
           if current.value == 1
