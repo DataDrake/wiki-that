@@ -148,7 +148,7 @@ module WikiThat
           if match? [:break]
             advance
           end
-          p = parse2
+          p = parse2(true)
           if p.is_a? Array and p.length == 0
             break
           end
@@ -168,7 +168,7 @@ module WikiThat
       table = Element.new(:table)
       table = parse_attributes(table)
       table = parse_caption(table)
-      while not end? and match? [:table_row, :table_header, :table_data]
+      while match? [:table_row, :table_header, :table_data]
         table = parse_row(table)
       end
       if match? [:table_end]

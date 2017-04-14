@@ -54,7 +54,8 @@ module WikiThat
       while match? [:break]
         advance
       end
-      while not end? and match? [:text, :break, :link_start, :format, :comment, :tag_open]
+
+      while match? [:text, :break, :link_start, :format, :comment, :tag_open]
         if match? [:break]
           if current.value == 1
             text.add_child(Element.new(:text, '&nbsp;'))
@@ -63,8 +64,9 @@ module WikiThat
             advance
             break
           end
+        else
+          text.add_children(*parse_inline)
         end
-        text.add_children(*parse_inline)
       end
       text
     end

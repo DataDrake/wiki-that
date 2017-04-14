@@ -135,7 +135,7 @@ module WikiThat
     ##
     def not_match?(chars)
       if end?
-        return false
+        return true
       end
       chars.each do |char|
         if current == char

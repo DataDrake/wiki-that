@@ -40,7 +40,10 @@ module WikiThat
       end
       append Token.new(:link_start, count)
 
-      while not_match? BREAK_SPECIAL and not end?
+      while not_match? BREAK_SPECIAL
+        if end?
+          break
+        end
         lex_text(%w(: | ] ))
         case current
           when ':'

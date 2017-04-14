@@ -38,14 +38,57 @@ module WikiThat
           append Token.new(:text, buff)
           return
         when '!'
-          advance 3
           type = :comment
-        when '/'
+          buff += current
           advance
+          if not_match? %w(-)
+            append Token.new(:text, buff)
+            return
+          end
+          buff += current
+          advance
+          if not_match? %w(-)
+            append Token.new(:text, buff)
+            return
+          end
+          buff += current
+          advance
+          while not_match? ['-', "\n", "\r"]
+            if end?
+              append Token.new(:text, buff)
+              return
+            end
+            buff += current
+            advance
+          end
+          if not_match? %w(-)
+            append Token.new(:text, buff)
+            return
+          end
+          buff += current
+          advance
+          if not_match? %w(-)
+            append Token.new(:text, buff)
+            return
+          end
+          buff += current
+          advance
+          if not_match? %w(>)
+            append Token.new(:text, buff)
+            return
+          end
+          advance
+          buff.gsub!('<!--','')
+          buff.gsub!('--','')
+          append Token.new(type, buff)
+          return
+        when '/'
           type = :tag_close
+          advance
         else
           type = :tag_open
       end
+
       tag = ''
       until end? or match? %w(\n >)
         tag += current
@@ -53,8 +96,6 @@ module WikiThat
       end
       if end? or not_match? %w(>)
         case type
-          when :comment
-            tag = '<!--' + tag
           when :tag_close
             tag = '</' + tag
           else
@@ -62,10 +103,8 @@ module WikiThat
         end
         append Token.new(:text, tag)
       else
+        ## closing >
         advance
-        if type == :comment
-          tag.chomp!('--')
-        end
         if type == :tag_open and (tag == 'nowiki' or tag == 'pre')
           content = ''
           done = false
@@ -80,8 +119,6 @@ module WikiThat
             lex_tag
             t = @result.pop
             case t.type
-              when :comment
-                content += "<!--#{t.value}-->"
               when :tag_open
                 content += "<#{t.value}>"
               when :tag_close

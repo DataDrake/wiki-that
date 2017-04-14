@@ -69,11 +69,11 @@ module WikiThat
 
     ##
     # Translate the current Tokens into sero or more elements
-    #
+    # @param [Boolean] table parsing a table?
     # @returns [Object] the resulting element(s)
     ##
-    def parse2
-      if match? [:table_end, :table_data, :table_header, :table_row]
+    def parse2( table = false)
+      if table and match? [:table_end, :table_data, :table_header, :table_row]
         return []
       end
       case current.type
@@ -89,8 +89,12 @@ module WikiThat
           parse_nowiki
         when :table_start
           parse_table
-        else
+        when :text, :break, :link_start, :format
           parse_text
+        else
+          $stderr.puts '[Parser2]:' + current.inspect
+          advance
+          []
       end
     end
 

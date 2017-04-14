@@ -30,6 +30,9 @@ module WikiThat
     def lex_text(stop = [])
       buff = ''
       while not_match?(stop) and not_match? BREAK_SPECIAL
+        if end?
+          break
+        end
         case current
           # Inline formatting
           when *FORMAT_SPECIAL

@@ -67,35 +67,36 @@ module WikiThat
     # @returns [String] the resulting HTML partial
     ##
     def generate_element(element)
-      if element.type == :text
-        return element.value ? element.value : ''
-      end
-      if element.type == :nowiki or element.type == :pre
-        return "<#{element.type.to_s}>#{element.value}</#{element.type.to_s}>"
-      end
-      if element.type == :root
-        buff = ''
-        element.children.each do |c|
-          buff += generate_element(c)
-        end
-        return buff
-      end
-      buff = "<#{element.type.to_s}"
-      buff += generate_attributes(element)
       case element.type
-        when :hr, :img
-          buff += ' />'
-        else
-          if element.type == :p and element.children.length == 0
-            return ''
-          end
-          buff += '>'
+        when :comment
+          "<!--#{element.value}</#{element.type.to_s}-->"
+        when :text
+          element.value ? element.value : ''
+        when :nowiki, :pre
+          "<#{element.type.to_s}>#{element.value}</#{element.type.to_s}>"
+        when :root
+          buff = ''
           element.children.each do |c|
             buff += generate_element(c)
           end
-          buff += "</#{element.type.to_s}>"
+          buff
+        else
+          buff = "<#{element.type.to_s}"
+          buff += generate_attributes(element)
+          case element.type
+            when :hr, :img
+              buff + ' />'
+            else
+              if element.type == :p and element.children.length == 0
+                return ''
+              end
+              buff += '>'
+              element.children.each do |c|
+                buff += generate_element(c)
+              end
+              buff + "</#{element.type.to_s}>"
+          end
       end
-      buff
     end
 
     # Translate an Element's attributes into an HTML partial

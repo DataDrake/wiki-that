@@ -151,4 +151,77 @@ class NoWikiLexTest < Test::Unit::TestCase
     assert_equal(' hello world', lexer.result[2].value)
   end
 
+  def test_incomplete_comment1
+    lexer = WikiThat::Lexer.new('<!')
+    lexer.lex
+    assert_equal(1, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('<!', lexer.result[0].value)
+  end
+
+  def test_incomplete_comment2
+    lexer = WikiThat::Lexer.new('<!-')
+    lexer.lex
+    assert_equal(1, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('<!-', lexer.result[0].value)
+  end
+
+  def test_incomplete_comment3
+    lexer = WikiThat::Lexer.new('<!--')
+    lexer.lex
+    assert_equal(1, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('<!--', lexer.result[0].value)
+  end
+
+  def test_incomplete_comment4
+    lexer = WikiThat::Lexer.new('<!-- ABC1235')
+    lexer.lex
+    assert_equal(1, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('<!-- ABC1235', lexer.result[0].value)
+  end
+
+  def test_incomplete_comment5
+    lexer = WikiThat::Lexer.new('<!-- ABC1235')
+    lexer.lex
+    assert_equal(1, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('<!-- ABC1235', lexer.result[0].value)
+  end
+
+  def test_incomplete_comment6
+    lexer = WikiThat::Lexer.new('<!-- ABC1235-')
+    lexer.lex
+    assert_equal(1, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('<!-- ABC1235-', lexer.result[0].value)
+  end
+
+  def test_incomplete_comment7
+    lexer = WikiThat::Lexer.new('<!-- ABC1235--')
+    lexer.lex
+    assert_equal(1, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('<!-- ABC1235--', lexer.result[0].value)
+  end
+
+  def test_incomplete_comment8
+    lexer = WikiThat::Lexer.new("<!-- ABC1235\n")
+    lexer.lex
+    assert_equal(2, lexer.result.length)
+    assert_equal(:text, lexer.result[0].type)
+    assert_equal('<!-- ABC1235', lexer.result[0].value)
+    assert_equal(:break, lexer.result[1].type)
+    assert_equal(1, lexer.result[1].value)
+  end
+
+  def test_complete_comment
+    lexer = WikiThat::Lexer.new('<!-- ABC1235 -->')
+    lexer.lex
+    assert_equal(1, lexer.result.length)
+    assert_equal(:comment, lexer.result[0].type)
+    assert_equal(' ABC1235 ', lexer.result[0].value)
+  end
 end

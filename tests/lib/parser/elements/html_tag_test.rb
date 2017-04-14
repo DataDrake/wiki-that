@@ -76,4 +76,95 @@ class NoWikiParseTest < Test::Unit::TestCase
     assert_equal(:text, parser.result.children[2].children[0].type)
     assert_equal(' hello world', parser.result.children[2].children[0].value)
   end
+
+  def test_incomplete_comment1
+    parser = WikiThat::Parser.new('<!', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('<!', parser.result.children[0].children[0].value)
+  end
+
+  def test_incomplete_comment2
+    parser = WikiThat::Parser.new('<!-', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('<!-', parser.result.children[0].children[0].value)
+  end
+
+  def test_incomplete_comment3
+    parser = WikiThat::Parser.new('<!--', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('<!--', parser.result.children[0].children[0].value)
+  end
+
+  def test_incomplete_comment4
+    parser = WikiThat::Parser.new('<!-- ABC1235', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('<!-- ABC1235', parser.result.children[0].children[0].value)
+  end
+
+  def test_incomplete_comment5
+    parser = WikiThat::Parser.new('<!-- ABC1235', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('<!-- ABC1235', parser.result.children[0].children[0].value)
+  end
+
+  def test_incomplete_comment6
+    parser = WikiThat::Parser.new('<!-- ABC1235-', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('<!-- ABC1235-', parser.result.children[0].children[0].value)
+  end
+
+  def test_incomplete_comment7
+    parser = WikiThat::Parser.new('<!-- ABC1235--', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('<!-- ABC1235--', parser.result.children[0].children[0].value)
+  end
+
+  def test_incomplete_comment8
+    parser = WikiThat::Parser.new("<!-- ABC1235\n", 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(2, parser.result.children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].type)
+    assert_equal('<!-- ABC1235', parser.result.children[0].children[0].value)
+    assert_equal(:text, parser.result.children[0].children[1].type)
+    assert_equal('&nbsp;', parser.result.children[0].children[1].value)
+  end
+
+  def test_complete_comment
+    parser = WikiThat::Parser.new('<!-- ABC1235 -->', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:comment, parser.result.children[0].type)
+    assert_equal(' ABC1235 ', parser.result.children[0].value)
+  end
+
 end
