@@ -104,7 +104,7 @@ class NoWikiParseTest < Test::Unit::TestCase
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
-    assert_equal('<!--', parser.result.children[0].children[0].value)
+    assert_equal('&lt;!--', parser.result.children[0].children[0].value)
   end
 
   def test_incomplete_comment4
@@ -114,7 +114,7 @@ class NoWikiParseTest < Test::Unit::TestCase
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
-    assert_equal('<!-- ABC1235', parser.result.children[0].children[0].value)
+    assert_equal('&lt;!-- ABC1235', parser.result.children[0].children[0].value)
   end
 
   def test_incomplete_comment5
@@ -124,7 +124,7 @@ class NoWikiParseTest < Test::Unit::TestCase
     assert_equal(:p, parser.result.children[0].type)
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].type)
-    assert_equal('<!-- ABC1235', parser.result.children[0].children[0].value)
+    assert_equal('&lt;!-- ABC1235', parser.result.children[0].children[0].value)
   end
 
   def test_incomplete_comment6

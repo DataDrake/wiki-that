@@ -61,10 +61,11 @@ module WikiThat
       @index             = 0
       @sub_url           = sub_url ? sub_url.strip : sub_url
       @media_base        = media_base ? media_base.strip : media_base
-      @errors            = []
-      @warnings          = []
+      @errors            = {}
+      @warnings          = {}
       @tokens            = []
       @result            = Element.new(:root)
+      @line = 1
     end
 
     ##
@@ -73,7 +74,7 @@ module WikiThat
     # @returns [Object] the resulting element(s)
     ##
     def parse2( table = false)
-      if table and match? [:table_end, :table_data, :table_header, :table_row]
+      if (table and match? [:table_end, :table_data, :table_header, :table_row]) or end?
         return []
       end
       case current.type
@@ -92,7 +93,7 @@ module WikiThat
         when :text, :break, :link_start, :format
           parse_text
         else
-          $stderr.puts '[Parser2]:' + current.inspect
+          $stderr.puts "[Parser2] Line: #{@line} Value:" + current.inspect
           advance
           []
       end
@@ -129,7 +130,10 @@ module WikiThat
     # @param [String] error the error to append
     ##
     def error(error)
-      @errors.push(error)
+      unless @errors[@line]
+        @errors[@line] = []
+      end
+      @errors[@line].push(error)
     end
 
     ##
@@ -137,7 +141,10 @@ module WikiThat
     # @param [String] warn the warning to append
     ##
     def warning(warn)
-      @warnings.push(warn)
+      unless @warnings[@line]
+        @warnings[@line] = []
+      end
+      @warnings[@line].push(warn)
     end
 
     ##

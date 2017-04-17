@@ -26,22 +26,37 @@ module WikiThat
       case current.type
         when :comment
           tag = Element.new(:comment, current.value)
+          @line += current.value.count("\r\n")
           advance
         when :tag_close
           tag = Element.new(:text, "</#{current.value}>")
           advance
         else
           name = current.value
+          if name == 'br/' or name == 'br /'
+            name = 'br'
+          end
+          if name == 'references/' or name == 'references /'
+            name = 'references'
+          end
           tag = Element.new(name.to_sym)
           advance
-          p = parse_inline
+          if name == 'br' or name == 'references'
+            return tag
+          end
+          until end? or match? [:tag_close]
+            p = parse_inline
+            tag.add_children(*p)
+            if match? [:break]
+              @line += current.value
+              advance
+            end
+          end
           if not_match? [:tag_close]
             warning "HTML tag '#{name}' not terminated, but closing anyways"
           else
             advance
           end
-
-          tag.add_children(*p)
       end
       tag
     end
@@ -51,6 +66,7 @@ module WikiThat
     ##
     def parse_nowiki
       e = Element.new(current.type, current.value)
+      @line += current.value.count("\r\n")
       advance
       e
     end

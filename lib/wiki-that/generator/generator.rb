@@ -68,8 +68,10 @@ module WikiThat
     ##
     def generate_element(element)
       case element.type
+        when :br
+          '<br>'
         when :comment
-          "<!--#{element.value}</#{element.type.to_s}-->"
+          "<!--#{element.value}-->"
         when :text
           element.value ? element.value : ''
         when :nowiki, :pre
@@ -84,7 +86,7 @@ module WikiThat
           buff = "<#{element.type.to_s}"
           buff += generate_attributes(element)
           case element.type
-            when :hr, :img
+            when :hr, :img, :references
               buff + ' />'
             else
               if element.type == :p and element.children.length == 0

@@ -35,7 +35,7 @@ module WikiThat
       end
       case current
         when *TAG_SPECIAL
-          append Token.new(:text, buff)
+          append Token.new(:text, '&lt;')
           return
         when '!'
           type = :comment
@@ -53,9 +53,9 @@ module WikiThat
           end
           buff += current
           advance
-          while not_match? ['-', "\n", "\r"]
+          while not_match? ['-', "\n", "\r", '<']
             if end?
-              append Token.new(:text, buff)
+              append Token.new(:text, buff.gsub('<','&lt;'))
               return
             end
             buff += current
@@ -90,16 +90,16 @@ module WikiThat
       end
 
       tag = ''
-      until end? or match? %w(\n >)
+      until end? or match? %W(\r \n > <)
         tag += current
         advance
       end
       if end? or not_match? %w(>)
         case type
           when :tag_close
-            tag = '</' + tag
+            tag = '&lt;/' + tag
           else
-            tag = '<' + tag
+            tag = '&lt;' + tag
         end
         append Token.new(:text, tag)
       else

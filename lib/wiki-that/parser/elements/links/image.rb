@@ -22,7 +22,7 @@ module WikiThat
     ##
     def parse_image_link(link, attrs)
       e = Element.new(:img)
-      e.set_attribute(:src, link)
+      e.set_attribute(:src, URI.escape(link))
       if attrs.length > 0
         classes = []
         width   = nil

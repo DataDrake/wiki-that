@@ -13,6 +13,7 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
+require 'uri'
 module WikiThat
   module Links
     ##
@@ -22,7 +23,7 @@ module WikiThat
     ##
     def parse_video_link(link)
       e = Element.new(:video)
-      e.set_attribute(:src, link)
+      e.set_attribute(:src, URI.escape(link))
       e.set_attribute(:controls, true)
       e
     end

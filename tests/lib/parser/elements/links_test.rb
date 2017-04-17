@@ -44,7 +44,7 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:a, parser.result.children[0].children[0].type)
     assert_equal(1, parser.result.children[0].children[0].attributes.length)
-    assert_equal(nil, parser.result.children[0].children[0].attributes[:href])
+    assert_equal('', parser.result.children[0].children[0].attributes[:href])
   end
 
   def test_external_incomplete

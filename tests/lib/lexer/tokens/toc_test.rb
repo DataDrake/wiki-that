@@ -81,7 +81,9 @@ class TableOfContentsLexTest < Test::Unit::TestCase
   def test_complete_trailing_newline
     lexer = WikiThat::Lexer.new("__NOTOC__ this should be ignored\n")
     lexer.lex
-    assert_equal(0, lexer.result.length)
+    assert_equal(1, lexer.result.length)
+    assert_equal(:break, lexer.result[0].type)
+    assert_equal(1, lexer.result[0].value)
   end
 
   def test_complete2

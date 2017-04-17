@@ -27,7 +27,7 @@ module WikiThat
     def parse_attributes(elem)
       if match? [:text]
         found = false
-        current.value.scan(/(\w+)="([^"]*?)"/) do |m|
+        current.value.scan(/(\w+)="([^"]*)"/) do |m|
           elem.set_attribute(m[0], m[1])
           found = true
         end
@@ -36,6 +36,7 @@ module WikiThat
         end
       end
       if match? [:break]
+        @line += current.value
         advance
       end
       elem
@@ -56,20 +57,9 @@ module WikiThat
             elem.add_child(caption)
           end
         end
-        if match? [:text]
-          whitespace = true
-          current.value.each_char do |c|
-            unless "\t ".include? c
-              whitespace = false
-            end
-          end
-          unless whitespace
-
-          end
-          advance
-        end
       end
       if match? [:break]
+        @line += current.value
         advance
       end
       elem
@@ -98,6 +88,7 @@ module WikiThat
             end
           end
           if match? [:break]
+            @line += current.value
             advance
           end
           row = parse_cells(row)
@@ -118,7 +109,7 @@ module WikiThat
     ##
     def parse_cells(row)
       first = true
-      while match? [:table_header, :table_data]
+      while match? [:table_header, :table_data] or (first and not end?)
         if match? [:table_header]
           cell = Element.new(:th)
         else
@@ -134,23 +125,42 @@ module WikiThat
             warning 'Inline cells should be "||" or "!!"'
           end
         end
-        advance
-        cell = parse_attributes(cell)
-        if cell.attributes.length > 0
+        if match? [:table_header, :table_data]
           advance
         end
-        contents = parse_inline
-        if contents.length > 0
-          cell.add_children(*contents)
+        cell = parse_attributes(cell)
+        ## skip next tag since attributes were read
+        if cell.attributes.length > 0 and match? [:table_data, :table_header]
+          advance
         end
+        contents = parse2(true)
+        if contents.is_a? Array
+          if contents.length > 0
+            cell.add_children(*contents)
+          else
+            break
+          end
+        else
+          cell.add_child(contents)
+        end
+        advance(-1)
+        if match? [:break]
+          first = true
+        end
+        advance
         ## Parse multi-line cell
         until end? or match? [:table_header, :table_data, :table_row, :table_end]
           if match? [:break]
+            @line += current.value
             advance
+            first = true
+            redo
           end
           p = parse2(true)
-          if p.is_a? Array and p.length == 0
-            break
+          if p.is_a? Array
+            if p.length == 0
+              break
+            end
           end
           cell.add_child(p)
         end

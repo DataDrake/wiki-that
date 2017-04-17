@@ -159,13 +159,13 @@ module WikiThat
                 warning 'Ignoring all but the last link attribute'
                 anchor.add_child(Element.new(:text, attributes.last))
             end
-            anchor.set_attribute(:href, url)
+            anchor.set_attribute(:href, URI.escape(url))
             anchor
         end
       else
         url = pieces.join('/') + url
         anchor = Element.new(:a)
-        anchor.set_attribute(:href, url)
+        anchor.set_attribute(:href, URI.escape(url))
         case attributes.length
           when 0
             if alt.empty? or alt.include? '/'
@@ -206,7 +206,7 @@ module WikiThat
       advance
       anchor = Element.new(:a)
       url    = url.split(' ')
-      anchor.set_attribute(:href, url[0])
+      anchor.set_attribute(:href, URI.escape(url[0] ? url[0] : ''))
       if url.length > 2
         anchor.add_child(Element.new(:text, url[1...url.length].join(' ')))
       elsif url.length == 2

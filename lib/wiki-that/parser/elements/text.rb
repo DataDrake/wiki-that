@@ -33,7 +33,7 @@ module WikiThat
           when :comment, :tag_open
             children.push(parse_tag)
           when :rule
-            children.push(parse_rule)
+            children.push(parse_rule(true))
           when :link_start
             children.push(parse_link)
           when :text
@@ -52,11 +52,13 @@ module WikiThat
     def parse_text
       text = Element.new(:p)
       while match? [:break]
+        @line += current.value
         advance
       end
 
       while match? [:text, :break, :link_start, :format, :comment, :tag_open]
         if match? [:break]
+          @line += current.value
           if current.value == 1
             text.add_child(Element.new(:text, '&nbsp;'))
             advance

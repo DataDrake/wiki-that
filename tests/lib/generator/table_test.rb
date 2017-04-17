@@ -85,7 +85,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr></tr></table><p> these are not attributes</p>', gen.result)
+    assert_equal('<table><tr><td><p> these are not attributes</p></td></tr></table>', gen.result)
   end
 
   def test_incomplete9
@@ -116,7 +116,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr></tr></table><p>1234</p>', gen.result)
+    assert_equal('<table><tr><td><p>1234</p></td></tr></table>', gen.result)
   end
 
   def test_incomplete12
@@ -124,7 +124,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr><td> 1234</td></tr></table>', gen.result)
+    assert_equal('<table><tr><td><p> 1234</p></td></tr></table>', gen.result)
   end
 
   def test_incomplete13
@@ -132,7 +132,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr><td> 1234</td></tr></table>', gen.result)
+    assert_equal('<table><tr><td><p> 1234</p></td></tr></table>', gen.result)
   end
 
   def test_incomplete14
@@ -140,7 +140,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr><td a="b"> 1234</td></tr></table>', gen.result)
+    assert_equal('<table><tr><td a="b"><p> 1234</p></td></tr></table>', gen.result)
   end
 
   def test_incomplete15
@@ -148,7 +148,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr><td a="b"> 1234 </td><th> bob</th></tr></table>', gen.result)
+    assert_equal('<table><tr><td a="b"><p> 1234 </p></td><th><p> bob</p></th></tr></table>', gen.result)
   end
 
   def test_incomplete16
@@ -156,7 +156,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr><td a="b"> 1234 </td></tr><tr><th> bob</th></tr></table>', gen.result)
+    assert_equal('<table><tr><td a="b"><p> 1234 &nbsp;</p></td></tr><tr><th><p> bob</p></th></tr></table>', gen.result)
   end
 
   def test_incomplete17
@@ -164,7 +164,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr><td> 1234 <p>paragraph&nbsp;</p></td><th> bob</th></tr></table>', gen.result)
+    assert_equal('<table><tr><td><p> 1234 &nbsp;paragraph&nbsp;</p></td><th><p> bob</p></th></tr></table>', gen.result)
   end
 
   def test_complete
@@ -172,7 +172,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr><td> 1234 <p>paragraph&nbsp;</p></td><th> bob</th></tr></table>', gen.result)
+    assert_equal('<table><tr><td><p> 1234 &nbsp;paragraph&nbsp;</p></td><th><p> bob&nbsp;</p></th></tr></table>', gen.result)
   end
 
   def test_complete2
@@ -180,7 +180,7 @@ class TableGenTest < Test::Unit::TestCase
     gen   = WikiThat::HTMLGenerator.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
     assert_true(gen.success?, 'Generation should have succeeded')
-    assert_equal('<table><tr><td> 1234 <p>paragraph&nbsp;</p></td><th> bob</th></tr></table>', gen.result)
+    assert_equal('<table><tr><td><p> 1234 &nbsp;paragraph&nbsp;</p></td><th><p> bob&nbsp;</p></th></tr></table>', gen.result)
   end
 
   def test_nested

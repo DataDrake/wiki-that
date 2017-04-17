@@ -72,9 +72,6 @@ module WikiThat
       until end? or match? BREAK_SPECIAL
         advance
       end
-      if match? BREAK_SPECIAL
-        advance
-      end
     end
   end
 end

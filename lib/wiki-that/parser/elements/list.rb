@@ -70,6 +70,7 @@ module WikiThat
         end
         items.push(item)
         if not end? and current.type == :break
+          @line += current.value
           advance
         end
       end
