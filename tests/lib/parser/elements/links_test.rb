@@ -471,4 +471,16 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal('/media/folder/BOB/public/test.png', parser.result.children[0].children[0].children[0].attributes[:src])
     assert_equal('Test PNG', parser.result.children[0].children[0].children[0].attributes[:alt])
   end
+
+  def test_internal_header
+    parser = WikiThat::Parser.new('[[#Bob 1234]]', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('#Bob_1234', parser.result.children[0].children[0].attributes[:href])
+  end
 end

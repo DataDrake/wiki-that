@@ -163,9 +163,14 @@ module WikiThat
             anchor
         end
       else
-        url = pieces.join('/') + url
         anchor = Element.new(:a)
-        anchor.set_attribute(:href, URI.escape(url))
+        if url.start_with? '#'
+          url.gsub!(' ','_')
+          anchor.set_attribute(:href,url)
+        else
+          url = pieces.join('/') + url
+          anchor.set_attribute(:href, URI.escape(url))
+        end
         case attributes.length
           when 0
             if alt.empty? or alt.include? '/'

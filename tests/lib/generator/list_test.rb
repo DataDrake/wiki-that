@@ -70,14 +70,14 @@ class ListGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new('#* ABC', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
 
-    assert_equal('<ol><ul><li> ABC</li></ul></ol>', gen.result, 'Unordered List should have been generated')
+    assert_equal('<ol><li><br><ul><li> ABC</li></ul></li></ol>', gen.result, 'Unordered List should have been generated')
   end
 
   def test_ul_ol_ul
     gen = WikiThat::HTMLGenerator.new("*# AB\n*#* ABC", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
 
-    assert_equal('<ul><ol><li> AB</li><ul><li> ABC</li></ul></ol></ul>', gen.result, 'Unordered List should have been generated')
+    assert_equal('<ul><li><br><ol><li> AB</li><li><br><ul><li> ABC</li></ul></li></ol></li></ul>', gen.result, 'Unordered List should have been generated')
   end
 
   def test_dl
@@ -113,7 +113,7 @@ class ListGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new("#; ABC\n#: DEF", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
 
-    assert_equal('<ol><dl><dt> ABC</dt><dd> DEF</dd></dl></ol>', gen.result, 'Unordered List should have been generated')
+    assert_equal('<ol><li><br><dl><dt> ABC</dt><dd> DEF</dd></dl></li></ol>', gen.result, 'Unordered List should have been generated')
   end
 
 end

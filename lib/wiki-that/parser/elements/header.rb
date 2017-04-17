@@ -86,6 +86,7 @@ module WikiThat
         depth = start.value
       end
       header = Element.new("h#{depth}".to_sym)
+      header.set_attribute(:id, content.first.value.strip.gsub(' ','_'))
       header.add_children(*content)
       header
     end
