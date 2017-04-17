@@ -77,7 +77,7 @@ class ListGenTest < Test::Unit::TestCase
     gen = WikiThat::HTMLGenerator.new("*# AB\n*#* ABC", 'wiki', 'BOB', 'sub/folder', 'media/folder')
     gen.generate
 
-    assert_equal('<ul><li><br><ol><li> AB</li><li><br><ul><li> ABC</li></ul></li></ol></li></ul>', gen.result, 'Unordered List should have been generated')
+    assert_equal('<ul><li><br><ol><li> AB<ul><li> ABC</li></ul></li></ol></li></ul>', gen.result, 'Unordered List should have been generated')
   end
 
   def test_dl

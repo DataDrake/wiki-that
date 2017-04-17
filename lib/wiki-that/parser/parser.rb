@@ -93,7 +93,7 @@ module WikiThat
         when :text, :break, :link_start, :format
           parse_text
         else
-          $stderr.puts "[Parser2] Line: #{@line} Value:" + current.inspect
+          warning "Skipping unexpected Token Type: #{current.type}"
           advance
           []
       end

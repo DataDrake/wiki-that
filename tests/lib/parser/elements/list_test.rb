@@ -13,6 +13,7 @@
 #	See the License for the specific language governing permissions and
 #	limitations under the License.
 ##
+require 'awesome_print'
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
 
@@ -127,20 +128,17 @@ class ListParseTest < Test::Unit::TestCase
     assert_equal(2, parser.result.children[0].children[0].children.length)
     assert_equal(:br, parser.result.children[0].children[0].children[0].type)
     assert_equal(:ol, parser.result.children[0].children[0].children[1].type)
-    assert_equal(2, parser.result.children[0].children[0].children[1].children.length)
+    assert_equal(1, parser.result.children[0].children[0].children[1].children.length)
     assert_equal(:li, parser.result.children[0].children[0].children[1].children[0].type)
-    assert_equal(1, parser.result.children[0].children[0].children[1].children[0].children.length)
+    assert_equal(2, parser.result.children[0].children[0].children[1].children[0].children.length)
     assert_equal(:text, parser.result.children[0].children[0].children[1].children[0].children[0].type)
     assert_equal(' AB', parser.result.children[0].children[0].children[1].children[0].children[0].value)
-    assert_equal(:li, parser.result.children[0].children[0].children[1].children[1].type)
-    assert_equal(2, parser.result.children[0].children[0].children[1].children[1].children.length)
-    assert_equal(:br, parser.result.children[0].children[0].children[1].children[1].children[0].type)
-    assert_equal(:ul, parser.result.children[0].children[0].children[1].children[1].children[1].type)
-    assert_equal(1, parser.result.children[0].children[0].children[1].children[1].children[1].children.length)
-    assert_equal(:li, parser.result.children[0].children[0].children[1].children[1].children[1].children[0].type)
-    assert_equal(1, parser.result.children[0].children[0].children[1].children[1].children[1].children[0].children.length)
-    assert_equal(:text, parser.result.children[0].children[0].children[1].children[1].children[1].children[0].children[0].type)
-    assert_equal(' ABC', parser.result.children[0].children[0].children[1].children[1].children[1].children[0].children[0].value)
+    assert_equal(:ul, parser.result.children[0].children[0].children[1].children[0].children[1].type)
+    assert_equal(1, parser.result.children[0].children[0].children[1].children[0].children[1].children.length)
+    assert_equal(:li, parser.result.children[0].children[0].children[1].children[0].children[1].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].children[1].children[0].children[1].children[0].children.length)
+    assert_equal(:text, parser.result.children[0].children[0].children[1].children[0].children[1].children[0].children[0].type)
+    assert_equal(' ABC', parser.result.children[0].children[0].children[1].children[0].children[1].children[0].children[0].value)
   end
 
   def test_ul_ol

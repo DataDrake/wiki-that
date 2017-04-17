@@ -63,13 +63,19 @@ module WikiThat
             item = Element.new(:li)
         end
         if depth < (current.value.length - 1)
-          item.add_child(Element.new(:br))
-          item.add_child(parse_list2(current.value, depth+1))
+          if items.length == 0
+            item.add_child(Element.new(:br))
+            item.add_child(parse_list2(current.value, depth+1))
+            items.push(item)
+          else
+            items.last.add_child(parse_list2(current.value, depth+1))
+          end
         else
           advance
           item.add_children(*parse_inline)
+          items.push(item)
         end
-        items.push(item)
+
         if not end? and current.type == :break
           @line += current.value
           advance

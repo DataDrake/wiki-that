@@ -33,17 +33,18 @@ module WikiThat
           advance
         else
           name = current.value
-          if name == 'br/' or name == 'br /'
-            name = 'br'
+          if name.end_with? '/'
+            name.chop!
+            name.strip!
+            advance
+            return Element.new(name.to_sym)
           end
-          if name == 'references/' or name == 'references /'
-            name = 'references'
+          if name == 'br'
+            advance
+            return Element.new(name.to_sym)
           end
           tag = Element.new(name.to_sym)
           advance
-          if name == 'br' or name == 'references'
-            return tag
-          end
           until end? or match? [:tag_close]
             p = parse_inline
             tag.add_children(*p)

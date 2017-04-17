@@ -170,7 +170,6 @@ class NoWikiLexTest < Test::Unit::TestCase
   def test_incomplete_comment3
     lexer = WikiThat::Lexer.new('!--')
     lexer.lex
-    $stderr.puts lexer.result.inspect
     assert_equal(2, lexer.result.length)
     assert_equal(:table_header, lexer.result[0].type)
     assert_equal(:rule, lexer.result[1].type)

@@ -26,7 +26,7 @@ module WikiThat
     ##
     def parse_inline(stop = nil)
       children = []
-      until match? [stop] or end?
+      until match? [stop] or match? %W(\r \n) or end?
         case current.type
           when :format
             children.push(*parse_format)
@@ -36,6 +36,8 @@ module WikiThat
             children.push(parse_rule(true))
           when :link_start
             children.push(parse_link)
+          when :nowiki
+            parse_nowiki
           when :text
             children.push(Element.new(:text, current.value))
             advance
