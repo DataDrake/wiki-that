@@ -58,7 +58,7 @@ module WikiThat
           end
           first = false
         else
-          alt = ''
+          alt += current.value.strip
         end
         url += current.value.strip
         advance

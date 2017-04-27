@@ -483,4 +483,18 @@ class LinkParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children[0].children[0].attributes.length)
     assert_equal('#Bob_1234', parser.result.children[0].children[0].attributes[:href])
   end
+
+  def test_hyphenated
+    parser = WikiThat::Parser.new('[[Bob-1234]]', 'wiki', 'BOB', 'sub/folder', 'media/folder')
+    parser.parse
+    assert_true(parser.success?, 'Parsing should have succeeded')
+    assert_equal(1, parser.result.children.length)
+    assert_equal(:p, parser.result.children[0].type)
+    $stderr.puts parser.result.children[0].inspect
+    assert_equal(1, parser.result.children[0].children.length)
+    assert_equal(:a, parser.result.children[0].children[0].type)
+    assert_equal(1, parser.result.children[0].children[0].attributes.length)
+    assert_equal('/wiki/BOB/sub/folder/Bob-1234', parser.result.children[0].children[0].attributes[:href])
+    assert_equal('Bob-1234', parser.result.children[0].children[0].children[0].value)
+  end
 end

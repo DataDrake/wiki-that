@@ -24,9 +24,9 @@ module WikiThat
     # Continue reading text tokens until a linebreak
     # @param [Symbol] stop the type to stop parsing at
     ##
-    def parse_inline(stop = nil)
+    def parse_inline(*stop)
       children = []
-      until match? [stop] or match? %W(\r \n) or end?
+      until match? stop or match? %W(\r \n) or end?
         case current.type
           when :format
             children.push(*parse_format)
