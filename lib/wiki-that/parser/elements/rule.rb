@@ -34,7 +34,6 @@ module WikiThat
           else
             e = Element.new(:hr)
           end
-
       end
       advance
       e

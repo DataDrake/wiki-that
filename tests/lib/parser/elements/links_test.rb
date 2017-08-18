@@ -490,7 +490,6 @@ class LinkParseTest < Test::Unit::TestCase
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
     assert_equal(:p, parser.result.children[0].type)
-    $stderr.puts parser.result.children[0].inspect
     assert_equal(1, parser.result.children[0].children.length)
     assert_equal(:a, parser.result.children[0].children[0].type)
     assert_equal(1, parser.result.children[0].children[0].attributes.length)

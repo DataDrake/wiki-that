@@ -35,24 +35,29 @@ module WikiThat
       end
       case current
         when *TAG_SPECIAL
+          # Escape a less-than, try again
           append Token.new(:text, '&lt;')
           return
         when '!'
+          # Lexing a Comment
           type = :comment
           buff += current
           advance
+          # First '-'
           if not_match? %w(-)
             append Token.new(:text, buff)
             return
           end
           buff += current
           advance
+          # Second '-'
           if not_match? %w(-)
             append Token.new(:text, buff)
             return
           end
           buff += current
           advance
+          # Read Comment
           while not_match? ['-', "\n", "\r", '<']
             if end?
               append Token.new(:text, buff.gsub('<','&lt;'))
@@ -61,18 +66,21 @@ module WikiThat
             buff += current
             advance
           end
+          # First Closing '-'
           if not_match? %w(-)
             append Token.new(:text, buff)
             return
           end
           buff += current
           advance
+          # Second Closing '-'
           if not_match? %w(-)
             append Token.new(:text, buff)
             return
           end
           buff += current
           advance
+          # Closing '>'
           if not_match? %w(>)
             append Token.new(:text, buff)
             return
@@ -103,8 +111,9 @@ module WikiThat
         end
         append Token.new(:text, tag)
       else
-        ## closing >
+        ## Skip closing >
         advance
+        # Handle special <nowiki> and <pre> tags
         if type == :tag_open and (tag == 'nowiki' or tag == 'pre')
           content = ''
           done = false

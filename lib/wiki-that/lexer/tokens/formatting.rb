@@ -38,6 +38,7 @@ module WikiThat
       if count > 1
         Token.new(:format, count)
       else
+        # Actual format character
         rewind
         nil
       end

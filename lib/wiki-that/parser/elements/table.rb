@@ -120,10 +120,8 @@ module WikiThat
             warning 'First cell on a new line should be "|" or "!" '
           end
           first = false
-        else
-          if current.value != 2
-            warning 'Inline cells should be "||" or "!!"'
-          end
+        elsif current.value != 2
+          warning 'Inline cells should be "||" or "!!"'
         end
         if match? [:table_header, :table_data]
           advance
@@ -156,11 +154,13 @@ module WikiThat
             first = true
             redo
           end
+          curr = @index
           p = parse2(true)
-          if p.is_a? Array
-            if p.length == 0
-              break
-            end
+          if p.nil? and curr == @index
+            error 'Unable to continue parsing table. Is this actually MediaWiki?'
+          end
+          if p.is_a? Array and p.length == 0
+            break
           end
           cell.add_child(p)
         end

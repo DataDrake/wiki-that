@@ -42,7 +42,7 @@ module WikiThat
               advance
             else
               if buff.length > 0
-                append Token.new(:text, buff.clone)
+                append Token.new(:text, buff)
                 buff = ''
               end
               append fmt

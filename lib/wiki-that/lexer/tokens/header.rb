@@ -36,6 +36,7 @@ module WikiThat
       end
 
       if count < 2
+        # Plain old equals
         rewind
         lex_text
         return
@@ -55,8 +56,9 @@ module WikiThat
 
       case count
         when 0
-          # do nothing
+          # Didn't find a header close
         when 1
+          # Just an Equals
           rewind
         else
           append Token.new(:header_end, count)
