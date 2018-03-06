@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -33,12 +33,12 @@ module WikiThat
     ##
     def lex_link
 
-      count = 0
+      buff = ''
       while match? LINK_SPECIAL
-        count += 1
+        buff += current
         advance
       end
-      append Token.new(:link_start, count)
+      append Token.new(:link_start, buff)
 
       until end? or match? BREAK_SPECIAL
         lex_text(%w(: | ] ))
@@ -54,12 +54,12 @@ module WikiThat
             append Token.new(:link_attribute)
             advance
           when ']'
-            count = 0
+            buff = ""
             while current == ']'
-              count += 1
+              buff += current
               advance
             end
-            append Token.new(:link_end, count)
+            append Token.new(:link_end, buff)
             return
           else
             ## do nothing

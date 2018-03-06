@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -28,14 +28,12 @@ module WikiThat
     ##
     def lex_toc
       buff  = ''
-      count = 0
 
       while match? TOC_SPECIAL
         buff  += current
-        count += 1
         advance
       end
-      if count != 2
+      if buff.length != 2
         append Token.new(:text, buff)
         return
       end

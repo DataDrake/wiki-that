@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,14 +23,14 @@ module WikiThat
     # Parse the current text as a horizontal rule if found
     ##
     def parse_rule(inline = false)
-      case current.value
+      case current.value.length
         when 1
-          e = Element.new(:text,'-')
+          e = Element.new(:text,current.value)
         when 2
           e = Element.new(:text,'&mdash;')
         else
           if inline
-            e =  Element.new(:text, '-' * current.value)
+            e =  Element.new(:text, current.value)
           else
             e = Element.new(:hr)
           end

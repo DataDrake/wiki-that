@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ module WikiThat
         end
       end
       if match? [:break]
-        @line += current.value
+        @line += current.value.length
         advance
       end
       elem
@@ -59,7 +59,7 @@ module WikiThat
         end
       end
       if match? [:break]
-        @line += current.value
+        @line += current.value.length
         advance
       end
       elem
@@ -88,7 +88,7 @@ module WikiThat
             end
           end
           if match? [:break]
-            @line += current.value
+            @line += current.value.length
             advance
           end
           row = parse_cells(row)
@@ -149,7 +149,7 @@ module WikiThat
         ## Parse multi-line cell
         until end? or match? [:table_header, :table_data, :table_row, :table_end]
           if match? [:break]
-            @line += current.value
+            @line += current.value.length
             advance
             first = true
             redo

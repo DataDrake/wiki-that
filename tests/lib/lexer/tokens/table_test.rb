@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -61,7 +61,7 @@ class TableLexTest < Test::Unit::TestCase
     assert_equal(4, lexer.result.length)
     assert_equal(:table_start, lexer.result[0].type)
     assert_equal(:break, lexer.result[1].type)
-    assert_equal(1, lexer.result[1].value)
+    assert_equal("\n", lexer.result[1].value)
     assert_equal(:table_caption, lexer.result[2].type)
     assert_equal(:text, lexer.result[3].type)
     assert_equal('Caption Here', lexer.result[3].value)
@@ -82,7 +82,7 @@ class TableLexTest < Test::Unit::TestCase
     assert_equal(4, lexer.result.length)
     assert_equal(:table_start, lexer.result[0].type)
     assert_equal(:break, lexer.result[1].type)
-    assert_equal(1, lexer.result[1].value)
+    assert_equal("\n", lexer.result[1].value)
     assert_equal(:table_row, lexer.result[2].type)
     assert_equal(:text, lexer.result[3].type)
     assert_equal('Row Here', lexer.result[3].value)

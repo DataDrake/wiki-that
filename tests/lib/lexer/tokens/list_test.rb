@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@ class ListLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' AB', lexer.result[1].value)
     assert_equal(:break, lexer.result[2].type)
-    assert_equal(1, lexer.result[2].value)
+    assert_equal("\n", lexer.result[2].value)
     assert_equal(:list_item, lexer.result[3].type)
     assert_equal('*#*', lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)
@@ -134,7 +134,7 @@ class ListLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
     assert_equal(:break, lexer.result[2].type)
-    assert_equal(1, lexer.result[2].value)
+    assert_equal("\n", lexer.result[2].value)
     assert_equal(:list_item, lexer.result[3].type)
     assert_equal(':', lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)
@@ -150,7 +150,7 @@ class ListLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
     assert_equal(:break, lexer.result[2].type)
-    assert_equal(1, lexer.result[2].value)
+    assert_equal("\n", lexer.result[2].value)
     assert_equal(:list_item, lexer.result[3].type)
     assert_equal(';', lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)
@@ -167,7 +167,7 @@ class ListLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[1].type)
     assert_equal(' ABC', lexer.result[1].value)
     assert_equal(:break, lexer.result[2].type)
-    assert_equal(1, lexer.result[2].value)
+    assert_equal("\n", lexer.result[2].value)
     assert_equal(:list_item, lexer.result[3].type)
     assert_equal('#:', lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)

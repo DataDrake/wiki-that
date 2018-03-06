@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,7 +18,7 @@ require_relative 'lib/wiki-that'
 Gem::Specification.new do |s|
   s.name        = 'wiki-that'
   s.version     = WikiThat::VERSION
-  s.date        = '2017-04-27'
+  s.date        = '2018-03-06'
   s.summary     = 'wiki-that'
   s.description = 'A MediaWiki to HTML parser for the Engineering Design Guide and Environment (EDGE)'
   s.authors     = ['Bryan T. Meyers']

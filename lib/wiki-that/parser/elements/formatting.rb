@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,20 +44,16 @@ module WikiThat
         end
       end
       if finish.nil?
-        element = Element.new(:text, '')
-        (0...start.value).each do
-          element.value += "'"
-        end
-        results.push element
+        results.push Element.new(:text, start.value)
         results.push(*contents)
         return results
       end
-      depth = finish.value
-      if start.value != finish.value
+      depth = finish.value.length
+      if start.value.length != finish.value.length
         warning "Unbalanced inline formatting"
       end
-      if start.value < finish.value
-        depth = start.value
+      if start.value.length < finish.value.length
+        depth = start.value.length
       end
       case depth
         when 2

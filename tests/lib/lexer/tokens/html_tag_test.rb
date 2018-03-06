@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -214,7 +214,7 @@ class NoWikiLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[0].type)
     assert_equal('<!-- ABC1235', lexer.result[0].value)
     assert_equal(:break, lexer.result[1].type)
-    assert_equal(1, lexer.result[1].value)
+    assert_equal("\n", lexer.result[1].value)
   end
 
   def test_complete_comment

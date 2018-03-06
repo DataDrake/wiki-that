@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ class TextLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[0].type)
     assert_equal('abc', lexer.result[0].value)
     assert_equal(:break, lexer.result[1].type)
-    assert_equal(1, lexer.result[1].value)
+    assert_equal("\n", lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('123', lexer.result[2].value)
   end
@@ -51,7 +51,7 @@ class TextLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[0].type)
     assert_equal('abc', lexer.result[0].value)
     assert_equal(:break, lexer.result[1].type)
-    assert_equal(2, lexer.result[1].value)
+    assert_equal("\n\n", lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('123', lexer.result[2].value)
   end

@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,15 +27,15 @@ module WikiThat
     # Lex the current text as a horizontal rule if found
     ##
     def lex_horizontal_rule
-      count = 0
+      buff = ''
       while match? RULE_SPECIAL
-        count += 1
+        buff += current
         advance
       end
-      if count == 1
+      if buff.length == 1
         append Token.new(:text, '-')
       else
-        append Token.new(:rule, count)
+        append Token.new(:rule, buff)
       end
 
     end

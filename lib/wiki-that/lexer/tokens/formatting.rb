@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,14 +29,14 @@ module WikiThat
     ##
     def lex_formatting
       #Read opening marks
-      count = 0
+      buff = ''
       while match? FORMAT_SPECIAL
-        count += 1
+        buff += current
         advance
       end
 
-      if count > 1
-        Token.new(:format, count)
+      if buff.length > 1
+        Token.new(:format, buff)
       else
         # Actual format character
         rewind

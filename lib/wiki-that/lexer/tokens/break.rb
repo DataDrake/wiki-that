@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -27,15 +27,15 @@ module WikiThat
     # Lex the current text as a line break
     ##
     def lex_break
-      count = 0
+      buff = ''
 
       #Find all consecutive newlines
       while match? BREAK_SPECIAL
-        count += 1
+        buff += current
         advance
       end
 
-      append Token.new(:break, count)
+      append Token.new(:break, buff)
     end
   end
 end

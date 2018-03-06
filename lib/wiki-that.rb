@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,5 +17,5 @@ require_relative('wiki-that/generator/generator')
 require_relative('wiki-that/lexer/lexer')
 require_relative('wiki-that/parser/parser')
 module WikiThat
-  VERSION = '0.9.12'
+  VERSION = '0.9.13'
 end

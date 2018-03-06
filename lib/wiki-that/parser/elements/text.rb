@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,14 +54,14 @@ module WikiThat
     def parse_text
       text = Element.new(:p)
       while match? [:break]
-        @line += current.value
+        @line += current.value.length
         advance
       end
 
       while match? [:text, :break, :link_start, :format, :comment, :tag_open]
         if match? [:break]
-          @line += current.value
-          if current.value == 1
+          @line += current.value.length
+          if current.value.length == 1
             text.add_child(Element.new(:text, '&nbsp;'))
             advance
           else

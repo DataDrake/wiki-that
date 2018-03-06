@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ class FormattingLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(2, lexer.result.length)
     assert_equal(:format, lexer.result[0].type)
-    assert_equal(2, lexer.result[0].value)
+    assert_equal("''", lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal("thing'", lexer.result[1].value)
   end
@@ -47,11 +47,11 @@ class FormattingLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(3, lexer.result.length)
     assert_equal(:format, lexer.result[0].type)
-    assert_equal(2, lexer.result[0].value)
+    assert_equal("''", lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal('italic things', lexer.result[1].value)
     assert_equal(:format, lexer.result[2].type)
-    assert_equal(2, lexer.result[2].value)
+    assert_equal("''", lexer.result[2].value)
   end
 
   def test_italic_inline
@@ -61,11 +61,11 @@ class FormattingLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[0].type)
     assert_equal('not ', lexer.result[0].value)
     assert_equal(:format, lexer.result[1].type)
-    assert_equal(2, lexer.result[1].value)
+    assert_equal("''", lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('italic things', lexer.result[2].value)
     assert_equal(:format, lexer.result[3].type)
-    assert_equal(2, lexer.result[3].value)
+    assert_equal("''", lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)
     assert_equal(' not', lexer.result[4].value)
   end
@@ -75,11 +75,11 @@ class FormattingLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(3, lexer.result.length)
     assert_equal(:format, lexer.result[0].type)
-    assert_equal(3, lexer.result[0].value)
+    assert_equal("'''", lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal('bold things', lexer.result[1].value)
     assert_equal(:format, lexer.result[2].type)
-    assert_equal(3, lexer.result[2].value)
+    assert_equal("'''", lexer.result[2].value)
   end
 
   def test_bold_inline
@@ -89,11 +89,11 @@ class FormattingLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[0].type)
     assert_equal('not ', lexer.result[0].value)
     assert_equal(:format, lexer.result[1].type)
-    assert_equal(3, lexer.result[1].value)
+    assert_equal("'''", lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('bold things', lexer.result[2].value)
     assert_equal(:format, lexer.result[3].type)
-    assert_equal(3, lexer.result[3].value)
+    assert_equal("'''", lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)
     assert_equal(' not', lexer.result[4].value)
   end
@@ -103,11 +103,11 @@ class FormattingLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(3, lexer.result.length)
     assert_equal(:format, lexer.result[0].type)
-    assert_equal(5, lexer.result[0].value)
+    assert_equal("'''''", lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal('both things', lexer.result[1].value)
     assert_equal(:format, lexer.result[2].type)
-    assert_equal(5, lexer.result[2].value)
+    assert_equal("'''''", lexer.result[2].value)
   end
 
   def test_both_inline
@@ -117,11 +117,11 @@ class FormattingLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[0].type)
     assert_equal('not ', lexer.result[0].value)
     assert_equal(:format, lexer.result[1].type)
-    assert_equal(5, lexer.result[1].value)
+    assert_equal("'''''", lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('both things', lexer.result[2].value)
     assert_equal(:format, lexer.result[3].type)
-    assert_equal(5, lexer.result[3].value)
+    assert_equal("'''''", lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)
     assert_equal(' not', lexer.result[4].value)
   end

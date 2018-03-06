@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@ module WikiThat
           attributes.push(attr.strip)
         end
       end
-      if not_match? [:link_end] or (match? [:link_end] and current.value != 2)
+      if not_match? [:link_end] or (match? [:link_end] and current.value.length != 2)
         warning 'Internal Link not terminated by "]]"'
         text = '[['
         if namespaces.length > 0
@@ -85,9 +85,7 @@ module WikiThat
           text += '|' + attributes.join('|')
         end
         if match? [:link_end]
-          (0...current.value).each do
-            text += ']'
-          end
+          text += current.value
           advance
         end
         return Element.new(:text, text)
@@ -192,7 +190,7 @@ module WikiThat
     # Parse any link , internal or external
     ##
     def parse_link
-      if current.value > 1
+      if current.value.length > 1
         return parse_link_internal
       end
       advance
@@ -204,7 +202,7 @@ module WikiThat
         end
         advance
       end
-      unless match? [:link_end] and current.value == 1
+      unless match? [:link_end] and current.value.length == 1
         warning 'External link not closed by "]"'
         return Element.new(:text, "[#{url}")
       end

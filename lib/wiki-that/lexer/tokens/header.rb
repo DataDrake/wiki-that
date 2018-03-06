@@ -1,5 +1,5 @@
 ##
-# Copyright 2017 Bryan T. Meyers
+# Copyright 2017-2018 Bryan T. Meyers
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,39 +29,39 @@ module WikiThat
     ##
     def lex_header
       #Read start sequence
-      count = 0
+      buff = ''
       while match? HEADER_SPECIAL
-        count += 1
+        buff += current
         advance
       end
 
-      if count < 2
+      if buff.length < 2
         # Plain old equals
         rewind
         lex_text
         return
       else
-        append Token.new(:header_start, count)
+        append Token.new(:header_start, buff)
       end
 
       #Read inner content
       lex_text(HEADER_SPECIAL)
 
       #closing tag
-      count = 0
+      buff = ''
       while match? HEADER_SPECIAL
-        count += 1
+        buff += current
         advance
       end
 
-      case count
+      case buff.length
         when 0
           # Didn't find a header close
         when 1
           # Just an Equals
           rewind
         else
-          append Token.new(:header_end, count)
+          append Token.new(:header_end, buff)
       end
 
       #trailing text

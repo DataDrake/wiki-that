@@ -65,7 +65,7 @@ both `__NOTOC__` and `__TOC__` are stripped from the document.
 
 ## License
 
-Copyright 2017 Bryan T. Meyers
+Copyright 2017-2018 Bryan T. Meyers
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
