@@ -67,7 +67,7 @@ class RuleParseTest < Test::Unit::TestCase
     assert_equal(0, parser.result.children[0].children.length)
   end
 
-  def test_hypen
+  def test_hyphen
     start  = 'A - B'
     parser = WikiThat::Parser.new(start, 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse

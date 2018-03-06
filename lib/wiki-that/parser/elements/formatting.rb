@@ -26,28 +26,14 @@ module WikiThat
       results = []
       start   = current
       advance
-      contents = []
-      finish   = nil
-      until end?
-        case current.type
-          when :format
-            finish = current
-            advance
-            break
-          when :link_start
-            contents.push(parse_link)
-          when :text
-            contents.push(Element.new(:text, current.value))
-            advance
-          else
-            break
-        end
-      end
-      if finish.nil?
+      contents = parse_inline(:format)
+      if not_match? :format
         results.push Element.new(:text, start.value)
         results.push(*contents)
         return results
       end
+      finish = current
+      advance
       depth = finish.value.length
       if start.value.length != finish.value.length
         warning "Unbalanced inline formatting"

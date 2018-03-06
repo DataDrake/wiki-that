@@ -196,7 +196,7 @@ class NoWikiLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(1, lexer.result.length)
     assert_equal(:text, lexer.result[0].type)
-    assert_equal('<!-- ABC1235-', lexer.result[0].value)
+    assert_equal('&lt;!-- ABC1235-', lexer.result[0].value)
   end
 
   def test_incomplete_comment7
@@ -204,7 +204,7 @@ class NoWikiLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(1, lexer.result.length)
     assert_equal(:text, lexer.result[0].type)
-    assert_equal('<!-- ABC1235--', lexer.result[0].value)
+    assert_equal('&lt;!-- ABC1235--', lexer.result[0].value)
   end
 
   def test_incomplete_comment8
@@ -212,7 +212,7 @@ class NoWikiLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(2, lexer.result.length)
     assert_equal(:text, lexer.result[0].type)
-    assert_equal('<!-- ABC1235', lexer.result[0].value)
+    assert_equal('&lt;!-- ABC1235', lexer.result[0].value)
     assert_equal(:break, lexer.result[1].type)
     assert_equal("\n", lexer.result[1].value)
   end

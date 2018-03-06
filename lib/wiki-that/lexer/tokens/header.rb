@@ -29,39 +29,30 @@ module WikiThat
     ##
     def lex_header
       #Read start sequence
-      buff = ''
-      while match? HEADER_SPECIAL
-        buff += current
-        advance
-      end
-
-      if buff.length < 2
+      start = read_matching(HEADER_SPECIAL)
+      if start.length < 2
         # Plain old equals
         rewind
         lex_text
         return
       else
-        append Token.new(:header_start, buff)
+        append Token.new(:header_start, start)
       end
 
       #Read inner content
       lex_text(HEADER_SPECIAL)
 
       #closing tag
-      buff = ''
-      while match? HEADER_SPECIAL
-        buff += current
-        advance
-      end
+      close = read_matching(HEADER_SPECIAL)
 
-      case buff.length
+      case close.length
         when 0
           # Didn't find a header close
         when 1
           # Just an Equals
           rewind
         else
-          append Token.new(:header_end, buff)
+          append Token.new(:header_end, close)
       end
 
       #trailing text

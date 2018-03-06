@@ -94,10 +94,10 @@ module WikiThat
 
     ##
     # Append Tokens to the result
-    # @param [Token] toks the Tokens to append
+    # @param [Token] tokens the Tokens to append
     ##
-    def append(toks)
-      @result.push(*toks)
+    def append(tokens)
+      @result.push(*tokens)
     end
 
     ##
@@ -126,6 +126,20 @@ module WikiThat
         end
       end
       false
+    end
+
+    ##
+    # Continue reading until the characters no longer match
+    # @param [Array] chars a list of characters to check
+    # @return [String] the characters read
+    ##
+    def read_matching(chars)
+      buff = ''
+      while match? chars
+        buff += current
+        advance
+      end
+      buff
     end
 
     ##

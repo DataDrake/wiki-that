@@ -33,12 +33,8 @@ module WikiThat
     ##
     def lex_link
 
-      buff = ''
-      while match? LINK_SPECIAL
-        buff += current
-        advance
-      end
-      append Token.new(:link_start, buff)
+      start = read_matching(LINK_SPECIAL)
+      append Token.new(:link_start, start)
 
       until end? or match? BREAK_SPECIAL
         lex_text(%w(: | ] ))
@@ -54,12 +50,8 @@ module WikiThat
             append Token.new(:link_attribute)
             advance
           when ']'
-            buff = ""
-            while current == ']'
-              buff += current
-              advance
-            end
-            append Token.new(:link_end, buff)
+            close = read_matching(%w(]))
+            append Token.new(:link_end, close)
             return
           else
             ## do nothing

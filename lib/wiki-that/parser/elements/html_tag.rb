@@ -45,15 +45,15 @@ module WikiThat
           end
           tag = Element.new(name.to_sym)
           advance
-          until end? or match? [:tag_close]
+          until end? or match? :tag_close
             p = parse_inline
             tag.add_children(*p)
-            if match? [:break]
+            if match? :break
               @line += current.value.length
               advance
             end
           end
-          if not_match? [:tag_close]
+          if not_match? :tag_close
             warning "HTML tag '#{name}' not terminated, but closing anyways"
           else
             advance

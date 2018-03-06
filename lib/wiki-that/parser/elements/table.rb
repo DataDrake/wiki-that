@@ -25,7 +25,7 @@ module WikiThat
     # @param [Element] elem the element to set the attributes on
     ##
     def parse_attributes(elem)
-      if match? [:text]
+      if match? :text
         found = false
         current.value.scan(/(\w+)="([^"]*)"/) do |m|
           elem.set_attribute(m[0], m[1])
@@ -35,7 +35,7 @@ module WikiThat
           advance
         end
       end
-      if match? [:break]
+      if match? :break
         @line += current.value.length
         advance
       end
@@ -47,9 +47,9 @@ module WikiThat
     # @param [Element] elem the table to add the caption to
     ##
     def parse_caption(elem)
-      if match? [:table_caption]
+      if match? :table_caption
         advance
-        if not_match? [:break]
+        if not_match? :break
           p = parse_inline
           if p.length > 0
             caption = Element.new(:caption)
@@ -58,7 +58,7 @@ module WikiThat
           end
         end
       end
-      if match? [:break]
+      if match? :break
         @line += current.value.length
         advance
       end
@@ -75,7 +75,7 @@ module WikiThat
           advance
           row = Element.new(:tr)
           row = parse_attributes(row)
-          if match? [:text]
+          if match? :text
             whitespace = true
             current.value.each_char do |c|
               unless "\t ".include? c
@@ -87,7 +87,7 @@ module WikiThat
               advance
             end
           end
-          if match? [:break]
+          if match? :break
             @line += current.value.length
             advance
           end
@@ -109,8 +109,8 @@ module WikiThat
     ##
     def parse_cells(row)
       first = true
-      while match? [:table_header, :table_data] or (first and not end?)
-        if match? [:table_header]
+      while match?(:table_header, :table_data) or (first and not end?)
+        if match? :table_header
           cell = Element.new(:th)
         else
           cell = Element.new(:td)
@@ -123,12 +123,12 @@ module WikiThat
         elsif current.value != 2
           warning 'Inline cells should be "||" or "!!"'
         end
-        if match? [:table_header, :table_data]
+        if match?(:table_header, :table_data)
           advance
         end
         cell = parse_attributes(cell)
         ## skip next tag since attributes were read
-        if cell.attributes.length > 0 and match? [:table_data, :table_header]
+        if cell.attributes.length > 0 and match?(:table_data, :table_header)
           advance
         end
         contents = parse2(true)
@@ -142,13 +142,13 @@ module WikiThat
           cell.add_child(contents)
         end
         advance(-1)
-        if match? [:break]
+        if match? :break
           first = true
         end
         advance
         ## Parse multi-line cell
-        until end? or match? [:table_header, :table_data, :table_row, :table_end]
-          if match? [:break]
+        until end? or match?(:table_header, :table_data, :table_row, :table_end)
+          if match? :break
             @line += current.value.length
             advance
             first = true
@@ -171,17 +171,17 @@ module WikiThat
 
     ##
     # Parse an entire table
-    # @return [Element] the parsed tabel
+    # @return [Element] the parsed table
     ##
     def parse_table
       advance
       table = Element.new(:table)
       table = parse_attributes(table)
       table = parse_caption(table)
-      while match? [:table_row, :table_header, :table_data]
+      while match?(:table_row, :table_header, :table_data)
         table = parse_row(table)
       end
-      if match? [:table_end]
+      if match? :table_end
         advance
       else
         warning 'Could not find end of table, missing "|}"'

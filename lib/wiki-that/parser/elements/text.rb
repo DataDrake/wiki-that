@@ -26,7 +26,7 @@ module WikiThat
     ##
     def parse_inline(*stop)
       children = []
-      until match? stop or match? [:break] or end?
+      until match?(*stop) or match? :break or end?
         case current.type
           when :format
             children.push(*parse_format)
@@ -53,13 +53,13 @@ module WikiThat
     ##
     def parse_text
       text = Element.new(:p)
-      while match? [:break]
+      while match? :break
         @line += current.value.length
         advance
       end
 
-      while match? [:text, :break, :link_start, :format, :comment, :tag_open]
-        if match? [:break]
+      while match?(:text, :break, :link_start, :format, :comment, :tag_open)
+        if match? :break
           @line += current.value.length
           if current.value.length == 1
             text.add_child(Element.new(:text, '&nbsp;'))

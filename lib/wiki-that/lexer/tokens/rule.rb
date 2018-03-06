@@ -27,17 +27,12 @@ module WikiThat
     # Lex the current text as a horizontal rule if found
     ##
     def lex_horizontal_rule
-      buff = ''
-      while match? RULE_SPECIAL
-        buff += current
-        advance
-      end
+      buff = read_matching(RULE_SPECIAL)
       if buff.length == 1
-        append Token.new(:text, '-')
+        append Token.new(:text, buff)
       else
         append Token.new(:rule, buff)
       end
-
     end
   end
 end

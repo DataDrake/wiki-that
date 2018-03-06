@@ -4,7 +4,7 @@ use in the Engineering Design Guide and Environment (EDGE),
 developed at the Rochester Institute of Technology. This 
 library does adapts the WikiMedia Foundation MediaWiki grammar
 in order to support richer use of namespaces in a 
-project-oriented system. It does not strive for full compatibilty
+project-oriented system. It does not strive for full compatibility
 with MediaWiki proper.
 
 ## Supported Features

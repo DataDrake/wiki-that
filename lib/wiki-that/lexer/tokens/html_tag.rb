@@ -23,14 +23,51 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   module HTMLTag
+
+    ##
+    # Lex the current text as an HTML Comment
+    ##
+    def lex_comment
+      start = '<' + current
+      advance
+      start += read_matching(%w(-))
+      # First '-'
+      if start != "<!--"
+        append Token.new(:text, start)
+        return
+      end
+      # Read Comment
+      buff = ''
+      while not_match? ['-', "\n", "\r", '<']
+        if end?
+          append Token.new(:text, start.gsub('<','&lt;') + buff)
+          return
+        end
+        buff += current
+        advance
+      end
+
+      # Read Closing --
+      close = read_matching(%w(-))
+      if close != "--" or not_match? %w(>)
+        start.gsub!('<','&lt;')
+        append Token.new(:text, start + buff + close)
+        return
+      end
+      advance
+      buff.gsub!('<!--','')
+      buff.gsub!('--','')
+      append Token.new(:comment, buff)
+    end
+
     ##
     # Lex the current text as an HTML Tag
     ##
     def lex_tag
-      buff = current
+      start = current
       advance
       if end?
-        append Token.new(:text, buff)
+        append Token.new(:text, start)
         return
       end
       case current
@@ -40,55 +77,7 @@ module WikiThat
           return
         when '!'
           # Lexing a Comment
-          type = :comment
-          buff += current
-          advance
-          # First '-'
-          if not_match? %w(-)
-            append Token.new(:text, buff)
-            return
-          end
-          buff += current
-          advance
-          # Second '-'
-          if not_match? %w(-)
-            append Token.new(:text, buff)
-            return
-          end
-          buff += current
-          advance
-          # Read Comment
-          while not_match? ['-', "\n", "\r", '<']
-            if end?
-              append Token.new(:text, buff.gsub('<','&lt;'))
-              return
-            end
-            buff += current
-            advance
-          end
-          # First Closing '-'
-          if not_match? %w(-)
-            append Token.new(:text, buff)
-            return
-          end
-          buff += current
-          advance
-          # Second Closing '-'
-          if not_match? %w(-)
-            append Token.new(:text, buff)
-            return
-          end
-          buff += current
-          advance
-          # Closing '>'
-          if not_match? %w(>)
-            append Token.new(:text, buff)
-            return
-          end
-          advance
-          buff.gsub!('<!--','')
-          buff.gsub!('--','')
-          append Token.new(type, buff)
+          lex_comment
           return
         when '/'
           type = :tag_close

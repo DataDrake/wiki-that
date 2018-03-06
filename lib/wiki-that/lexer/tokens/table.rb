@@ -71,6 +71,8 @@ module WikiThat
             append Token.new(:table_header, 1)
           end
           lex_text(%w(| !))
+        else
+          []
       end
     end
   end

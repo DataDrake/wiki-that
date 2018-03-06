@@ -29,12 +29,7 @@ module WikiThat
     ##
     def lex_formatting
       #Read opening marks
-      buff = ''
-      while match? FORMAT_SPECIAL
-        buff += current
-        advance
-      end
-
+      buff = read_matching(FORMAT_SPECIAL)
       if buff.length > 1
         Token.new(:format, buff)
       else

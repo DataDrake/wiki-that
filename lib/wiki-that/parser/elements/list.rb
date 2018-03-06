@@ -53,7 +53,7 @@ module WikiThat
     ##
     def parse_items(curr, depth)
       items = []
-      while match? [:list_item] and check_item(curr, depth, current.value)
+      while match? :list_item and check_item(curr, depth, current.value)
         case current.value[depth]
           when ';'
             item = Element.new(:dt)

@@ -28,11 +28,7 @@ module WikiThat
     # Lex the current text as a list
     ##
     def lex_list
-      buff = ''
-      while match? LIST_SPECIAL
-        buff += current
-        advance
-      end
+      buff = read_matching(LIST_SPECIAL)
       append Token.new(:list_item, buff)
     end
   end

@@ -32,41 +32,62 @@ module WikiThat
     # Property attributes for images
     IMAGE_ATTRIBUTES = %w(border frame left right center thumb thumbnail)
 
+
     ##
-    # Parse the current text as a link to content in a namespace
+    # Handle special parsing of namespace links
+    # @return [Element] the link itself
     ##
-    def parse_link_internal
-      advance
-      url        = ''
-      namespaces = []
-      while match? [:link_namespace]
-        temp = current.value.strip
-        if temp == 'http' or temp == 'https'
-          warning 'External link in internal link brackets?'
-        end
-        namespaces.push(temp)
-        advance
-      end
-      attributes = []
-      alt = ''
-      first = true
-      while match? [:text]
-        if first
-          alt = current.value.strip
-          if alt.start_with? '/'
-            alt = ''
+    def parse_namespace_link(namespaces, pieces, attributes, alt, url)
+      case namespaces[0].capitalize
+        when 'Audio'
+          if attributes.length > 0
+            warning 'Ignoring all attributes'
           end
-          first = false
+          pieces[1] = @media_base
+          url = pieces.join('/') + url
+          parse_audio_link(url)
+        when 'Image'
+          pieces[1] = @media_base
+          url = pieces.join('/') + url
+          parse_image_link(url, attributes)
+        when 'Video'
+          if attributes.length > 0
+            warning 'Ignoring all attributes'
+          end
+          pieces[1] = @media_base
+          url = pieces.join('/') + url
+          parse_video_link(url)
         else
-          alt += current.value.strip
-        end
-        url += current.value.strip
-        advance
+          url = pieces.join('/') + url
+          anchor = Element.new(:a)
+          case attributes.length
+            when 0
+              if alt.empty? or alt.include? '/'
+                anchor.add_child(Element.new(:text, url))
+              else
+                anchor.add_child(Element.new(:text, alt))
+              end
+            when 1
+              anchor.add_child(Element.new(:text, attributes.last))
+            else
+              warning 'Ignoring all but the last link attribute'
+              anchor.add_child(Element.new(:text, attributes.last))
+          end
+          anchor.set_attribute(:href, URI.escape(url))
+          anchor
       end
-      while match? [:link_attribute]
+    end
+
+    ##
+    # Read all of the link attribute tokens
+    # @return [Array] list of attributes
+    ##
+    def parse_link_attributes
+      attributes = []
+      while match? :link_attribute
         advance
         attr = ''
-        while match? [:text]
+        while match? :text
           attr += current.value
           advance
         end
@@ -74,7 +95,61 @@ module WikiThat
           attributes.push(attr.strip)
         end
       end
-      if not_match? [:link_end] or (match? [:link_end] and current.value.length != 2)
+      attributes
+    end
+
+    ##
+    # Read the URL and alt text
+    # @return [Array] containing URL and alt text
+    ##
+    def parse_url_alt
+      url = ''
+      alt = ''
+      if match? :text
+        alt = current.value.strip
+        if alt.start_with? '/'
+          url += alt
+          alt = ''
+        else
+          url = ''
+        end
+        advance
+      end
+      while match? :text
+        alt += current.value.strip
+        advance
+      end
+      url += alt
+      [url,alt]
+    end
+
+    ##
+    # Read all of the namespace tokens
+    # @return [Array] list of namespaces
+    ##
+    def parse_namespaces
+      namespaces = []
+      while match? :link_namespace
+        temp = current.value.strip
+        if temp == 'http' or temp == 'https'
+          warning 'External link in internal link brackets?'
+        end
+        namespaces.push(temp)
+        advance
+      end
+      namespaces
+    end
+
+    ##
+    # Parse the current text as a link to content in a namespace
+    ##
+    def parse_link_internal
+      advance
+      namespaces = parse_namespaces
+      url, alt = parse_url_alt
+      attributes = parse_link_attributes
+
+      if not_match? :link_end or (match? :link_end and current.value.length != 2)
         warning 'Internal Link not terminated by "]]"'
         text = '[['
         if namespaces.length > 0
@@ -84,7 +159,7 @@ module WikiThat
         if attributes.length > 0
           text += '|' + attributes.join('|')
         end
-        if match? [:link_end]
+        if match? :link_end
           text += current.value
           advance
         end
@@ -122,44 +197,7 @@ module WikiThat
       end
 
       if namespaces.length > 0
-        case namespaces[0].capitalize
-          when 'Audio'
-            if attributes.length > 0
-              warning 'Ignoring all attributes'
-            end
-            pieces[1] = @media_base
-            url = pieces.join('/') + url
-            parse_audio_link(url)
-          when 'Image'
-            pieces[1] = @media_base
-            url = pieces.join('/') + url
-            parse_image_link(url, attributes)
-          when 'Video'
-            if attributes.length > 0
-              warning 'Ignoring all attributes'
-            end
-            pieces[1] = @media_base
-            url = pieces.join('/') + url
-            parse_video_link(url)
-          else
-            url = pieces.join('/') + url
-            anchor = Element.new(:a)
-            case attributes.length
-              when 0
-                if alt.empty? or alt.include? '/'
-                  anchor.add_child(Element.new(:text, url))
-                else
-                  anchor.add_child(Element.new(:text, alt))
-                end
-              when 1
-                anchor.add_child(Element.new(:text, attributes.last))
-              else
-                warning 'Ignoring all but the last link attribute'
-                anchor.add_child(Element.new(:text, attributes.last))
-            end
-            anchor.set_attribute(:href, URI.escape(url))
-            anchor
-        end
+        parse_namespace_link(namespaces, pieces, attributes, alt, url)
       else
         anchor = Element.new(:a)
         if url.start_with? '#'
@@ -195,14 +233,14 @@ module WikiThat
       end
       advance
       url = ''
-      while match? [:link_namespace, :text]
+      while match?(:link_namespace, :text)
         url += current.value
-        if match? [:link_namespace]
+        if match? :link_namespace
           url += ':'
         end
         advance
       end
-      unless match? [:link_end] and current.value.length == 1
+      unless match? :link_end and current.value.length == 1
         warning 'External link not closed by "]"'
         return Element.new(:text, "[#{url}")
       end

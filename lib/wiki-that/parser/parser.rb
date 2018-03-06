@@ -69,12 +69,12 @@ module WikiThat
     end
 
     ##
-    # Translate the current Tokens into sero or more elements
+    # Translate the current Tokens into zero or more elements
     # @param [Boolean] table parsing a table?
     # @returns [Object] the resulting element(s)
     ##
     def parse2( table = false)
-      if (table and match? [:table_end, :table_data, :table_header, :table_row]) or end?
+      if (table and match?(:table_end, :table_data, :table_header, :table_row)) or end?
         return []
       end
       case current.type
@@ -160,7 +160,7 @@ module WikiThat
     # @param [Array] types a list of types to check
     # @return [Boolean] True iff the current token type is in the list
     ##
-    def match?(types)
+    def match?(*types)
       if end?
         return false
       end
@@ -177,7 +177,7 @@ module WikiThat
     # @param [Array] types a list of types to check
     # @return [Boolean] True iff the current token type is not in the list
     ##
-    def not_match?(types)
+    def not_match?(*types)
       if end?
         return true
       end

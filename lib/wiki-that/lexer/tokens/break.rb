@@ -19,7 +19,7 @@ module WikiThat
   # Special characters for break tags
   BREAK_SPECIAL = %W(\n \r)
   ##
-  # Lexer module for handline line breaks
+  # Lexer module for handling line breaks
   # @author Bryan T. Meyers
   ##
   module Break
@@ -27,14 +27,7 @@ module WikiThat
     # Lex the current text as a line break
     ##
     def lex_break
-      buff = ''
-
-      #Find all consecutive newlines
-      while match? BREAK_SPECIAL
-        buff += current
-        advance
-      end
-
+      buff = read_matching(BREAK_SPECIAL)
       append Token.new(:break, buff)
     end
   end

@@ -27,14 +27,9 @@ module WikiThat
     # Lex the current text as a NOTOC
     ##
     def lex_toc
-      buff  = ''
-
-      while match? TOC_SPECIAL
-        buff  += current
-        advance
-      end
-      if buff.length != 2
-        append Token.new(:text, buff)
+      start  = read_matching(TOC_SPECIAL)
+      if start.length != 2
+        append Token.new(:text, start)
         return
       end
 
@@ -44,26 +39,22 @@ module WikiThat
         when 'T'
           text = 'TOC'
         else
-          append Token.new(:text, buff)
+          append Token.new(:text, start)
           return
       end
+      buff = ''
       text.each_char do |c|
         unless current == c
-          append Token.new(:text, buff)
+          append Token.new(:text, start + buff)
           return
         end
         buff += current
         advance
       end
 
-      count = 0
-      while match? TOC_SPECIAL
-        buff  += current
-        count += 1
-        advance
-      end
-      if count != 2
-        append Token.new(:text, buff)
+      close = read_matching(TOC_SPECIAL)
+      if close.length != 2
+        append Token.new(:text, start + buff + close)
         return
       end
       ## Read to the end fo the line. We want to remove this entirely
