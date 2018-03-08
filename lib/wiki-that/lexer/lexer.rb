@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require_relative('tokens/break')
 require_relative('tokens/formatting')
@@ -105,9 +105,7 @@ module WikiThat
     # @return [String] the character being pointed at
     ##
     def current
-      if end?
-        return ''
-      end
+      return '' if end?
       @doc[@index]
     end
 
@@ -117,15 +115,7 @@ module WikiThat
     # @return [Boolean] True iff the current character is in the list
     ##
     def match?(chars)
-      if end?
-        return false
-      end
-      chars.each do |char|
-        if current == char
-          return true
-        end
-      end
-      false
+      !end? && chars.include?(current)
     end
 
     ##
@@ -148,13 +138,9 @@ module WikiThat
     # @return [Boolean] True iff the current character is not in the list
     ##
     def not_match?(chars)
-      if end?
-        return true
-      end
+      return false if end?
       chars.each do |char|
-        if current == char
-          return false
-        end
+        return false if current == char
       end
       true
     end

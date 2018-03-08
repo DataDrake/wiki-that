@@ -9,27 +9,24 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
-
   # Special characters for List elements
-  LIST_SPECIAL = %w(* # : ;)
+  LIST_SPECIAL = %w[* # : ;].freeze
 
   ##
   # Lexer module for handling List elements
   # @author Bryan T. Meyers
   ##
   module List
-
     ##
     # Lex the current text as a list
     ##
     def lex_list
-      buff = read_matching(LIST_SPECIAL)
-      append Token.new(:list_item, buff)
+      append Token.new(:list_item, read_matching(LIST_SPECIAL))
     end
   end
 end

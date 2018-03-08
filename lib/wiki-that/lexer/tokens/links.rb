@@ -9,14 +9,13 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
-
   # Special Characters for Links
-  LINK_SPECIAL = %w([)
+  LINK_SPECIAL = %w([).freeze
 
   ##
   # Lexer module for links and embedded media
@@ -32,16 +31,15 @@ module WikiThat
     # Lex any link , internal or external
     ##
     def lex_link
-
       start = read_matching(LINK_SPECIAL)
       append Token.new(:link_start, start)
 
-      until end? or match? BREAK_SPECIAL
-        lex_text(%w(: | ] ))
+      until end? or match?(BREAK_SPECIAL)
+        lex_text(%w(: | ]))
         case current
           when ':'
             value = ''
-            if @result.last != nil && @result.last.type == :text
+            if !@result.last.nil? and @result.last.type == :text
               value = @result.pop.value
             end
             append Token.new(:link_namespace, value)
@@ -53,8 +51,6 @@ module WikiThat
             close = read_matching(%w(]))
             append Token.new(:link_end, close)
             return
-          else
-            ## do nothing
         end
       end
     end

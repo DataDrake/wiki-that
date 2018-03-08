@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
@@ -439,5 +439,4 @@ class TableParseTest < Test::Unit::TestCase
     assert_equal(1, parser.result.children[0].children[0].children[0].children[0].children[0].children[0].children.length)
     assert_equal(:ul, parser.result.children[0].children[0].children[0].children[0].children[0].children[0].children[0].type)
   end
-
 end

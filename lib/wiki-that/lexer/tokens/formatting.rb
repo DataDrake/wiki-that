@@ -9,15 +9,14 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require_relative('token')
 module WikiThat
-
   # Special characters for formatting tags
-  FORMAT_SPECIAL = %w(')
+  FORMAT_SPECIAL = %w['].freeze
 
   ##
   # Lexer module for inline formatting
@@ -28,15 +27,12 @@ module WikiThat
     # Lex the current text as inline formatting
     ##
     def lex_formatting
-      #Read opening marks
+      # Read opening marks
       buff = read_matching(FORMAT_SPECIAL)
-      if buff.length > 1
-        Token.new(:format, buff)
-      else
-        # Actual format character
-        rewind
-        nil
-      end
+      return Token.new(:format, buff) if buff.length > 1
+      # Actual format character
+      rewind
+      nil
     end
   end
 end

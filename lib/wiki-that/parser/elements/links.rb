@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require_relative('links/audio')
 require_relative('links/image')
@@ -28,10 +28,8 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   module Links
-
     # Property attributes for images
-    IMAGE_ATTRIBUTES = %w(border frame left right center thumb thumbnail)
-
+    IMAGE_ATTRIBUTES = %w[border frame left right center thumb thumbnail].freeze
 
     ##
     # Handle special parsing of namespace links
@@ -40,29 +38,25 @@ module WikiThat
     def parse_namespace_link(namespaces, pieces, attributes, alt, url)
       case namespaces[0].capitalize
         when 'Audio'
-          if attributes.length > 0
-            warning 'Ignoring all attributes'
-          end
+          warning 'Ignoring all attributes' unless attributes.empty?
           pieces[1] = @media_base
-          url = pieces.join('/') + url
+          url       = pieces.join('/') + url
           parse_audio_link(url)
         when 'Image'
           pieces[1] = @media_base
-          url = pieces.join('/') + url
+          url       = pieces.join('/') + url
           parse_image_link(url, attributes)
         when 'Video'
-          if attributes.length > 0
-            warning 'Ignoring all attributes'
-          end
+          warning 'Ignoring all attributes' unless attributes.empty?
           pieces[1] = @media_base
-          url = pieces.join('/') + url
+          url       = pieces.join('/') + url
           parse_video_link(url)
         else
-          url = pieces.join('/') + url
+          url    = pieces.join('/') + url
           anchor = Element.new(:a)
           case attributes.length
             when 0
-              if alt.empty? or alt.include? '/'
+              if alt.empty? || alt.include?('/')
                 anchor.add_child(Element.new(:text, url))
               else
                 anchor.add_child(Element.new(:text, alt))
@@ -91,9 +85,7 @@ module WikiThat
           attr += current.value
           advance
         end
-        if attr.length > 0
-          attributes.push(attr.strip)
-        end
+        attributes.push(attr.strip) unless attr.empty?
       end
       attributes
     end
@@ -120,7 +112,7 @@ module WikiThat
         advance
       end
       url += alt
-      [url,alt]
+      [url, alt]
     end
 
     ##
@@ -131,7 +123,7 @@ module WikiThat
       namespaces = []
       while match? :link_namespace
         temp = current.value.strip
-        if temp == 'http' or temp == 'https'
+        if (temp == 'http') || (temp == 'https')
           warning 'External link in internal link brackets?'
         end
         namespaces.push(temp)
@@ -146,19 +138,15 @@ module WikiThat
     def parse_link_internal
       advance
       namespaces = parse_namespaces
-      url, alt = parse_url_alt
+      url, alt   = parse_url_alt
       attributes = parse_link_attributes
 
-      if not_match? :link_end or (match? :link_end and current.value.length != 2)
+      if not_match?(:link_end) || (match?(:link_end) && (current.value.length != 2))
         warning 'Internal Link not terminated by "]]"'
         text = '[['
-        if namespaces.length > 0
-          text += namespaces.join(':') + ':'
-        end
+        text += namespaces.join(':') + ':' unless namespaces.empty?
         text += url
-        if attributes.length > 0
-          text += '|' + attributes.join('|')
-        end
+        text += '|' + attributes.join('|') unless attributes.empty?
         if match? :link_end
           text += current.value
           advance
@@ -167,49 +155,40 @@ module WikiThat
       end
       advance
       pieces = ['']
-      if @base_url and not @base_url.empty?
-        pieces.push(@base_url)
+      pieces.push(@base_url) if @base_url && !@base_url.empty?
+      ns_index = namespaces.length - 1
+      if ns_index > 1
+        ns_index = 1
+        warning 'Ignoring all but the first two namespaces'
       end
-      case namespaces.length
-        when 0
-          ns_index = -1
-        when 1
-          ns_index = 0
-        when 2
-          ns_index = 1
-        else
-          ns_index = 1
-          warning 'Ignoring all but the first two namespaces'
-      end
-      if ns_index == -1 or %w(Audio Image Video).include? namespaces[ns_index].capitalize
-        if @default_namespace and not @default_namespace.empty?
+      if (ns_index == -1) || %w[Audio Image Video].include?(namespaces[ns_index].capitalize)
+        if @default_namespace && !@default_namespace.empty?
           pieces.push(@default_namespace)
         end
       else
         pieces.push(namespaces[ns_index])
       end
       unless url.start_with? '/'
-        if @sub_url and not @sub_url.empty?
-          pieces.push(@sub_url, '')
-        else
-          pieces.push('')
+        if @sub_url && !@sub_url.empty?
+          pieces.push(@sub_url)
         end
+        pieces.push('')
       end
 
-      if namespaces.length > 0
+      if !namespaces.empty?
         parse_namespace_link(namespaces, pieces, attributes, alt, url)
       else
         anchor = Element.new(:a)
         if url.start_with? '#'
-          url.gsub!(' ','_')
-          anchor.set_attribute(:href,url)
+          url.tr!(' ', '_')
+          anchor.set_attribute(:href, url)
         else
           url = pieces.join('/') + url
           anchor.set_attribute(:href, URI.escape(url))
         end
         case attributes.length
           when 0
-            if alt.empty? or alt.include? '/'
+            if alt.empty? || alt.include?('/')
               anchor.add_child(Element.new(:text, url))
             else
               anchor.add_child(Element.new(:text, alt))
@@ -228,19 +207,15 @@ module WikiThat
     # Parse any link , internal or external
     ##
     def parse_link
-      if current.value.length > 1
-        return parse_link_internal
-      end
+      return parse_link_internal if current.value.length > 1
       advance
       url = ''
       while match?(:link_namespace, :text)
         url += current.value
-        if match? :link_namespace
-          url += ':'
-        end
+        url += ':' if match? :link_namespace
         advance
       end
-      unless match? :link_end and current.value.length == 1
+      unless match?(:link_end) && (current.value.length == 1)
         warning 'External link not closed by "]"'
         return Element.new(:text, "[#{url}")
       end

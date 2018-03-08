@@ -9,13 +9,13 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require_relative('wiki-that/generator/generator')
 require_relative('wiki-that/lexer/lexer')
 require_relative('wiki-that/parser/parser')
 module WikiThat
-  VERSION = '0.9.13'
+  VERSION = '0.9.13'.freeze
 end

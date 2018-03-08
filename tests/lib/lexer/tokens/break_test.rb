@@ -9,15 +9,14 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
 
 class BreakLexTest < Test::Unit::TestCase
-
   def test_empty
     lexer = WikiThat::Lexer.new('')
     lexer.lex
@@ -75,5 +74,4 @@ class BreakLexTest < Test::Unit::TestCase
     assert_equal(:break, lexer.result[3].type)
     assert_equal("\n", lexer.result[3].value)
   end
-
 end

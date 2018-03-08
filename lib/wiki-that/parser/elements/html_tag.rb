@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
   ##
@@ -25,7 +25,7 @@ module WikiThat
     def parse_tag
       case current.type
         when :comment
-          tag = Element.new(:comment, current.value)
+          tag   = Element.new(:comment, current.value)
           @line += current.value.count("\r\n")
           advance
         when :tag_close
@@ -34,24 +34,16 @@ module WikiThat
         else
           name = current.value
           if name.end_with? '/'
-            name.chop!
-            name.strip!
             advance
-            return Element.new(name.to_sym)
-          end
-          if name == 'br'
-            advance
-            return Element.new(name.to_sym)
+            return Element.new(name.chop.strip.to_sym)
           end
           tag = Element.new(name.to_sym)
           advance
-          until end? or match? :tag_close
-            p = parse_inline
-            tag.add_children(*p)
-            if match? :break
-              @line += current.value.length
-              advance
-            end
+          return tag if tag.type == :br
+
+          while not_match?(:tag_close)
+            tag.add_children(*parse_inline)
+            skip :break
           end
           if not_match? :tag_close
             warning "HTML tag '#{name}' not terminated, but closing anyways"
@@ -66,7 +58,7 @@ module WikiThat
     # Parse the current token as nowiki/pre
     ##
     def parse_nowiki
-      e = Element.new(current.type, current.value)
+      e     = Element.new(current.type, current.value)
       @line += current.value.count("\r\n")
       advance
       e

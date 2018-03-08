@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require_relative('token')
 module WikiThat
@@ -20,6 +20,13 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   module Text
+    ##
+    # Append buffer as needed
+    ##
+    def append_text(buff)
+      append Token.new(:text, buff) unless buff.empty?
+      ''
+    end
 
     ##
     # Continue to lex as inline-text until the specified
@@ -29,10 +36,7 @@ module WikiThat
     ##
     def lex_text(stop = [])
       buff = ''
-      while not_match?(stop) and not_match? BREAK_SPECIAL
-        if end?
-          break
-        end
+      while not_match?(stop) && not_match?(BREAK_SPECIAL)
         case current
           # Inline formatting
           when *FORMAT_SPECIAL
@@ -41,39 +45,25 @@ module WikiThat
               buff += current
               advance
             else
-              if buff.length > 0
-                append Token.new(:text, buff)
-                buff = ''
-              end
+              buff = append_text buff
               append fmt
             end
           # Inline links
           when *LINK_SPECIAL
-            if buff.length > 0
-              append Token.new(:text, buff)
-              buff = ''
-            end
+            buff = append_text buff
             lex_link
           when *RULE_SPECIAL
-            if buff.length > 0
-              append Token.new(:text, buff)
-              buff = ''
-            end
+            buff = append_text buff
             lex_horizontal_rule
           when *TAG_SPECIAL
-            if buff.length > 0
-              append Token.new(:text, buff)
-              buff = ''
-            end
+            buff = append_text buff
             lex_tag
           else
             buff += current
             advance
         end
       end
-      if buff.length > 0
-        append Token.new(:text, buff)
-      end
+      append_text buff
     end
   end
 end

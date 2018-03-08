@@ -9,23 +9,23 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 
 require_relative 'lib/wiki-that'
 
-NAME='wiki-that'
+NAME = 'wiki-that'.freeze
 
 task :build do
   system "gem build #{NAME}.gemspec"
 end
 
-task :install => :build do
+task install: :build do
   system "sudo gem install -N -l #{NAME}-#{WikiThat::VERSION}.gem"
 end
 
-task :release => :build do
+task release: :build do
   system "gem push #{NAME}-#{WikiThat::VERSION}.gem"
 end

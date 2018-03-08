@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
   ##
@@ -19,7 +19,6 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   module Table
-
     ##
     # Parse all K-V pairs on this line
     # @param [Element] elem the element to set the attributes on
@@ -31,14 +30,9 @@ module WikiThat
           elem.set_attribute(m[0], m[1])
           found = true
         end
-        if found
-          advance
-        end
+        advance if found
       end
-      if match? :break
-        @line += current.value.length
-        advance
-      end
+      skip :break
       elem
     end
 
@@ -51,17 +45,14 @@ module WikiThat
         advance
         if not_match? :break
           p = parse_inline
-          if p.length > 0
+          unless p.empty?
             caption = Element.new(:caption)
             caption.add_children(*p)
             elem.add_child(caption)
           end
         end
       end
-      if match? :break
-        @line += current.value.length
-        advance
-      end
+      skip :break
       elem
     end
 
@@ -83,22 +74,15 @@ module WikiThat
                 break
               end
             end
-            if whitespace
-              advance
-            end
+            advance if whitespace
           end
-          if match? :break
-            @line += current.value.length
-            advance
-          end
+          skip :break
           row = parse_cells(row)
           elem.add_child(row)
         when :table_header, :table_data
           row = Element.new(:tr)
           row = parse_cells(row)
           elem.add_child(row)
-        else
-          elem
       end
       elem
     end
@@ -109,12 +93,12 @@ module WikiThat
     ##
     def parse_cells(row)
       first = true
-      while match?(:table_header, :table_data) or (first and not end?)
-        if match? :table_header
-          cell = Element.new(:th)
-        else
-          cell = Element.new(:td)
-        end
+      while match?(:table_header, :table_data) || (first && !end?)
+        cell = if match? :table_header
+                 Element.new(:th)
+               else
+                 Element.new(:td)
+               end
         if first
           if current.value == 2
             warning 'First cell on a new line should be "|" or "!" '
@@ -123,31 +107,22 @@ module WikiThat
         elsif current.value != 2
           warning 'Inline cells should be "||" or "!!"'
         end
-        if match?(:table_header, :table_data)
-          advance
-        end
+        advance if match?(:table_header, :table_data)
         cell = parse_attributes(cell)
         ## skip next tag since attributes were read
-        if cell.attributes.length > 0 and match?(:table_data, :table_header)
-          advance
-        end
+        advance if !cell.attributes.empty? && match?(:table_data, :table_header)
         contents = parse2(true)
         if contents.is_a? Array
-          if contents.length > 0
-            cell.add_children(*contents)
-          else
-            break
-          end
+          break if contents.empty?
+          cell.add_children(*contents)
         else
           cell.add_child(contents)
         end
         advance(-1)
-        if match? :break
-          first = true
-        end
+        first = true if match? :break
         advance
         ## Parse multi-line cell
-        until end? or match?(:table_header, :table_data, :table_row, :table_end)
+        until end? || match?(:table_header, :table_data, :table_row, :table_end)
           if match? :break
             @line += current.value.length
             advance
@@ -155,13 +130,11 @@ module WikiThat
             redo
           end
           curr = @index
-          p = parse2(true)
-          if p.nil? and curr == @index
+          p    = parse2(true)
+          if p.nil? && (curr == @index)
             error 'Unable to continue parsing table. Is this actually MediaWiki?'
           end
-          if p.is_a? Array and p.length == 0
-            break
-          end
+          break if p.is_a?(Array) && p.empty?
           cell.add_child(p)
         end
         row.add_child(cell)

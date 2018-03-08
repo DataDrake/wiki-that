@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
   module Links
@@ -23,45 +23,38 @@ module WikiThat
     def parse_image_link(link, attrs)
       e = Element.new(:img)
       e.set_attribute(:src, URI.escape(link))
-      if attrs.length > 0
-        classes = []
-        width   = nil
-        attrs.each do |a|
-          if IMAGE_ATTRIBUTES.include? a
-            classes.push(a)
-          end
-          if a =~ /\d+px/
-            width = a
-          end
-        end
-        wrapper = Element.new(:figure)
-        if classes.length > 0
-          wrapper.set_attribute(:class, classes.join(' '))
-        end
-        if width
-          attrs -= [width]
-          e.set_attribute(:width, width.sub('px',''))
-        end
-        attrs -= classes
-        if attrs.length > 1
-          warning 'Ignoring all but the last attribute'
-          e.set_attribute(:alt, attrs.last)
-        elsif attrs.length > 0
-          e.set_attribute(:alt, attrs.last)
-        end
-        if classes.empty?
-          return e
-        end
-        wrapper.add_child(e)
-        if classes.include?('frame') || classes.include?('thumb') || classes.include?('thumbnail')
-          caption = Element.new(:figcaption)
-          caption.add_child(Element.new(:text, attrs.last))
-          wrapper.add_child(caption)
-        end
-        wrapper
-      else
-        e
+      # Just a plain image link
+      return e if attrs.empty?
+
+      # This link may need a wrapping div
+      wrapper = Element.new(:figure)
+      classes = attrs & IMAGE_ATTRIBUTES
+      width   = nil
+      attrs.each do |a|
+        width = a if a =~ /\d+px/
       end
+      # Set class attribute
+      wrapper.set_attribute(:class, classes.join(' ')) unless classes.empty?
+      attrs -= classes
+      # Set width attribute
+      if width
+        attrs.delete(width)
+        e.set_attribute(:width, width.sub('px', ''))
+      end
+      # Add alt text if available
+      e.set_attribute(:alt, attrs.last) unless attrs.empty?
+      warning 'Ignoring all but the last attribute' if attrs.length > 1
+      # If no other classes, this doesn't need a wrapping div
+      return e if classes.empty?
+      # Build the wrapper
+      wrapper.add_child(e)
+      # Add a caption element if needed
+      if (%w(frame thumb thumbnail) - classes).length != 3
+        caption = Element.new(:figcaption)
+        caption.add_child(Element.new(:text, attrs.last))
+        wrapper.add_child(caption)
+      end
+      wrapper
     end
   end
 end

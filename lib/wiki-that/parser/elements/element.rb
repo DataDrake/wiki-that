@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
   ##
@@ -19,7 +19,6 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   class Element
-
     ##
     # Create a new element
     #
@@ -61,10 +60,7 @@ module WikiThat
     # @param [Element] children the child elements
     ##
     def add_children(*children)
-      children.each do |child|
-        @children.push(child)
-      end
+      @children.push(*children)
     end
-
   end
 end

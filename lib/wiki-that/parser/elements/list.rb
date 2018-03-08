@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
   ##
@@ -28,20 +28,10 @@ module WikiThat
     ##
     def check_item(prefix, depth, value)
       (0..depth).each do |i|
-        case value[i]
-          when prefix[i]
-            # good
-          when ':'
-            unless prefix[i] == ';'
-              return false
-            end
-          when ';'
-            unless prefix[i] == ':'
-              return false
-            end
-          else
-            return false
-        end
+        success = value[i] == prefix[i]
+        success ||= value[i] == ':' && prefix[i] == ';'
+        success ||= value[i] == ';' && prefix[i] == ':'
+        return false unless success
       end
       true
     end
@@ -53,22 +43,22 @@ module WikiThat
     ##
     def parse_items(curr, depth)
       items = []
-      while match? :list_item and check_item(curr, depth, current.value)
-        case current.value[depth]
-          when ';'
-            item = Element.new(:dt)
-          when ':'
-            item = Element.new(:dd)
-          else
-            item = Element.new(:li)
-        end
+      while match?(:list_item) && check_item(curr, depth, current.value)
+        item = case current.value[depth]
+                 when ';'
+                   Element.new(:dt)
+                 when ':'
+                   Element.new(:dd)
+                 else
+                   Element.new(:li)
+               end
         if depth < (current.value.length - 1)
-          if items.length == 0
+          if items.empty?
             item.add_child(Element.new(:br))
-            item.add_child(parse_list2(current.value, depth+1))
+            item.add_child(parse_list2(current.value, depth + 1))
             items.push(item)
           else
-            items.last.add_child(parse_list2(current.value, depth+1))
+            items.last.add_child(parse_list2(current.value, depth + 1))
           end
         else
           advance
@@ -76,10 +66,7 @@ module WikiThat
           items.push(item)
         end
 
-        if not end? and current.type == :break
-          @line += current.value.length
-          advance
-        end
+        skip :break
       end
       items
     end

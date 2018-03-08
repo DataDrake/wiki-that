@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
@@ -157,7 +157,6 @@ class ListLexTest < Test::Unit::TestCase
     assert_equal(' DEF', lexer.result[4].value)
   end
 
-
   def test_ol_dl_dt_dn
     lexer = WikiThat::Lexer.new("#; ABC\n#: DEF")
     lexer.lex
@@ -173,5 +172,4 @@ class ListLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[4].type)
     assert_equal(' DEF', lexer.result[4].value)
   end
-
 end

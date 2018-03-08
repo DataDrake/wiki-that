@@ -9,14 +9,13 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
 class LinkLexTest < Test::Unit::TestCase
-
   def test_empty
     lexer = WikiThat::Lexer.new('')
     lexer.lex
@@ -28,7 +27,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(1, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[", lexer.result[0].value)
+    assert_equal('[', lexer.result[0].value)
   end
 
   def test_external_empty
@@ -36,9 +35,9 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(2, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[", lexer.result[0].value)
+    assert_equal('[', lexer.result[0].value)
     assert_equal(:link_end, lexer.result[1].type)
-    assert_equal("]", lexer.result[1].value)
+    assert_equal(']', lexer.result[1].value)
   end
 
   def test_external_incomplete
@@ -47,7 +46,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(5, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[", lexer.result[0].value)
+    assert_equal('[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('http', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -62,13 +61,13 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(4, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[", lexer.result[0].value)
+    assert_equal('[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('http', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('//example.com', lexer.result[2].value)
     assert_equal(:link_end, lexer.result[3].type)
-    assert_equal("]", lexer.result[3].value)
+    assert_equal(']', lexer.result[3].value)
   end
 
   def test_external_inline
@@ -78,13 +77,13 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[0].type)
     assert_equal('Go Here: ', lexer.result[0].value)
     assert_equal(:link_start, lexer.result[1].type)
-    assert_equal("[", lexer.result[1].value)
+    assert_equal('[', lexer.result[1].value)
     assert_equal(:link_namespace, lexer.result[2].type)
     assert_equal('http', lexer.result[2].value)
     assert_equal(:text, lexer.result[3].type)
     assert_equal('//example.com', lexer.result[3].value)
     assert_equal(:link_end, lexer.result[4].type)
-    assert_equal("]", lexer.result[4].value)
+    assert_equal(']', lexer.result[4].value)
   end
 
   def test_external_inline2
@@ -92,17 +91,17 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(7, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[", lexer.result[0].value)
+    assert_equal('[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('http', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('//example.com', lexer.result[2].value)
     assert_equal(:link_end, lexer.result[3].type)
-    assert_equal("]", lexer.result[3].value)
+    assert_equal(']', lexer.result[3].value)
     assert_equal(:text, lexer.result[4].type)
     assert_equal(' ', lexer.result[4].value)
     assert_equal(:rule, lexer.result[5].type)
-    assert_equal("--", lexer.result[5].value)
+    assert_equal('--', lexer.result[5].value)
     assert_equal(:text, lexer.result[6].type)
     assert_equal(' Follow', lexer.result[6].value)
   end
@@ -112,7 +111,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(6, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[", lexer.result[0].value)
+    assert_equal('[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('http', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -121,7 +120,7 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[4].type)
     assert_equal('Example', lexer.result[4].value)
     assert_equal(:link_end, lexer.result[5].type)
-    assert_equal("]", lexer.result[5].value)
+    assert_equal(']', lexer.result[5].value)
   end
 
   def test_internal_incomplete
@@ -129,7 +128,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(1, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
   end
 
   def test_internal_incomplete2
@@ -137,9 +136,9 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(2, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_end, lexer.result[1].type)
-    assert_equal("]", lexer.result[1].value)
+    assert_equal(']', lexer.result[1].value)
   end
 
   def test_internal_empty
@@ -147,9 +146,9 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(2, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_end, lexer.result[1].type)
-    assert_equal("]]", lexer.result[1].value)
+    assert_equal(']]', lexer.result[1].value)
   end
 
   def test_internal_home
@@ -157,11 +156,11 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(3, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal('public/Home', lexer.result[1].value)
     assert_equal(:link_end, lexer.result[2].type)
-    assert_equal("]]", lexer.result[2].value)
+    assert_equal(']]', lexer.result[2].value)
   end
 
   def test_internal_relative
@@ -169,11 +168,11 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(3, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:text, lexer.result[1].type)
     assert_equal('/public/Home', lexer.result[1].value)
     assert_equal(:link_end, lexer.result[2].type)
-    assert_equal("]]", lexer.result[2].value)
+    assert_equal(']]', lexer.result[2].value)
   end
 
   def test_internal_audio
@@ -181,13 +180,13 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(4, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Audio', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('/public/test.wav', lexer.result[2].value)
     assert_equal(:link_end, lexer.result[3].type)
-    assert_equal("]]", lexer.result[3].value)
+    assert_equal(']]', lexer.result[3].value)
   end
 
   def test_internal_video
@@ -195,13 +194,13 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(4, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Video', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('/public/test.wav', lexer.result[2].value)
     assert_equal(:link_end, lexer.result[3].type)
-    assert_equal("]]", lexer.result[3].value)
+    assert_equal(']]', lexer.result[3].value)
   end
 
   def test_internal_image
@@ -209,13 +208,13 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(4, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
     assert_equal('/public/test.png', lexer.result[2].value)
     assert_equal(:link_end, lexer.result[3].type)
-    assert_equal("]]", lexer.result[3].value)
+    assert_equal(']]', lexer.result[3].value)
   end
 
   def test_internal_image_caption
@@ -223,7 +222,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(6, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -232,7 +231,7 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[4].type)
     assert_equal('Test PNG', lexer.result[4].value)
     assert_equal(:link_end, lexer.result[5].type)
-    assert_equal("]]", lexer.result[5].value)
+    assert_equal(']]', lexer.result[5].value)
   end
 
   def test_internal_image_caption_incomplete1
@@ -241,7 +240,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(5, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -257,7 +256,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(6, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -275,7 +274,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(7, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -284,7 +283,7 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[4].type)
     assert_equal('Test PNG', lexer.result[4].value)
     assert_equal(:link_end, lexer.result[5].type)
-    assert_equal("]", lexer.result[5].value)
+    assert_equal(']', lexer.result[5].value)
     assert_equal(:text, lexer.result[6].type)
     assert_equal(' ', lexer.result[6].value)
   end
@@ -294,7 +293,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(8, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -306,7 +305,7 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[6].type)
     assert_equal('Test PNG', lexer.result[6].value)
     assert_equal(:link_end, lexer.result[7].type)
-    assert_equal("]]", lexer.result[7].value)
+    assert_equal(']]', lexer.result[7].value)
   end
 
   def test_internal_image_thumb
@@ -314,7 +313,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(8, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -326,7 +325,7 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[6].type)
     assert_equal('Test PNG', lexer.result[6].value)
     assert_equal(:link_end, lexer.result[7].type)
-    assert_equal("]]", lexer.result[7].value)
+    assert_equal(']]', lexer.result[7].value)
   end
 
   def test_internal_image_width
@@ -334,7 +333,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(8, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -346,7 +345,7 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[6].type)
     assert_equal('Test PNG', lexer.result[6].value)
     assert_equal(:link_end, lexer.result[7].type)
-    assert_equal("]]", lexer.result[7].value)
+    assert_equal(']]', lexer.result[7].value)
   end
 
   def test_internal_image_left
@@ -354,7 +353,7 @@ class LinkLexTest < Test::Unit::TestCase
     lexer.lex
     assert_equal(8, lexer.result.length)
     assert_equal(:link_start, lexer.result[0].type)
-    assert_equal("[[", lexer.result[0].value)
+    assert_equal('[[', lexer.result[0].value)
     assert_equal(:link_namespace, lexer.result[1].type)
     assert_equal('Image', lexer.result[1].value)
     assert_equal(:text, lexer.result[2].type)
@@ -366,6 +365,6 @@ class LinkLexTest < Test::Unit::TestCase
     assert_equal(:text, lexer.result[6].type)
     assert_equal('Test PNG', lexer.result[6].value)
     assert_equal(:link_end, lexer.result[7].type)
-    assert_equal("]]", lexer.result[7].value)
+    assert_equal(']]', lexer.result[7].value)
   end
 end

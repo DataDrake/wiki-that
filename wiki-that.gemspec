@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 
 require_relative 'lib/wiki-that'
@@ -23,7 +23,7 @@ Gem::Specification.new do |s|
   s.description = 'A MediaWiki to HTML parser for the Engineering Design Guide and Environment (EDGE)'
   s.authors     = ['Bryan T. Meyers']
   s.email       = 'bmeyers@datadrake.com'
-  s.files       = Dir.glob('lib/**/*') + %w(LICENSE README.md)
+  s.files       = Dir.glob('lib/**/*') + %w[LICENSE README.md]
   s.homepage    = 'http://rubygems.org/gems/wiki-that'
   s.license     = 'Apache-2.0'
 end

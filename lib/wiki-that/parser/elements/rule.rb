@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
   ##
@@ -23,18 +23,18 @@ module WikiThat
     # Parse the current text as a horizontal rule if found
     ##
     def parse_rule(inline = false)
-      case current.value.length
-        when 1
-          e = Element.new(:text,current.value)
-        when 2
-          e = Element.new(:text,'&mdash;')
-        else
-          if inline
-            e =  Element.new(:text, current.value)
-          else
-            e = Element.new(:hr)
+      e = case current.value.length
+            when 1
+              Element.new(:text, current.value)
+            when 2
+              Element.new(:text, '&mdash;')
+            else
+              if inline
+                Element.new(:text, current.value)
+              else
+                Element.new(:hr)
+              end
           end
-      end
       advance
       e
     end

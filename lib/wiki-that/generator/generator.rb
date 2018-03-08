@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require_relative('../parser/parser')
 module WikiThat
@@ -55,9 +55,7 @@ module WikiThat
       @errors   = @parser.errors
       @warnings = @parser.warnings
       @root     = @parser.result
-      unless success?
-        return
-      end
+      return unless success?
       @result = generate_element(@root)
     end
 
@@ -75,7 +73,7 @@ module WikiThat
         when :text
           element.value ? element.value : ''
         when :nowiki, :pre
-          "<#{element.type.to_s}>#{element.value}</#{element.type.to_s}>"
+          "<#{element.type}>#{element.value}</#{element.type}>"
         when :root
           buff = ''
           element.children.each do |c|
@@ -83,20 +81,17 @@ module WikiThat
           end
           buff
         else
-          buff = "<#{element.type.to_s}"
-          buff += generate_attributes(element)
+          buff = "<#{element.type}" + generate_attributes(element)
           case element.type
             when :hr, :img, :references
               buff + ' />'
             else
-              if element.type == :p and element.children.length == 0
-                return ''
-              end
+              return '' if (element.type == :p) && element.children.empty?
               buff += '>'
               element.children.each do |c|
                 buff += generate_element(c)
               end
-              buff + "</#{element.type.to_s}>"
+              buff + "</#{element.type}>"
           end
       end
     end
@@ -106,16 +101,15 @@ module WikiThat
     # @returns [String] the resulting HTML partial
     ##
     def generate_attributes(element)
-      buff = ''
+      buff = ['']
       element.attributes.each do |k, v|
-        buff += ' '
         if v.is_a? TrueClass
-          buff += k.to_s
+          buff.push(k.to_s)
         else
-          buff += "#{k.to_s}=\"#{v}\""
+          buff.push( "#{k}=\"#{v}\"")
         end
       end
-      buff.rstrip
+      buff.join(' ')
     end
 
     ##
@@ -123,7 +117,7 @@ module WikiThat
     # @returns [Boolean] True iff no errors
     ##
     def success?
-      @errors.length == 0
+      @errors.empty?
     end
   end
 end

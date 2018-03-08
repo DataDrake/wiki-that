@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
   ##
@@ -19,14 +19,13 @@ module WikiThat
   # @author Bryan T. Meyers
   ##
   module Text
-
     ##
     # Continue reading text tokens until a linebreak
     # @param [Symbol] stop the type to stop parsing at
     ##
     def parse_inline(*stop)
       children = []
-      until match?(*stop) or match? :break or end?
+      until match?(*stop) || match?(:break) || end?
         case current.type
           when :format
             children.push(*parse_format)
@@ -53,10 +52,7 @@ module WikiThat
     ##
     def parse_text
       text = Element.new(:p)
-      while match? :break
-        @line += current.value.length
-        advance
-      end
+      skip :break
 
       while match?(:text, :break, :link_start, :format, :comment, :tag_open)
         if match? :break
@@ -69,7 +65,9 @@ module WikiThat
             break
           end
         else
-          text.add_children(*parse_inline)
+          children = parse_inline
+          break if children.empty?
+          text.add_children(*children)
         end
       end
       text

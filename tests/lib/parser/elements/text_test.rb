@@ -9,15 +9,14 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
 
 class TextParseTest < Test::Unit::TestCase
-
   def test_empty
     parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
@@ -67,5 +66,4 @@ class TextParseTest < Test::Unit::TestCase
     assert_equal(:text, parser.result.children[1].children[0].type)
     assert_equal('123', parser.result.children[1].children[0].value)
   end
-
 end

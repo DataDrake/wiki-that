@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require_relative('elements/element')
 require_relative('elements/formatting')
@@ -65,7 +65,7 @@ module WikiThat
       @warnings          = {}
       @tokens            = []
       @result            = Element.new(:root)
-      @line = 1
+      @line              = 1
     end
 
     ##
@@ -73,8 +73,8 @@ module WikiThat
     # @param [Boolean] table parsing a table?
     # @returns [Object] the resulting element(s)
     ##
-    def parse2( table = false)
-      if (table and match?(:table_end, :table_data, :table_header, :table_row)) or end?
+    def parse2(table = false)
+      if (table && match?(:table_end, :table_data, :table_header, :table_row)) || end?
         return []
       end
       case current.type
@@ -130,9 +130,7 @@ module WikiThat
     # @param [String] error the error to append
     ##
     def error(error)
-      unless @errors[@line]
-        @errors[@line] = []
-      end
+      @errors[@line] = [] unless @errors[@line]
       @errors[@line].push(error)
     end
 
@@ -141,9 +139,7 @@ module WikiThat
     # @param [String] warn the warning to append
     ##
     def warning(warn)
-      unless @warnings[@line]
-        @warnings[@line] = []
-      end
+      @warnings[@line] = [] unless @warnings[@line]
       @warnings[@line].push(warn)
     end
 
@@ -156,20 +152,23 @@ module WikiThat
     end
 
     ##
+    # Skip over one or more tokens
+    # @param [Array] types the list of types to skip
+    ##
+    def skip(*types)
+      while match? *types
+        @line += current.value.length if current.type == :break
+        advance
+      end
+    end
+
+    ##
     # Determine if the current character matches any types in a list
     # @param [Array] types a list of types to check
     # @return [Boolean] True iff the current token type is in the list
     ##
     def match?(*types)
-      if end?
-        return false
-      end
-      types.each do |type|
-        if current.type == type
-          return true
-        end
-      end
-      false
+      !end? && types.include?(current.type)
     end
 
     ##
@@ -178,15 +177,7 @@ module WikiThat
     # @return [Boolean] True iff the current token type is not in the list
     ##
     def not_match?(*types)
-      if end?
-        return true
-      end
-      types.each do |type|
-        if current.type == type
-          return false
-        end
-      end
-      true
+      end? || !types.include?(current.type)
     end
 
     ##
@@ -194,7 +185,7 @@ module WikiThat
     # @returns [Boolean] True if at or beyond the end
     ##
     def end?
-      @tokens.nil? or @index >= @tokens.length
+      @tokens.nil? || (@index >= @tokens.length)
     end
 
     ##
@@ -202,7 +193,7 @@ module WikiThat
     # @returns [Boolean] True iff no errors
     ##
     def success?
-      @errors.length == 0
+      @errors.empty?
     end
   end
 end

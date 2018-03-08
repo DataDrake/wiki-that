@@ -9,21 +9,19 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
-
   # Special characters for Tables
-  TABLE_SPECIAL = %w({ | !)
+  TABLE_SPECIAL = %w[{ | !].freeze
 
   ##
   # Lexer module for MediaWiki Tables
   # @author Bryan T. Meyers
   ##
   module Table
-
     ##
     # Lex any of the possible table tokens
     ##
@@ -31,7 +29,7 @@ module WikiThat
       case current
         when '{'
           advance
-          unless current == '|'
+          if end? || not_match?(%W[|])
             rewind
             lex_text
             return
@@ -57,10 +55,10 @@ module WikiThat
             when '|'
               advance
               append Token.new(:table_data, 2)
-              lex_text(%w(| !))
+              lex_text(%w[| !])
             else
               append Token.new(:table_data, 1)
-              lex_text(%w(| !))
+              lex_text(%w[| !])
           end
         when '!'
           advance
@@ -70,9 +68,7 @@ module WikiThat
           else
             append Token.new(:table_header, 1)
           end
-          lex_text(%w(| !))
-        else
-          []
+          lex_text(%w[| !])
       end
     end
   end

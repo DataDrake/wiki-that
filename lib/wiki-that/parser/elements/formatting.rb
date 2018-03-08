@@ -9,9 +9,9 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 module WikiThat
   ##
@@ -28,17 +28,14 @@ module WikiThat
       advance
       contents = parse_inline(:format)
       if not_match? :format
-        results.push Element.new(:text, start.value)
-        results.push(*contents)
+        results.push(Element.new(:text, start.value), *contents)
         return results
       end
       finish = current
       advance
       depth = finish.value.length
-      if start.value.length != finish.value.length
-        warning "Unbalanced inline formatting"
-      end
-      if start.value.length < finish.value.length
+      if start.value.length < depth
+        warning 'Unbalanced inline formatting'
         depth = start.value.length
       end
       case depth

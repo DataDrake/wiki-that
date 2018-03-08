@@ -9,14 +9,13 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require 'test/unit'
 require_relative('../../../../lib/wiki-that')
 class LinkParseTest < Test::Unit::TestCase
-
   def test_empty
     parser = WikiThat::Parser.new('', 'wiki', 'BOB', 'sub/folder', 'media/folder')
     parser.parse
@@ -191,7 +190,7 @@ class LinkParseTest < Test::Unit::TestCase
   end
 
   def test_internal_no_base_url
-    parser = WikiThat::Parser.new('[[public/Home]]', nil , 'BOB', 'sub/folder', 'media/folder')
+    parser = WikiThat::Parser.new('[[public/Home]]', nil, 'BOB', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -203,7 +202,7 @@ class LinkParseTest < Test::Unit::TestCase
   end
 
   def test_internal_no_sub_url
-    parser = WikiThat::Parser.new('[[public/Home]]', 'wiki' , 'BOB', '', '')
+    parser = WikiThat::Parser.new('[[public/Home]]', 'wiki', 'BOB', '', '')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)
@@ -215,7 +214,7 @@ class LinkParseTest < Test::Unit::TestCase
   end
 
   def test_internal_no_namespace
-    parser = WikiThat::Parser.new('[[public/Home]]', 'wiki' , '', 'sub/folder', 'media/folder')
+    parser = WikiThat::Parser.new('[[public/Home]]', 'wiki', '', 'sub/folder', 'media/folder')
     parser.parse
     assert_true(parser.success?, 'Parsing should have succeeded')
     assert_equal(1, parser.result.children.length)

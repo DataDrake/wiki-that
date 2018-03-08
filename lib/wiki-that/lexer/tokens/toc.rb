@@ -9,14 +9,13 @@
 #
 # Unless required by applicable law or agreed to in writing, software
 # distributed under the License is distributed on an "AS IS" BASIS,
-#	WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-#	See the License for the specific language governing permissions and
-#	limitations under the License.
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 ##
 require_relative('token')
 module WikiThat
-
-  TOC_SPECIAL = %w(_)
+  TOC_SPECIAL = %w[_].freeze
 
   ##
   # Lexer module for handling Table of Contents
@@ -27,7 +26,7 @@ module WikiThat
     # Lex the current text as a NOTOC
     ##
     def lex_toc
-      start  = read_matching(TOC_SPECIAL)
+      start = read_matching(TOC_SPECIAL)
       if start.length != 2
         append Token.new(:text, start)
         return
@@ -58,9 +57,7 @@ module WikiThat
         return
       end
       ## Read to the end fo the line. We want to remove this entirely
-      until end? or match? BREAK_SPECIAL
-        advance
-      end
+      advance until end? || match?(BREAK_SPECIAL)
     end
   end
 end
